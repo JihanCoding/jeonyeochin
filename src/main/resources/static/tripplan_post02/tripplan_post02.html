@@ -5,58 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>새 여행 플랜 만들기</title>
-    <link rel="stylesheet" href="./tripplan_post02.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: auto;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="tripplan_post02.css">
 </head>
 
 <body>
-
-    <h1>새 여행 플랜 만들기</h1>
-
-    <label for="title">여행 플랜 제목:</label>
-    <input type="text" id="title" name="title" placeholder="여행 플랜 제목을 입력하세요">
-
-    <label for="date">날짜:</label>
-    <input type="date" id="date" name="date">
-
-    <label for="content">내용:</label>
-    <textarea id="content" name="content" rows="5" placeholder="여행 계획을 입력하세요"></textarea>
-
-    <button type="submit">게시</button>
-
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" onclick="history.back()">&lt;</button>
+            <span class="header-title">새 여행 플랜 만들기</span>
+        </header>
+        <div class="route-list" id="routeList"></div>
+        <form class="plan-form">
+            <div class="input-row">
+                <input type="text" id="plan-title" placeholder="여행 플랜 제목">
+                <div class="date-box">
+                    <span class="calendar-icon">&#128197;</span>
+                    <input type="date" id="plan-date">
+                </div>
+            </div>
+            <textarea id="plan-content" placeholder="내용"></textarea>
+            <button type="submit" class="submit-btn" disabled>게시</button>
+        </form>
+    </div>
+    <script src="tripplan_post02.js"></script>
 </body>
 
 </html>
