@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새 여행 플랜 만들기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>새 여행 플랜 만들기</h1>
+
+    <label for="title">여행 플랜 제목:</label>
+    <input type="text" id="title" name="title" placeholder="여행 플랜 제목을 입력하세요">
+
+    <label for="date">날짜:</label>
+    <input type="date" id="date" name="date">
+
+    <label for="content">내용:</label>
+    <textarea id="content" name="content" rows="5" placeholder="여행 계획을 입력하세요"></textarea>
+
+    <button type="submit">게시</button>
+
+</body>
+
+</html>
