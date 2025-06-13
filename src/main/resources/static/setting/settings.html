@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>설정</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./settings.css" />
+</head>
+<body>
+    <div class="settings-overlay">
+        <header class="settings-header">
+            <span class="material-icons back-btn">chevron_left</span>
+            <div class="settings-title">설정</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <main class="settings-main">
+            <button class="login-btn">
+                로그인 / 회원가입
+                <span class="material-icons" style="float:right;vertical-align:middle;">chevron_right</span>
+            </button>
+
+            <section class="settings-section">
+                <!-- 계정 설정 대분류 -->
+                <div class="settings-group">
+                    <div class="settings-group-title">
+                        <span class="material-icons" style="vertical-align:middle;margin-right:8px;">person</span>
+                        계정 설정
+                    </div>
+                    <ul class="settings-list">
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                계정 정보
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>이름</li>
+                                <li>이메일</li>
+                                <li>연락처</li>
+                            </ul>
+                        </li>
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                계정 관리
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>비밀번호 변경</li>
+                                <li>계정 탈퇴하기</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 앱 설정 대분류 -->
+                <div class="settings-group">
+                    <div class="settings-group-title">
+                        <span class="material-icons" style="vertical-align:middle;margin-right:8px;">settings</span>
+                        앱 설정
+                    </div>
+                    <ul class="settings-list">
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                지도 태그 관리
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>지도 태그 추가/삭제</li>
+                            </ul>
+                        </li>
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                알림
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>
+                                    <div class="settings-toggle-row">
+                                        <span>알림 활성화</span>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="settings-toggle-row">
+                                        <span>게시판 알림 음성</span>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="settings-toggle-row">
+                                        <span>추천 정보 알림</span>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="settings-toggle-row">
+                                        <span>여정 정보 알림</span>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                테마
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>
+                                    <div class="settings-radio-row">
+                                        <span>테마</span>
+                                        <label><input type="radio" name="theme" checked> Light Mode</label>
+                                        <label><input type="radio" name="theme"> Dark Mode</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                언어 설정
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>
+                                    <div class="settings-radio-row">
+                                        <label><input type="radio" name="lang" checked> 한국어</label>
+                                        <br>
+                                        <label><input type="radio" name="lang"> English</label>
+                                        <br>
+                                        <label><input type="radio" name="lang"> 日本語</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                잠금 화면
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>잠금 비밀번호 설정</li>
+                            </ul>
+                        </li>
+                        <li class="settings-category collapsed">
+                            <div class="settings-category-title">
+                                앱 정보
+                                <span class="material-icons chevron">expand_more</span>
+                            </div>
+                            <ul class="settings-sub-list">
+                                <li>공지사항</li>
+                                <li>앱 버전</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+        <script src="./settings.js"></script>
+    </div>
+</body>
+</html>

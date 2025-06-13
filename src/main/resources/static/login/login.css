@@ -1,0 +1,153 @@
+body {
+    overflow-x: hidden;
+    background: #fff;
+}
+
+.overlay {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    background: white;
+    color: #6dd5ed;
+    position: relative;
+    z-index: 20;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.menu-toggle {
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.login-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: unset;
+    height: auto;
+    margin-top: 4vh;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: #fff; 
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 32px 24px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.input-group label {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+.input-group input {
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+    background: #fafbfc;
+}
+.input-group input:focus {
+    border: 1.5px solid #6dd5ed;
+    background: #fff;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px 0;
+    background: linear-gradient(90deg, #6dd5ed 0%, #2193b0 100%);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+.login-btn:active {
+    background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
+}
+
+.login-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.92rem;
+    color: #888;
+    margin-top: -12px;
+    margin-bottom: 4px;
+}
+.signup-link {
+    color: #6dd5ed;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+.find-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.find-links a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.92rem;
+}
+.find-links .divider {
+    color: #ccc;
+    font-size: 0.92rem;
+    margin: 0 2px;
+}
+.signup-link:hover,
+.find-links a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+    .login-form {
+        padding: 24px 8px;
+    }
+}
+
+/* 모바일 키보드 대응: 입력창이 가려지지 않도록 */
+html, body {
+    height: 100%;
+}
+input, button, select, textarea {
+    font-family: inherit;
+}
+@media (max-width: 600px) {
+    .login-main {
+        min-height: unset;
+    }
+}

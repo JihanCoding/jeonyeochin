@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>전여친 - 메인</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./index.css" />
+</head>
+
+<body>
+    <div id="map">
+        <button class="write-button">
+            <span class="material-icons">edit</span>
+        </button>
+    </div>
+
+    <div class="overlay">
+        <!-- 헤더 -->
+        <header class="app-header">
+            <span class="material-icons menu-toggle" id="menuToggle">menu</span>
+            <div class="logo">전여친</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+
+        <!-- 왼쪽 사이드 메뉴 -->
+        <div class="side-menu" id="sideMenu">
+            <button id="backButton" class="back-button">
+                <span class="material-icons" style="font-size: 2rem;">chevron_left</span>
+            </button>
+
+            
+            <h3 class="menu-title" onclick="location.href='community.html'">커뮤니티</h3>
+            <!-- <ul class="menu-list">
+                <li>
+                    <div class="menu-item" onclick="location.href='community.html'">전체보기</div>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="location.href='community.html'">여행 후기</div>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="location.href='community.html'">여행 질문</div>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="location.href='community.html'">여행 정보</div>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="location.href='mypage.html'">마이페이지</div>
+                </li>
+            </ul> -->
+            <h3 class="menu-title" onclick="location.href='mypage.html'">마이페이지</h3>
+
+            <h3 class="menu-title" onclick="location.href='tripInfo.html'">전남 여행 정보</h3>
+            <!-- <ul class="menu-list">
+                <li>
+                    <div class="menu-item" onclick="location.href='events.html'">축제/공연/전시 정보</div>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="location.href='tripPlan.html'">여행 플랜</div>
+                </li>
+            </ul> -->
+            <h3 class="menu-title">여행 플랜</h3>
+
+
+            <div class="menu-footer">
+                <div class="footer-item" onclick="location.href='notice.html'">
+                    <span class="material-icons">campaign</span>
+                    <span>공지사항</span>
+                </div>
+                <div class="footer-item" onclick="location.href='settings.html'">
+                    <span class="material-icons">settings</span>
+                    <span>환경설정</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 검색창 -->
+        <div class="search-bar">
+            <input type="text" placeholder="강진수국길축제" />
+            <button><span class="material-icons">search</span></button>
+        </div>
+
+        <!-- 필터 -->
+        <div class="filters-wrapper">
+            <div class="filters">
+                <button class="active" data-type="전체">전체</button>
+                <button class="active" data-type="게시글">게시글</button>
+                <button class="active" data-type="축제">축제</button>
+                <button class="active" data-type="공연">공연</button>
+                <button class="active" data-type="전시">전시</button>
+                <button class="active" data-type="테마파크">테마파크</button>
+            </div>
+        </div>
+
+        <!-- 하단 슬라이드 업 패널 -->
+        <div id="bottomSheet">
+            <div id="dragHandle">
+                <div class="bar"></div>
+            </div>
+            <div id="sheetContent">
+                <!-- 무한 스크롤 콘텐츠 여기에 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 검색 오버레이 -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay-content" id="searchOverlayContent">
+            <button class="close-btn" id="searchOverlayClose" title="닫기"><span class="material-icons">close</span>
+            </button>
+            <!-- AJAX로 03_search.html 주요 내용이 여기에 삽입됨 -->
+        </div>
+    </div>
+    <script src="./index.js"></script>
+
+</body>
+
+</html>

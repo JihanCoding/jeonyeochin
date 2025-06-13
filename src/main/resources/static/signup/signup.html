@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>전여친 - 회원가입</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./signup.css" />
+    <script defer src="./signup.js"></script>
+</head>
+<body>
+    <div class="overlay">
+        <header class="app-header">
+            <span class="material-icons menu-toggle" id="backButton">chevron_left</span>
+            <div class="logo">전여친</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <main class="signup-main">
+            <form class="signup-form" autocomplete="off">
+                <div class="input-group id"><input type="text" placeholder="아이디" /></div>
+                <div class="input-group pw"><input type="password" placeholder="비밀번호" /></div>
+                <div class="input-group email"><input type="email" placeholder="이메일" /></div>
+                <div class="space-box"></div>
+                <div class="input-group name"><input type="text" placeholder="이름" /></div>
+                <div class="input-group date-of-birth"><input type="text" placeholder="생년월일" /></div>
+                <div class="input-group mobile-carrier"><input type="text" placeholder="통신사" /></div>
+                <div class="input-group phone-num"><input type="text" placeholder="휴대전화 번호" /></div>
+                <div class="space-box"></div>
+
+                <div class="input-group certif-num"><input type="text" placeholder="인증번호 입력" /></div>
+                <div class="input-group agree-group"><input type="checkbox" id="agreeAll" /><label for="agreeAll">인증 약관 전체 동의</label></div>
+                <button type="button" class="signup-btn">인증요청</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

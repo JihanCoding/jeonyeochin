@@ -1,0 +1,187 @@
+body {
+    overflow-x: hidden;
+    background: #fff;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.overlay {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    background: white;
+    color: #6dd5ed;
+    position: relative;
+    z-index: 20;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.menu-toggle {
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.signup-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: unset;
+    height: auto;
+    margin-top: 4vh;
+}
+
+.signup-form {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+.input-group {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.input-group input[type="text"],
+.input-group input[type="password"],
+.input-group input[type="email"] {
+    width: 100%;
+    padding: 12px 0;
+    background: #eeeeee;
+    border: none;
+    border-radius: 0;
+    font-size: 1.0rem;
+    padding-left: 24px;
+
+    color: #8d8d8d;
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+.input-group input[type="text"]::placeholder,
+.input-group input[type="password"]::placeholder,
+.input-group input[type="email"]::placeholder {
+    color: #bdbdbd;
+    font-size: 1.0rem;
+    text-align: left;
+}
+
+.agree-group {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: #bdbdbd;
+    gap: 8px;
+}
+
+.agree-group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #bdbdbd;
+    border-radius: 6px;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+    transition: border 0.2s, box-shadow 0.2s;
+    vertical-align: middle;
+    outline: none;
+    margin-right: 8px;
+}
+
+.agree-group input[type="checkbox"]:checked {
+    border-color: #6dd5ed;
+    background: #6dd5ed;
+}
+
+.agree-group input[type="checkbox"]:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 6px;
+    height: 12px;
+    border: solid #fff;
+    border-width: 0 3px 3px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.agree-group input[type="checkbox"]:focus {
+    box-shadow: 0 0 0 2px #6dd5ed44;
+}
+
+.input-group input[type="text"]:focus,
+.input-group input[type="password"]:focus,
+.input-group input[type="email"]:focus {
+    border: none;
+    outline: none; 
+    box-shadow: 0 0 8px 4px #6dd5ed; /* 파란색 번짐 효과 */
+    z-index: 9999;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #6dd5ed;
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 16px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.space-box {
+    margin-bottom: 24px;
+}
+
+.id input[type="text"],
+.name input[type="text"] {
+    border-radius: 12px 12px 0 0;
+}
+
+.email input[type="email"],
+.phone-num input[type="text"] {
+    border-radius: 0 0 12px 12px;
+}
+
+.certif-num input[type="text"] {
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .signup-form {
+        padding: 0;
+    }
+}
