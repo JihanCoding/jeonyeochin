@@ -32,5 +32,16 @@ public class UserController {
         }
     }
     
-
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
+        String userEmail = loginData.get("userEmail");
+        String userPassword = loginData.get("userPassword");
+        User user = userService.login(userEmail, userPassword);
+        if (user != null) {
+            return ResponseEntity.ok(Map.of("user", user));
+        } else {
+            return ResponseEntity.status(401).body(Map.of("error", "이메일 또는 비밀번호가 올바르지 않습니다."));
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.smhrd.jeonyeochin.service;
 import com.smhrd.jeonyeochin.entity.User;
 import com.smhrd.jeonyeochin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +14,22 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
     
     // 로그인
+    public User login(String userEmail, String userPassword) {
+        return userRepository.findByUserEmail(userEmail)
+                .filter(user -> passwordEncoder.matches(userPassword, user.getUserPassword()))
+                .orElse(null);
+    }
     
     // 회원가입
     public User saveUser(User user) {
+        // 비밀번호 암호화 적용
+        String encodedPassword = passwordEncoder.encode(user.getUserPassword());
+        user.setUserPassword(encodedPassword);
         return userRepository.save(user);
     }
 }
