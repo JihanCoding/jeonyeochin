@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return newWaypointItem;
     }
 
+    // waypoint 삭제 가능 여부 확인 함수
+    function canRemoveWaypoint() {
+        return waypointsContainer.querySelectorAll('.waypoint-item').length > 1;
+    }
+
     waypointsContainer.addEventListener('click', function (event) {
         const target = event.target;
 
@@ -30,8 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon.textContent = '-';
                 icon.classList.remove('add');
                 icon.classList.add('remove');
-                // 참고: '-' 아이콘 클릭 시 제거 기능을 추가하려면 여기에 이벤트 리스너를 추가할 수 있습니다.
-                // 예: icon.onclick = () => currentWaypointItem.remove(); (단, 마지막 '+' 항목 유지 로직 필요)
             }
             if (textLabel) {
                 textLabel.style.display = 'none';
@@ -46,14 +49,43 @@ document.addEventListener('DOMContentLoaded', () => {
             const newPlaceholder = createNewWaypointPlaceholder();
             waypointsContainer.appendChild(newPlaceholder);
         }
-        // '-' 아이콘 클릭 시 (현재는 아무 동작 없음, 필요시 기능 추가)
+        // '-' 아이콘 클릭 시 (제거 기능)
         else if (target.classList.contains('waypoint-action-icon') && target.classList.contains('remove')) {
-            // const waypointToRemove = target.closest('.waypoint-item');
-            // if (waypointToRemove) {
-            //   // 경유지 제거 로직 (예: waypointToRemove.remove();)
-            //   // 주의: 모든 경유지가 제거되었을 때 '+' 항목이 하나는 남아있도록 하는 로직이 필요할 수 있습니다.
-            //   console.log("'-' 아이콘 클릭됨. 제거 기능은 현재 구현되지 않았습니다.");
-            // }
+            const waypointToRemove = target.closest('.waypoint-item');
+            if (waypointToRemove && canRemoveWaypoint()) {
+                waypointToRemove.remove();
+            }
         }
     });
+
+    // Geolocation API를 사용하여 사용자 위치 가져오기
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            // 사용자 위치를 성공적으로 가져왔을 때
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Naver Maps 초기화 (사용자 위치 중심으로)
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(latitude, longitude),
+                zoom: 12
+            });
+        }, function (error) {
+            // 사용자 위치를 가져오는데 실패했을 때
+            console.error('Geolocation error:', error);
+            // 기본 위치 (서울)으로 Naver Maps 초기화
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(37.5665, 126.9780),
+                zoom: 12
+            });
+        });
+    } else {
+        // Geolocation API를 지원하지 않는 브라우저
+        console.error('Geolocation is not supported by this browser.');
+        // 기본 위치 (서울)으로 Naver Maps 초기화
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5665, 126.9780),
+            zoom: 12
+        });
+    }
 });
