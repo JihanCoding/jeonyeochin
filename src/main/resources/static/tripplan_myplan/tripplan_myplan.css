@@ -1,0 +1,177 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', sans-serif;
+    background: #fff;
+    overflow-x: hidden;
+}
+
+.tripplanmy-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 24px;
+    min-height: 100vh;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #eee;
+    background: white;
+    color: #6dd5ed;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.logo {
+    font-weight: 400;
+    font-size: 1.6rem;
+    color: #222;
+}
+
+.back-btn {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #bbb;
+}
+
+.tripplanmy-main {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.route-breadcrumb {
+    color: #d3d3d3;
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    text-align: left;
+    word-break: keep-all;
+}
+
+.plan-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 12px;
+}
+
+.plan-title-input {
+    flex: 1;
+    border: none;
+    border-bottom: 2px solid #d3d3d3;
+    font-size: 1.3rem;
+    color: #bbb;
+    background: transparent;
+    outline: none;
+    padding: 8px 0;
+}
+
+.plan-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #d3d3d3;
+    font-size: 1.3rem;
+}
+
+.plan-date .material-icons {
+    font-size: 1.5rem;
+    color: #d3d3d3;
+}
+
+.plan-content {
+    min-height: 120px;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 1.3rem;
+    color: #bbb;
+    background: transparent;
+    margin: 18px 0px 32px 0px;
+    padding: 18px 18px;
+    resize: none;
+    outline: none;
+}
+
+.plan-map {
+    aspect-ratio: 1/1;
+    border: 2px solid #222;
+    border-radius: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    margin-top: 8px;
+}
+
+.plan-map-text {
+    font-size: 3rem;
+    color: #222;
+    letter-spacing: 2px;
+}
+
+.plan-btn-row {
+    display: flex;
+    justify-content: right;
+    margin-top: 0px;
+}
+
+.plan-btn {
+    background: none;
+    border: none;
+    color: #d3d3d3;
+    font-size: 2rem;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    padding: 0 12px;
+    transition: color 0.15s;
+}
+
+.plan-btn:active {
+    color: #bbb;
+}
+
+.plan-date-input {
+    position: absolute;
+    left: -9999px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (max-width: 600px) {
+    .tripplanmy-container {
+        padding: 0 24px;
+    }
+
+    .plan-map {
+        border-radius: 20px;
+    }
+
+    .plan-content {
+        font-size: 1.1rem;
+        padding: 12px 10px;
+    }
+
+    .route-breadcrumb {
+        font-size: 1.1rem;
+    }
+
+    .plan-title-input,
+    .plan-date {
+        font-size: 1.1rem;
+    }
+
+    .plan-btn {
+        font-size: 1.2rem;
+    }
+}
