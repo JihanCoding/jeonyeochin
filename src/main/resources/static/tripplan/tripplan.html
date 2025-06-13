@@ -3,9 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>전남 여행 플랜</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./tripPlan.css">
 </head>
 <body>
-    
+    <div class="tripplan-container">
+        <header class="app-header">
+            <span class="material-icons back-btn" onclick="history.back()">chevron_left</span>
+            <div class="logo">전남 여행</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <main class="tripplan-main">
+            <section class="myplan-section">
+                <div class="myplan-box">
+                    <div class="myplan-title-row">
+                        <span class="material-icons myplan-icon">account_circle</span>
+                        <span class="myplan-title">내 여행 플랜</span>
+                    </div>
+                    <ul class="myplan-list">
+                        <li>
+                            <span>광주 박물관 전시 축제</span>
+                            <span class="material-icons myplan-arrow">chevron_right</span>
+                        </li>
+                        <li>
+                            <span>목포 맛집 투어</span>
+                            <span class="material-icons myplan-arrow">chevron_right</span>
+                        </li>
+                        <li>
+                            <span>장미 축제</span>
+                            <span class="material-icons myplan-arrow">chevron_right</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="newplan-section">
+                <div class="newplan-btn-label">새 여행 플랜 만들기</div>
+                <button class="newplan-btn" aria-label="새 여행 플랜 만들기">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </section>
+        </main>
+    </div>
 </body>
 </html>
