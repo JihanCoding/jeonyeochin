@@ -8,11 +8,14 @@ import java.time.LocalDateTime;
 @Table(name = "tb_user")
 @Data
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer userId;
+
+    @Column(name = "user_nick", nullable = false, length = 255)
+    private String userNick;
 
     @Column(name = "user_name", nullable = false, length = 255)
     private String userName;
@@ -23,15 +26,9 @@ public class User {
     @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", nullable = false, length = 255)
-    private UserRole userRole = UserRole.USER;
+    @Column(name = "user_profile", nullable = false, length = 255)
+    private String userProfile;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    public enum UserRole {
-        ADMIN,
-        USER
-    }
 }
