@@ -1,0 +1,211 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.page-container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+    /* 패딩과 테두리를 너비에 포함 */
+}
+
+h1 {
+    text-align: center;
+    color: #1a73e8;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    /* 기본 글꼴 크기 조정 */
+}
+
+#route-planner {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.location-item,
+.waypoint-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* 간격 약간 줄임 */
+    padding: 10px;
+    /* 패딩 약간 줄임 */
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    background-color: #fff;
+    flex-wrap: wrap;
+    /* 작은 화면에서 줄바꿈 허용 */
+}
+
+.location-item label {
+    font-weight: 500;
+    min-width: 60px;
+    color: #5f6368;
+    flex-basis: 100%;
+    /* 작은 화면에서 레이블이 전체 너비를 차지하도록 */
+    margin-bottom: 5px;
+    /* 입력 필드와의 간격 */
+}
+
+.location-item input[type="text"],
+.waypoint-item .waypoint-input-field {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    font-size: 1rem;
+    min-width: 0;
+    /* flex 아이템이 줄어들 수 있도록 */
+    flex-basis: calc(100% - 70px);
+    /* 레이블이 위로 갔을 때 입력 필드 너비 조정 */
+}
+
+
+.location-item input[type="text"]:focus,
+.waypoint-item .waypoint-input-field:focus {
+    outline: none;
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+.waypoint-action-icon {
+    cursor: pointer;
+    font-size: 1.4em;
+    /* 아이콘 크기 약간 조정 */
+    font-weight: bold;
+    width: 26px;
+    /* 아이콘 크기 약간 조정 */
+    height: 26px;
+    /* 아이콘 크기 약간 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 50%;
+    user-select: none;
+    transition: background-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+    /* 아이콘이 줄어들지 않도록 */
+}
+
+.waypoint-action-icon.add {
+    color: #1e8e3e;
+    border-color: #1e8e3e;
+}
+
+.waypoint-action-icon.add:hover {
+    background-color: rgba(30, 142, 62, 0.1);
+}
+
+.waypoint-action-icon.remove {
+    color: #d93025;
+    border-color: #d93025;
+}
+
+.waypoint-action-icon.remove:hover {
+    background-color: rgba(217, 48, 37, 0.1);
+}
+
+.waypoint-text-label {
+    flex-grow: 1;
+    color: #5f6368;
+    font-size: 0.95rem;
+    /* 글꼴 크기 약간 조정 */
+    padding: 8px 0;
+    /* 패딩 약간 조정 */
+    min-width: 100px;
+    /* 최소 너비 확보 */
+}
+
+.waypoint-item .waypoint-input-field {
+    flex-basis: calc(100% - 40px);
+    /* 아이콘 너비 제외 */
+}
+
+
+/* 반응형 웹 디자인을 위한 미디어 쿼리 */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+        /* body 패딩 줄임 */
+    }
+
+    .page-container {
+        padding: 15px;
+        /* 컨테이너 패딩 줄임 */
+    }
+
+    h1 {
+        font-size: 1.5em;
+        /* 제목 글꼴 크기 줄임 */
+        margin-bottom: 20px;
+    }
+
+    .location-item,
+    .waypoint-item {
+        flex-direction: row;
+        /* 기본은 row로 유지하되, 내부 요소들이 wrap 되도록 함 */
+        align-items: center;
+        /* 아이콘과 텍스트/입력 필드를 수직 중앙 정렬 */
+        gap: 8px;
+    }
+
+    .location-item label {
+        flex-basis: auto;
+        /* 레이블 너비 자동 조정 */
+        margin-bottom: 0;
+        /* 아래쪽 마진 제거 */
+        min-width: 50px;
+        /* 최소 너비 조정 */
+    }
+
+    .location-item input[type="text"] {
+        flex-basis: 0;
+        /* flex-grow에 따라 유연하게 너비 조절 */
+    }
+
+    .waypoint-text-label {
+        font-size: 0.9rem;
+    }
+
+    .waypoint-item .waypoint-input-field {
+        font-size: 0.9rem;
+        /* 입력 필드가 아이콘 옆에 오도록 flex-basis 조정 */
+        flex-basis: 0;
+        /* flex-grow에 따라 유연하게 너비 조절 */
+    }
+}
+
+@media (max-width: 400px) {
+    .location-item label {
+        min-width: unset;
+        /* 매우 작은 화면에서는 최소 너비 제거 */
+        width: 100%;
+        /* 레이블이 항상 전체 너비를 차지하도록 */
+        margin-bottom: 5px;
+    }
+
+    .location-item input[type="text"] {
+        width: 100%;
+        /* 입력 필드도 전체 너비 차지 */
+        flex-basis: 100%;
+    }
+
+    .waypoint-item {
+        /* 아이콘과 텍스트/입력 필드가 한 줄에 최대한 보이도록 */
+        /* 필요하다면 여기서 .waypoint-text-label, .waypoint-input-field의 너비를 더 조정할 수 있습니다. */
+    }
+}
