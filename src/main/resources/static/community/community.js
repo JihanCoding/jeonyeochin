@@ -1,6 +1,6 @@
 // 뒤로가기 버튼
 document.getElementById('backButton')?.addEventListener('click', () => {
-  window.location.href = 'index.html';
+  window.location.href = '/index/index.html';
 });
 
 // 필터 버튼 토글

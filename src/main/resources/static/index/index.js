@@ -163,5 +163,5 @@ sheetContent.addEventListener('scroll', () => {
 // 검색창 클릭 시 search.html로 이동 (SPA 오버레이 제거)
 const searchBar = document.querySelector('.search-bar');
 searchBar.addEventListener('click', function (e) {
-    window.location.href = 'search.html';
+    window.location.href = '/search/search.html';
 });
