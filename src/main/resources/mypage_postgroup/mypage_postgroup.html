@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이 페이지 - 게시글 전체보기</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./mypage_postgroup.css">
+</head>
+<body>
+    <div class="mypage-container">
+        <header class="app-header">
+            <span class="material-icons back-btn" onclick="history.back()">chevron_left</span>
+            <div class="logo">마이 페이지</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <section class="posts-section" style="margin-top:32px;">
+            <div class="posts-group">
+                <div class="posts-group-header">25년 6월</div>
+                <div class="posts-list all-posts-list">
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                </div>
+            </div>
+            <div class="posts-group">
+                <div class="posts-group-header">25년 5월</div>
+                <div class="posts-list all-posts-list">
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                </div>
+            </div>
+            <div class="posts-group">
+                <div class="posts-group-header">25년 4월</div>
+                <div class="posts-list all-posts-list">
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                </div>
+            </div>
+            <div class="posts-group">
+                <div class="posts-group-header">24년 12월</div>
+                <div class="posts-list all-posts-list">
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                    <div class="post-card"><div class="post-thumb"></div><div class="post-title">게시글</div><div class="post-desc">내용</div></div>
+                </div>
+            </div>
+        </section>
+        <button class="add-post-btn" style="position:fixed;right:36px;bottom:48px;z-index:10;background:#fff;border:2px solid #bbb;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+            <span class="material-icons" style="font-size:2rem;color:#bbb;">edit</span>
+        </button>
+    </div>
+    <script src="./mypage_postgroup.js"></script>
+</body>
+</html>

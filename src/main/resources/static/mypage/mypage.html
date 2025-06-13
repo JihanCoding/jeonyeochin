@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이 페이지</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./mypage.css">
+</head>
+
+<body>
+    <div class="mypage-container">
+        <header class="app-header">
+            <span class="material-icons back-btn">chevron_left</span>
+            <div class="logo">마이페이지</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <section class="profile-section">
+            <label class="profile-img-label" for="profile-img-input">
+                <img src="" alt="" class="profile-img" id="profile-img-preview">
+                <input type="file" id="profile-img-input" accept="image/*" style="display:none">
+            </label>
+            <div class="profile-info">
+                <div class="profile-id">아이디</div>
+                <div class="profile-username-row">
+                    <span class="profile-username">사용자명</span>
+                    <button class="username-edit-btn" aria-label="사용자명 편집">
+                        <span class="material-icons">edit</span>
+                    </button>
+                </div>
+                <div class="profile-stats">
+                    <span>게시글 <br><b>24개</b></span>
+                    <span>여행플랜 <br><b>3개</b></span>
+                    <span>답글 <br><b>22개</b></span>
+                    <span>북마크 <br><b>17개</b></span>
+                </div>
+            </div>
+        </section>
+        <hr class="mypage-divider">
+        <section class="posts-section">
+            <div class="posts-group">
+                <div class="posts-group-header">25년 6월 <span class="arrow material-icons">chevron_right</span></div>
+                <div class="posts-list horizontal-scroll">
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                </div>
+            </div>
+            <div class="posts-group">
+                <div class="posts-group-header">25년 5월 <span class="arrow material-icons">chevron_right</span></div>
+                <div class="posts-list horizontal-scroll">
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                </div>
+            </div>
+            <div class="posts-group">
+                <div class="posts-group-header">25년 4월 <span class="arrow material-icons">chevron_right</span></div>
+                <div class="posts-list horizontal-scroll">
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-thumb"></div>
+                        <div class="post-title">게시글</div>
+                        <div class="post-desc">내용</div>
+                    </div>
+                    <div class="post-card add-post"><button class="add-post-btn" aria-label="게시글 추가"><span
+                                class="material-icons">edit</span></button></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="./mypage.js"></script>
+</body>
+
+</html>

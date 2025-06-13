@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./mypage_post.css">
+</head>
+
+<body>
+    <div class="mypage-container">
+        <header class="app-header">
+            <span class="material-icons back-btn" onclick="history.back()">chevron_left</span>
+            <div class="logo">게시글</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <main class="post-main">
+            <section class="post-block">
+                <div class="post-profile-row">
+                    <div class="post-profile-img"></div>
+                    <div class="post-profile-info">
+                        <div class="post-type">게시글 종류</div>
+                        <div class="post-author">작성자</div>
+                    </div>
+                </div>
+                <div class="post-image">이미지</div>
+                <div class="post-tags"># 태그, # 태그, # 태그</div>
+                <div class="post-content">글 내용</div>
+            </section>
+            <section class="post-block">
+                <div class="post-profile-row">
+                    <div class="post-profile-img"></div>
+                    <div class="post-profile-info">
+                        <div class="post-type">게시글 종류</div>
+                        <div class="post-author">작성자</div>
+                    </div>
+                    <button class="post-edit-btn" aria-label="게시글 편집"><span class="material-icons">edit</span></button>
+                </div>
+                <div class="post-image">이미지</div>
+                <div class="post-tags"># 태그, # 태그, # 태그</div>
+                <div class="post-content">글 내용</div>
+            </section>
+        </main>
+    </div>
+    <script src="./mypage_post.js"></script>
+</body>
+
+</html>

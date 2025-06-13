@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 이름</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./mypage_editname.css">
+</head>
+<body>
+    <div class="mypage-container">
+        <header class="app-header">
+            <span class="material-icons back-btn" onclick="history.back()">chevron_left</span>
+            <div class="logo">프로필 이름</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
+        <main class="editname-main">
+            <form class="editname-form" autocomplete="off">
+                <label for="username" class="editname-label">사용자명</label>
+                <div class="editname-input-row">
+                    <input type="text" id="username" name="username" class="editname-input" value="현재 사용자명" maxlength="20" autocomplete="off">
+                    <button type="button" class="editname-clear-btn" aria-label="입력 지우기"><span class="material-icons">close</span></button>
+                </div>
+                <div class="editname-desc">숫자, 문자, 밑줄 _, 마침표만 사용할 수 있습니다.</div>
+                <button type="submit" class="editname-save-btn">저장</button>
+            </form>
+        </main>
+    </div>
+    <script src="./mypage_editname.js"></script>
+</body>
+</html>

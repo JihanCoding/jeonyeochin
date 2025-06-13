@@ -55,4 +55,31 @@ function enableHorizontalDragScroll(selector) {
             list.scrollLeft = scrollLeft - walk;
         });
     });
+    window.addEventListener('DOMContentLoaded', function() {
+        enableHorizontalDragScroll('.tripinfo-horizontal-scroll');
+    });
 }
+
+// 검색창 엔터 시 새로고침 방지
+const searchInput = document.querySelector('.search-input');
+if (searchInput) {
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') e.preventDefault();
+    });
+}
+
+// 카드 클릭 시 인터랙션(예시)
+document.querySelectorAll('.info-card').forEach(card => {
+    card.addEventListener('click', function() {
+        card.classList.add('active');
+        setTimeout(() => card.classList.remove('active'), 120);
+    });
+});
+
+// 섹션 화살표 클릭 시(예시)
+document.querySelectorAll('.section-arrow').forEach(arrow => {
+    arrow.style.cursor = 'pointer';
+    arrow.addEventListener('click', function() {
+        
+    });
+});

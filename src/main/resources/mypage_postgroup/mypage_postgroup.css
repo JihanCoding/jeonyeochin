@@ -11,11 +11,8 @@ html {
     max-width: 480px;
     margin: 0 auto;
     padding: 0 24px;
-    background: #fff;
-    min-height: 100vh;
     box-sizing: border-box;
-    position: relative;
-    z-index: 0;
+    width: 100%;
 }
 
 .app-header {
@@ -189,8 +186,10 @@ html {
 }
 
 .post-card {
-    min-width: 120px;
-    max-width: 120px;
+    width: 100%;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
     background: #fff;
     border-radius: 12px;
     padding: 10px 8px 8px 8px;
@@ -199,6 +198,7 @@ html {
     align-items: center;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
     position: relative;
+    box-sizing: border-box;
 }
 
 .post-thumb {
@@ -249,13 +249,20 @@ html {
     grid-template-columns: repeat(3, 1fr);
     gap: 32px 24px;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 0;
+    /* 좌우 여백을 컨테이너에서만 적용, 그리드 내부는 0 */
+}
+
+@media (max-width: 900px) {
+    .all-posts-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 600px) {
     .all-posts-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px 12px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px 8px;
     }
 }
 
