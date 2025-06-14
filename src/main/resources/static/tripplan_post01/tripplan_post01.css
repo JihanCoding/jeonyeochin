@@ -232,3 +232,30 @@ h1 {
     font-size: 1.5em;
     text-decoration: none;
 }
+
+/* 뒤로가기 버튼 컨테이너 (좌상단 고정) */
+.back-btn-container {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 10;
+}
+
+.back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    color: #4DD0E1;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.back-btn:hover {
+    background: #e0f7fa;
+}
