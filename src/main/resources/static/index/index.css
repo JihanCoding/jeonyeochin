@@ -46,13 +46,14 @@ body {
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
 }
 
 .menu-toggle {
     cursor: pointer;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    font-weight: 500;
 }
 
 /* 사이드 메뉴 */
@@ -108,13 +109,14 @@ body {
     outline: none;
     flex: 1;
     min-width: 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     background: transparent;
 }
 
 .search-bar input::placeholder {
-    color: #6dd5ed;
-    font-weight: 500;
+    color: rgb(109, 213, 237, 1);
+    font-size: 1.1rem;
+    font-weight: 700;
     opacity: 1;
 }
 
@@ -150,10 +152,10 @@ body {
     border: 3px solid #6dd5ed;
     border-radius: 20px;
     color: #6dd5ed;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 1.0rem;
     cursor: pointer;    
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
 }
@@ -170,21 +172,21 @@ body {
 }
 
 .write-button {
-    position: absolute;
+    position: fixed;
     bottom: 6rem;
     right: 2rem;
     color: #6dd5ed;
     background: #ffffff;
-    border: 3px solid #6dd5ed;
+    border: 4px solid #6dd5ed;
     border-radius: 50%;
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     z-index: 100;
 }
 
@@ -193,20 +195,18 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    color: #2193b0;
+    color: #6dd5ed;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    padding: 8px 0 0 0;
 }
 
-.back-button:hover {
-    color: #6dd5ed;
-}
+
 
 .menu-title {
     font-weight: bold;
-    font-size: 0.4rem;
+    font-size: 1.8rem;
     margin-top: 24px;
     margin-bottom: 12px;
     padding-left: 8px;
@@ -240,7 +240,7 @@ body {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.2s;
-    color: #2193b0;
+    color: #6dd5ed;
 }
 
 .menu-item:hover {
@@ -249,22 +249,23 @@ body {
 
 .side-menu h3 {
     font-size: 1.1rem;
-    font-weight: bold;
-    color: #2193b0;
+    font-weight: 600;
+    color: #6dd5ed;
 }
 
 .menu-footer {
-    margin-top: 4rem;
-    padding-top: 1rem;
+    position: absolute;
+    top: 80%;
+    transform: translateY(-50%);
 }
 
 .footer-item {
-    color: #2193b0;
+    color: #6dd5ed;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 0.4rem 0;
-    padding-left: 16px;
+    padding: 8px 0 8px 12px;
+    font-weight: 400;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -276,7 +277,7 @@ body {
 
 .footer-item .material-icons {
     font-size: 1.2rem;
-    color: #2193b0;
+    color: #6dd5ed;
 }
 
 #bottomSheet {
