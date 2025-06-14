@@ -10,6 +10,11 @@ body {
     min-height: 100vh;
 }
 
+.material-icons {
+    font-size: 1.5rem;
+    color: #d3d3d3;
+}
+
 .page-container {
     background-color: #ffffff;
     padding: 25px;
