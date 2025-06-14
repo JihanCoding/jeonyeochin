@@ -50,38 +50,49 @@ html {
 .search-bar-wrapper{
     margin: 12px 0;
 }
+
+/* index 페이지 검색창 스타일로 통일 */
 .search-bar {
     display: flex;
     align-items: center;
     border: 4px solid #6dd5ed;
     border-radius: 999px;
-    margin: 0px;
-    /* 검색창 배경 반투명 블러 */
-    background: rgba(255, 255, 255, 0.7);
+    padding: 0.9rem 1.6rem;
+    margin: 20px 24px 9px 24px;
+    width: calc(100% - 48px);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 15;
 }
 
-.search-input {
+.search-bar input {
     border: none;
     outline: none;
     flex: 1;
     min-width: 0;
     font-size: 1rem;
     background: transparent;
-    margin-left: 12px;
+}
+
+.search-bar input::placeholder {
+    color: #6dd5ed;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.search-bar button {
+    color: #6dd5ed;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 .search-icon {
     color: #6dd5ed;
     font-size: 1.3rem;
     padding: 12px 0 12px 0;
-}
-
-.search-bar input::placeholder {
-    color: #6dd5ed;
-    opacity: 1;
 }
 
 .tripinfo-section {

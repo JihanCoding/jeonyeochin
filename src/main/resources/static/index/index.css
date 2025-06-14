@@ -97,7 +97,7 @@ body {
     margin: 20px 24px 9px 24px;
     width: calc(100% - 48px);
     /* 검색창 배경 반투명 블러 */
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 15;
@@ -114,6 +114,7 @@ body {
 
 .search-bar input::placeholder {
     color: #6dd5ed;
+    font-weight: 500;
     opacity: 1;
 }
 
@@ -130,7 +131,6 @@ body {
     padding: 0 24px;
     /* 필터 배경 투명 */
     background: rgba(255, 255, 255, 0);
-    backdrop-filter: blur(4px);
     position: relative;
     z-index: 14;
 }
@@ -147,14 +147,14 @@ body {
 
 .filters button {
     padding: 0.32rem 1rem;
-    border: 2px solid #6dd5ed;
+    border: 3px solid #6dd5ed;
     border-radius: 20px;
     color: #6dd5ed;
-    /* 검색창 배경 반투명 블러 */
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
+    font-weight: 500;
     font-size: 1.0rem;
-    cursor: pointer;
+    cursor: pointer;    
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
     transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
 }
 
@@ -339,11 +339,11 @@ body {
     bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.32);
+    background: rgba(0, 0, 0, 0.1);
     z-index: 200;
     overflow-y: auto;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     animation: fadeIn 0.2s;
 }
 

@@ -47,6 +47,7 @@ body {
     font-size: 2rem;
 }
 
+/* index 페이지 검색창 스타일로 통일 */
 .search-bar {
     display: flex;
     align-items: center;
@@ -55,8 +56,7 @@ body {
     padding: 0.9rem 1.6rem;
     margin: 20px 24px 9px 24px;
     width: calc(100% - 48px);
-    /* 검색창 배경 반투명 블러 */
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 15;
@@ -71,6 +71,12 @@ body {
     background: transparent;
 }
 
+.search-bar input::placeholder {
+    color: #6dd5ed;
+    font-weight: 500;
+    opacity: 1;
+}
+
 .search-bar button {
     color: #6dd5ed;
     background: none;
@@ -81,8 +87,7 @@ body {
 
 .filters-wrapper {
     overflow-x: auto;
-    padding: 0 0px 4px 24px;
-    /* 필터 배경 투명 */
+    padding: 0 24px;
     background: rgba(255, 255, 255, 0);
     position: relative;
     z-index: 14;
@@ -100,14 +105,14 @@ body {
 
 .filters button {
     padding: 0.32rem 1rem;
-    border: 2px solid #6dd5ed;
+    border: 3px solid #6dd5ed;
     border-radius: 20px;
     color: #6dd5ed;
-    /* 검색창 배경 반투명 블러 */
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
+    font-weight: 500;
     font-size: 1.0rem;
-    cursor: pointer;
+    cursor: pointer;    
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
     transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
 }
 
