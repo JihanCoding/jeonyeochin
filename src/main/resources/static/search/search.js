@@ -1,14 +1,14 @@
-
 // 뒤로가기 버튼 동작
-document.getElementById('backButton').addEventListener('click', () => {
-    history.back();
-});
-
+const backBtn = document.getElementById('backButton');
+if (backBtn) {
+    backBtn.addEventListener('click', () => {
+        history.back();
+    });
+}
 
 const filterButtons = document.querySelectorAll('.filters button');
 const allButton = document.querySelector('.filters button[data-type="전체"]');
 function updateAllButtonState() {
-    // "전체" 버튼 제외한 나머지 버튼들 중 active인 게 모두 있으면 전체 버튼도 active, 아니면 비활성화
     const others = [...filterButtons].filter(btn => btn !== allButton);
     const allActive = others.every(btn => btn.classList.contains('active'));
     allButton.classList.toggle('active', allActive);
@@ -16,7 +16,6 @@ function updateAllButtonState() {
 filterButtons.forEach(button => {
     button.addEventListener('click', () => {
         const type = button.dataset.type;
-
         if (type === '전체') {
             const isAllActive = button.classList.contains('active');
             filterButtons.forEach(btn => {
@@ -28,14 +27,30 @@ filterButtons.forEach(button => {
         }
     });
 });
-// 초기 상태도 맞춰주기 (필터 버튼들 모두 켜져있다고 가정)
 updateAllButtonState();
 
-// 검색기록 X버튼 동작 (예시)
-document.querySelectorAll('.search-history .remove-btn').forEach(btn => {
+// 검색기록 X버튼 동작
+const removeBtns = document.querySelectorAll('.search-history .remove-btn');
+removeBtns.forEach(btn => {
     btn.addEventListener('click', function (e) {
         e.preventDefault();
         const item = this.closest('.search-history-item');
         if (item) item.remove();
     });
 });
+
+// 검색창에서 엔터 또는 검색 버튼 클릭 시 community 페이지로 이동
+const searchInput = document.querySelector('.search-bar input');
+const searchBtn = document.querySelector('.search-bar button');
+if (searchInput) {
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            window.location.href = '/community/community.html';
+        }
+    });
+}
+if (searchBtn) {
+    searchBtn.addEventListener('click', function() {
+        window.location.href = '/community/community.html';
+    });
+}
