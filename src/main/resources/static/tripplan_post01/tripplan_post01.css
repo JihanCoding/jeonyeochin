@@ -1,261 +1,366 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ===== 공통 및 기본 ===== */
+* {
     margin: 0;
-    padding: 20px;
-    background-color: #f0f2f5;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.material-icons {
-    font-size: 1.5rem;
-    color: #d3d3d3;
+body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
 }
 
 .page-container {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    position: relative;
+    padding: 20px;
+}
+
+/* ===== 헤더 ===== */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.back-btn:hover {
+    background: #f0f0f0;
 }
 
 h1 {
     text-align: center;
-    color: #1a73e8;
+    margin: 60px 0 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ===== 안내 텍스트 ===== */
+.instruction-text {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
     margin-bottom: 25px;
-    font-size: 1.8em;
+    padding: 12px;
+    background: #f0f8ff;
+    border-radius: 8px;
+    border-left: 4px solid #2196F3;
 }
 
+/* ===== 경로 플래너 ===== */
 #route-planner {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+    margin-bottom: 20px;
 }
 
-/* Base styles for location items (label and input side-by-side on larger screens) */
 .location-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border: 1px solid #dadce0;
-    border-radius: 6px;
-    background-color: #fff;
+    margin-bottom: 20px;
 }
 
 .location-item label {
-    font-weight: 500;
-    color: #5f6368;
-    min-width: 60px;
-    /* Adjust as needed */
-    flex-shrink: 0;
-    /* Prevent label from shrinking */
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
 }
 
-.location-item input[type="text"] {
-    flex-grow: 1;
-    /* Takes up remaining space */
-    padding: 10px;
-    border: 1px solid #dadce0;
-    border-radius: 4px;
-    font-size: 1rem;
-    min-width: 0;
-    /* Important for flex items that can shrink */
+.location-item input,
+.waypoint-input-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+.location-item input:focus,
+.waypoint-input-field:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    transform: translateY(-1px);
+}
+
+/* ===== 지도 선택 모드 ===== */
+.map-selection-active {
+    border-color: #FF9800 !important;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2) !important;
+    background: #fff8f0 !important;
+    animation: pulse-orange 2s infinite;
+}
+
+@keyframes pulse-orange {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(255, 152, 0, 0.1);
+    }
+}
+
+/* ===== 경유지 ===== */
+#waypoints-container {
+    margin: 20px 0;
 }
 
 .waypoint-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border: 1px solid #dadce0;
-    border-radius: 6px;
-    background-color: #fff;
-    flex-wrap: wrap;
-    /* Allow wrapping for waypoint text/input */
-}
-
-.location-item input[type="text"]:focus,
-.waypoint-item .waypoint-input-field:focus {
-    outline: none;
-    border-color: #1a73e8;
-    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
-}
-
-.waypoint-action-icon {
-    cursor: pointer;
-    font-size: 1.4em;
-    font-weight: bold;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid;
-    /* Color defined by .add or .remove */
-    border-radius: 50%;
-    user-select: none;
-    transition: background-color 0.2s, color 0.2s;
-    flex-shrink: 0;
-}
-
-.waypoint-action-icon.add {
-    color: #1e8e3e;
-    border-color: #1e8e3e;
-}
-
-.waypoint-action-icon.add:hover {
-    background-color: rgba(30, 142, 62, 0.1);
-}
-
-.waypoint-action-icon.remove {
-    color: #d93025;
-    border-color: #d93025;
-}
-
-.waypoint-action-icon.remove:hover {
-    background-color: rgba(217, 48, 37, 0.1);
-}
-
-.waypoint-text-label {
-    flex-grow: 1;
-    color: #5f6368;
-    font-size: 0.95rem;
+    margin-bottom: 12px;
     padding: 8px 0;
-    min-width: 100px;
-    /* Ensure some minimum width for the label */
-}
-
-.waypoint-item .waypoint-input-field {
-    flex-grow: 1;
-    /* Allow input to take available space next to icon */
-    padding: 10px;
-    border: 1px solid #dadce0;
-    border-radius: 4px;
-    font-size: 1rem;
-    min-width: 0;
-    /* Allow shrinking */
-    /* display: none; is handled by JavaScript */
-}
-
-
-/* --- 반응형 웹 디자인을 위한 미디어 쿼리 --- */
-
-/* 중간 크기 화면 (예: 태블릿) */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    .page-container {
-        padding: 15px;
-    }
-
-    h1 {
-        font-size: 1.5em;
-        margin-bottom: 20px;
-    }
-
-    .location-item label {
-        min-width: 50px;
-        /* 레이블 최소 너비 약간 줄임 */
-    }
-
-    /* .location-item input[type="text"]는 flex-grow: 1로 이미 유연하게 조정됨 */
-
-    .waypoint-text-label {
-        font-size: 0.9rem;
-    }
-
-    .waypoint-item .waypoint-input-field {
-        font-size: 0.9rem;
-        /* flex-basis: 0; 와 flex-grow: 1 조합은 아이템이 공간을 채우도록 함 */
-        /* 이미 flex-grow: 1이 기본 스타일이므로 여기서는 특별히 flex-basis를 0으로 할 필요는 없음 */
-    }
-}
-
-/* 작은 크기 화면 (예: 모바일) */
-@media (max-width: 400px) {
-    .location-item {
-        flex-direction: column;
-        /* 레이블과 입력 필드를 수직으로 쌓음 */
-        align-items: stretch;
-        /* 자식 요소들이 전체 너비를 차지하도록 함 */
-    }
-
-    .location-item label {
-        min-width: unset;
-        /* 최소 너비 제한 해제 */
-        width: 100%;
-        margin-bottom: 5px;
-        /* 레이블과 입력 필드 사이 간격 */
-    }
-
-    .location-item input[type="text"] {
-        width: 100%;
-    }
-
-    /* .waypoint-item은 아이콘 + 텍스트/입력 필드 구조를 유지하되, 필요시 flex-wrap으로 줄바꿈됨 */
-    .waypoint-item {
-        /* 특별한 변경이 필요 없을 수 있으나, 필요시 아이콘과 입력 필드 배치를 조정 */
-    }
-}
-
-#map {
-    margin-top: 20px;
-    border: 1px solid #dadce0;
-    border-radius: 6px;
-}
-
-.next-page-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.next-page-link a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #f0f2f5;
-    color: #333;
-    font-size: 1.5em;
-    text-decoration: none;
-}
-
-/* 뒤로가기 버튼 컨테이너 (좌상단 고정) */
-.back-btn-container {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    z-index: 10;
-}
-
-.back-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: none;
-    border: none;
-    color: #4DD0E1;
-    font-size: 28px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 8px;
     transition: background 0.2s;
 }
 
-.back-btn:hover {
-    background: #e0f7fa;
+.waypoint-item:hover {
+    background: #f8f9fa;
+}
+
+.waypoint-action-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: background 0.2s, transform 0.2s;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.waypoint-action-icon.add {
+    background: #4CAF50;
+    color: #fff;
+}
+
+.waypoint-action-icon.add:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.waypoint-action-icon.remove {
+    background: #f44336;
+    color: #fff;
+}
+
+.waypoint-action-icon.remove:hover {
+    background: #da190b;
+    transform: scale(1.05);
+}
+
+.waypoint-text-label {
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 1;
+}
+
+/* ===== 경로 검색 버튼 ===== */
+.route-search-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #00c73c, #00a32a);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 199, 60, 0.3);
+}
+
+.route-search-btn:hover {
+    background: linear-gradient(135deg, #00a32a, #008a22);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 199, 60, 0.4);
+}
+
+.route-search-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== 지도 ===== */
+#map {
+    width: 100%;
+    height: 400px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+/* ===== 다음 페이지 링크 ===== */
+.next-page-link {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+}
+
+.next-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.next-link:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(33, 150, 243, 0.5);
+}
+
+/* ===== 경로 정보 ===== */
+.route-info {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    border-left: 4px solid #2196F3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.route-info h3 {
+    color: #2196F3;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.route-info p {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.route-info p:last-child {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #dee2e6;
+    font-size: 16px;
+    color: #2196F3;
+}
+
+/* ===== 로딩 ===== */
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    z-index: 2000;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.loading::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #ffffff40;
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== 모바일 반응형 ===== */
+@media (max-width: 480px) {
+    .page-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    h1 {
+        margin: 50px 0 20px;
+        font-size: 20px;
+    }
+
+    .location-item input,
+    .waypoint-input-field {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+    #map {
+        height: 300px;
+        margin: 15px 0;
+    }
+
+    .route-search-btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    .next-link {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+
+    .next-page-link {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* ===== 접근성 & 기타 ===== */
+.waypoint-action-icon:focus,
+.route-search-btn:focus,
+.next-link:focus {
+    outline: 2px solid #2196F3;
+    outline-offset: 2px;
+}
+
+html {
+    scroll-behavior: smooth;
 }
