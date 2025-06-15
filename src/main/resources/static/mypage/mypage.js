@@ -42,6 +42,27 @@ window.addEventListener('DOMContentLoaded', function() {
     enableHorizontalDragScroll('.posts-list.horizontal-scroll');
 });
 
+// 년월 그룹 헤더 클릭 시 해당 년월 정보와 함께 이동
+window.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.posts-group-header').forEach(function(header) {
+        header.style.cursor = 'pointer';
+        header.addEventListener('click', function(e) {
+            // 텍스트에서 년, 월 추출 (예: '25년 6월')
+            var text = header.textContent.trim();
+            var match = text.match(/(\d+)년\s*(\d+)월/);
+            if (match) {
+                var year = match[1];
+                var month = match[2];
+                window.location.href = '/mypage_postgroup/mypage_postgroup.html?year=' + year + '&month=' + month;
+            } else {
+                window.location.href = '/mypage_postgroup/mypage_postgroup.html';
+            }
+        });
+    });
+    // 데스크톱 가로 스크롤 드래그 지원
+    enableHorizontalDragScroll('.posts-list.horizontal-scroll');
+});
+
 // 데스크톱에서 게시글 가로 스크롤 마우스 드래그 지원
 function enableHorizontalDragScroll(selector) {
     document.querySelectorAll(selector).forEach(function(list) {

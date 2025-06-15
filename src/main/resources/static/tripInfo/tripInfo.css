@@ -47,10 +47,6 @@ html {
     margin-top: 0px;
 }
 
-.search-bar-wrapper{
-    margin: 12px 0;
-}
-
 /* index 페이지 검색창 스타일로 통일 */
 .search-bar {
     display: flex;
@@ -60,6 +56,7 @@ html {
     padding: 0.9rem 1.6rem;
     margin: 20px 24px 9px 24px;
     width: calc(100% - 48px);
+    /* 검색창 배경 반투명 블러 */
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     position: relative;
@@ -71,13 +68,14 @@ html {
     outline: none;
     flex: 1;
     min-width: 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     background: transparent;
 }
 
 .search-bar input::placeholder {
-    color: #6dd5ed;
-    font-weight: 500;
+    color: rgb(109, 213, 237, 1);
+    font-size: 1.1rem;
+    font-weight: 700;
     opacity: 1;
 }
 
@@ -89,12 +87,6 @@ html {
     flex-shrink: 0;
 }
 
-.search-icon {
-    color: #6dd5ed;
-    font-size: 1.3rem;
-    padding: 12px 0 12px 0;
-}
-
 .tripinfo-section {
     margin-bottom: 24px;
     position: relative;
@@ -104,13 +96,15 @@ html {
 }
 
 .section-header {
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    margin-left: 24px;
+    color: #666;
     margin-bottom: 8px;
+    margin-left: 24px;
     display: flex;
     align-items: center;
-    color: #151515;
+    gap: 4px;
+    width: fit-content;
 }
 
 .section-arrow {
