@@ -1,4 +1,4 @@
-    * {
+* {
       box-sizing: border-box;
     }
     body {
@@ -96,11 +96,13 @@
 
     .photo-grid {
       display: flex;
+      flex-wrap: wrap;
       gap: 12px;
     }
 
     .photo-box {
-      flex: 1;
+      flex: 0 0 calc((100% - 24px) / 3);
+      max-width: calc((100% - 24px) / 3);
       aspect-ratio: 1 / 1;
       background: #f0f9fd;
       border: 2px dashed #6dd5ed;
@@ -111,6 +113,20 @@
       font-size: 2rem;
       color: #6dd5ed;
       cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .photo-box {
+        flex: 0 0 calc((100% - 12px) / 2);
+        max-width: calc((100% - 12px) / 2);
+      }
+    }
+    @media (max-width: 480px) {
+      .photo-box {
+        flex: 0 0 calc((100% - 12px) / 2);
+        max-width: calc((100% - 12px) / 2);
+      }
     }
 
     .submit-btn {
