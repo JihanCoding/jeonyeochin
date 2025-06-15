@@ -175,3 +175,33 @@ const searchBar = document.querySelector('.search-bar');
 searchBar.addEventListener('click', function (e) {
     window.location.href = '/search/search.html';
 });
+
+// 지도에 마커 표시 (글 목록)
+window.addEventListener('DOMContentLoaded', function () {
+    fetch('/api/posts')
+        .then(res => res.json())
+        .then(posts => {
+            posts.forEach(post => {
+                if (post.lat && post.lng) {
+                    const marker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(post.lat, post.lng),
+                        map: map
+                    });
+                    // 마커 클릭 시 정보창
+                    const infoHtml = `
+                        <div style="min-width:180px;max-width:220px;word-break:break-all;">
+                            <b>${post.title}</b><br>
+                            <span>${post.category ? '['+post.category+'] ' : ''}${post.content}</span><br>
+                            ${post.imageUrls && post.imageUrls.length > 0 ? `<img src='${post.imageUrls[0]}' style='width:100%;margin-top:6px;border-radius:8px;'>` : ''}
+                        </div>
+                    `;
+                    const infowindow = new naver.maps.InfoWindow({
+                        content: infoHtml
+                    });
+                    naver.maps.Event.addListener(marker, 'click', function () {
+                        infowindow.open(map, marker);
+                    });
+                }
+            });
+        });
+});
