@@ -37,21 +37,20 @@ html {
 }
 
 .search-bar {
+    max-width: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     border: 4px solid #6dd5ed;
     border-radius: 999px;
     padding: 0.9rem 1.6rem;
-    margin: 20px 24px 8px 24px;
-    width: auto;
-    min-width: 0;
-    max-width: 100%;
+    margin: 20px 24px 9px 24px;
+    width: calc(100% - 48px);
     /* 검색창 배경 반투명 블러 */
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 15;
-    box-sizing: border-box;
 }
 
 .search-bar input {
@@ -66,25 +65,23 @@ html {
 .search-bar input::placeholder {
     color: rgb(109, 213, 237, 1);
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     opacity: 1;
 }
 
 .search-bar button {
-    color: #36b3d9;
+    color: #6dd5ed;
     background: none;
     border: none;
     cursor: pointer;
     flex-shrink: 0;
 }
 
-
 .filters-wrapper {
     overflow-x: auto;
-    padding: 0px 0 0px 24px;
+    padding: 0 24px;
     /* 필터 배경 투명 */
-    background: rgba(255, 255, 255);
-    backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0);
     position: relative;
     z-index: 14;
 }
@@ -107,21 +104,16 @@ html {
     margin-right: 0.4rem;
 }
 
-.filters::after {
-    content: "";
-    flex: 0 0 24px;
-}
-
 .filters button {
     padding: 0.32rem 1rem;
-    border: 2px solid #6dd5ed;
+    border: 3px solid #6dd5ed;
     border-radius: 20px;
     color: #6dd5ed;
-    /* 검색창 배경 반투명 블러 */
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
+    font-weight: 600;
     font-size: 1.0rem;
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
     transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
 }
 
@@ -131,6 +123,10 @@ html {
     border-color: #6dd5ed;
 }
 
+.filters::after {
+    content: "";
+    flex: 0 0 24px;
+}
 .section-title {
     padding: 8px 24px 0px 24px;
     font-weight: bold;

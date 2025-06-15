@@ -38,13 +38,13 @@ body {
 }
 
 .logo {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
 .menu-toggle {
     cursor: pointer;
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 /* index 페이지 검색창 스타일로 통일 */
@@ -68,16 +68,14 @@ body {
     outline: none;
     flex: 1;
     min-width: 0;
-    color: rgb(109, 213, 237, 1);
     font-size: 1.1rem;
-    font-weight: 700;
     background: transparent;
 }
 
 .search-bar input::placeholder {
     color: rgb(109, 213, 237, 1);
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 600;
     opacity: 1;
 }
 

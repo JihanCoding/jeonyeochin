@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -8,10 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/setting/settings.css" />
 </head>
+
 <body>
     <div class="settings-overlay">
         <header class="settings-header">
-            <span class="material-icons back-btn">chevron_left</span>
+            <button id="backButton" class="back-button" onclick="window.location.href='/index/index.html'">
+                <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
+            </button>
             <div class="settings-title">설정</div>
             <span class="material-icons" style="visibility: hidden;">menu</span>
         </header>
@@ -170,4 +174,5 @@
         <script src="/setting/settings.js"></script>
     </div>
 </body>
+
 </html>
