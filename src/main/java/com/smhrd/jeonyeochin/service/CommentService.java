@@ -14,9 +14,9 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    // 좋아요 생성
+    // 댓글 생성
     public Comment saveComment(Comment comment) {
-        // 좋아요 정보 저장
+        // 댓글 정보 저장
         return commentRepository.save(comment);
     }
 }
