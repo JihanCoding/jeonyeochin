@@ -10,7 +10,7 @@ let currentPath = null;
 const DEFAULT_CENTER = { lat: 37.5665, lng: 126.9780 };
 const ZOOM_LEVEL = 14;
 
-document.addEventListener('DOMContentLoaded', function () {
+window.naverMapInit = function () {
     const startInput = document.getElementById('start-point');
     const endInput = document.getElementById('end-point');
     const waypointsContainer = document.getElementById('waypoints-container');
@@ -89,7 +89,28 @@ document.addEventListener('DOMContentLoaded', function () {
             e.target.removeAttribute('readonly');
         }
     });
-});
+
+    // 지도 초기화
+    function initMap(center) {
+        currentMap = new naver.maps.Map('map', {
+            center: center || new naver.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
+            zoom: ZOOM_LEVEL,
+            mapTypeControl: true
+        });
+        naver.maps.Event.addListener(currentMap, 'click', function (e) {
+            handleMapClick(e.coord);
+        });
+    }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const currentLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                initMap(currentLocation);
+            },
+            function () { initMap(); }
+        );
+    } else { initMap(); }
+}
 
 // Waypoint 아이템 생성 함수
 function createWaypointItem() {
@@ -154,27 +175,6 @@ function disableMapSelection() {
 window.enableMapSelection = enableMapSelection;
 window.disableMapSelection = disableMapSelection;
 
-// 지도 초기화
-function initMap(center) {
-    currentMap = new naver.maps.Map('map', {
-        center: center || new naver.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
-        zoom: ZOOM_LEVEL,
-        mapTypeControl: true
-    });
-    naver.maps.Event.addListener(currentMap, 'click', function (e) {
-        handleMapClick(e.coord);
-    });
-}
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-        function (position) {
-            const currentLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            initMap(currentLocation);
-        },
-        function () { initMap(); }
-    );
-} else { initMap(); }
-
 // 지도 클릭 처리
 async function handleMapClick(coord) {
     if (!mapSelectionMode) return;
@@ -215,26 +215,61 @@ async function handleMapClick(coord) {
     }
 }
 
-// 역지오코딩
-function reverseGeocode(lat, lng) {
-    return new Promise((resolve, reject) => {
-        naver.maps.Service.reverseGeocode({
-            coords: new naver.maps.LatLng(lat, lng),
-            orders: [naver.maps.Service.OrderType.ADDR, naver.maps.Service.OrderType.ROAD_ADDR].join(',')
-        }, function (status, response) {
-            if (status !== naver.maps.Service.Status.OK) return reject(new Error('역지오코딩 실패'));
-            const items = response.v2.results;
-            let address = '';
-            if (items[0]) {
-                address = items[0].region.area1.name + ' ' + items[0].region.area2.name + ' ' + items[0].region.area3.name;
-                if (items[0].land) {
-                    address += ' ' + items[0].land.number1;
-                    if (items[0].land.number2) address += '-' + items[0].land.number2;
-                }
-            }
-            resolve(address || '알 수 없는 위치');
-        });
+// 네이버 클라우드 REST API 방식으로 주소 → 좌표 변환 (CORS Anywhere 프록시 사용)
+async function geocodeAddress(address) {
+    const apiKeyId = 'e696ij4ub6';
+    const apiKey = 'VE4dq3vAamH8MibpCpjxskfG1l8MbSrUcJBk9Qzz';
+    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    const url = corsProxy + `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
+    const response = await fetch(url, {
+        headers: {
+            'X-NCP-APIGW-API-KEY-ID': apiKeyId,
+            'X-NCP-APIGW-API-KEY': apiKey,
+            'Accept': 'application/json'
+        }
     });
+    const data = await response.json();
+    if (data.status !== 'OK' || !data.addresses || !data.addresses[0]) {
+        throw new Error(`주소를 찾을 수 없음: ${address}`);
+    }
+    return {
+        lat: parseFloat(data.addresses[0].y),
+        lng: parseFloat(data.addresses[0].x)
+    };
+}
+
+// 네이버 클라우드 REST API 방식으로 좌표 → 주소 변환 (CORS Anywhere 프록시 사용)
+async function reverseGeocode(lat, lng) {
+    const apiKeyId = 'e696ij4ub6';
+    const apiKey = 'VE4dq3vAamH8MibpCpjxskfG1l8MbSrUcJBk9Qzz';
+    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    const url = corsProxy + `https://maps.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&orders=roadaddr,addr&output=json`;
+    const response = await fetch(url, {
+        headers: {
+            'X-NCP-APIGW-API-KEY-ID': apiKeyId,
+            'X-NCP-APIGW-API-KEY': apiKey,
+            'Accept': 'application/json'
+        }
+    });
+    const data = await response.json();
+    console.log('reverseGeocode 응답:', data);
+    // status.code === 0, status.name === 'ok'이면 정상
+    if (!data.status || data.status.code !== 0 || !data.results || !data.results.length) {
+        throw new Error('역지오코딩 실패');
+    }
+    // results에서 type이 roadaddr 또는 addr인 결과를 우선적으로 사용
+    const result = data.results.find(r => r.name === 'roadaddr') || data.results.find(r => r.name === 'addr') || data.results[0];
+    const region = result.region;
+    const land = result.land;
+    let address = '';
+    if (region) {
+        address = [region.area1.name, region.area2.name, region.area3.name].filter(Boolean).join(' ');
+    }
+    if (land && land.number1) {
+        address += ' ' + land.number1;
+        if (land.number2) address += '-' + land.number2;
+    }
+    return address || '알 수 없는 위치';
 }
 
 // 임시 마커 추가
@@ -294,48 +329,10 @@ function hideMapSelectionGuide() {
     if (guideEl) guideEl.style.display = 'none';
 }
 
-// 경로 검색 및 최적화 함수
-async function searchRoute() {
-    const startPoint = document.getElementById('start-point').value;
-    const endPoint = document.getElementById('end-point').value;
-    const waypoints = Array.from(document.querySelectorAll('.waypoint-input-field'))
-        .filter(input => input.style.display !== 'none' && input.value.trim())
-        .map(input => input.value.trim());
-
-    if (!startPoint || !endPoint) return alert('출발지와 도착지를 입력해주세요.');
-
-    // 임시 마커들 제거
-    tempMarkers.forEach(marker => marker.setMap(null));
-    tempMarkers = [];
-
-    // 로딩 표시
-    showLoading(true);
-
-    try {
-        // 1. 모든 장소의 좌표 구하기
-        const coordinates = await getCoordinatesForAllPoints(startPoint, endPoint, waypoints);
-
-        // 2. 최적 경로 계산
-        const optimizedRoute = await findOptimizedRoute(coordinates);
-
-        // 3. 지도에 경로 표시
-        displayRouteOnMap(optimizedRoute);
-
-        // 4. 경로 정보 표시
-        displayRouteInfo(optimizedRoute);
-
-    } catch (error) {
-        alert('경로 검색 중 오류가 발생했습니다: ' + error.message);
-    } finally {
-        showLoading(false);
-    }
-}
-
-// 모든 지점의 좌표를 구하는 함수
+// 모든 지점의 좌표를 구하는 함수 (start, end, waypoints)
 async function getCoordinatesForAllPoints(start, end, waypoints) {
     const allPoints = [start, ...waypoints, end];
     const coordinates = [];
-
     for (let i = 0; i < allPoints.length; i++) {
         const point = allPoints[i];
         try {
@@ -351,149 +348,142 @@ async function getCoordinatesForAllPoints(start, end, waypoints) {
             throw new Error(`"${point}" 위치를 찾을 수 없습니다.`);
         }
     }
-
     return coordinates;
 }
 
-// 주소를 좌표로 변환하는 함수 (네이버 지오코딩 API 사용)
-function geocodeAddress(address) {
-    return new Promise((resolve, reject) => {
-        naver.maps.Service.geocode({ query: address }, function (status, response) {
-            if (status !== naver.maps.Service.Status.OK) return reject(new Error(`주소 변환 실패: ${address}`));
-            const result = response.v2.addresses[0];
-            if (!result) return reject(new Error(`주소를 찾을 수 없음: ${address}`));
-            resolve({ lat: parseFloat(result.y), lng: parseFloat(result.x) });
-        });
+// 경로 검색 및 최적화 함수
+async function searchRoute() {
+    const startPoint = document.getElementById('start-point').value;
+    const endPoint = document.getElementById('end-point').value;
+    const waypoints = Array.from(document.querySelectorAll('.waypoint-input-field'))
+        .filter(input => input.style.display !== 'none' && input.value.trim())
+        .map(input => input.value.trim());
+    if (!startPoint || !endPoint) return alert('출발지와 도착지를 입력해주세요.');
+    tempMarkers.forEach(marker => marker.setMap(null));
+    tempMarkers = [];
+    showLoading(true);
+    try {
+        const coordinates = await getCoordinatesForAllPoints(startPoint, endPoint, waypoints);
+        // 경로 모드 선택값 읽기
+        const mode = document.querySelector('input[name="routeMode"]:checked').value;
+        // Directions API로 실제 경로 polyline 가져오기
+        const polylineCoords = await getDirectionsRoute(coordinates, mode);
+        displayRouteOnMapWithPolyline(coordinates, polylineCoords);
+        displayRouteInfo(optimizedRouteFromPolyline(coordinates, polylineCoords));
+    } catch (error) {
+        alert('경로 검색 중 오류가 발생했습니다: ' + error.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// 네이버 Directions API로 실제 경로(도보/자차/대중교통) 가져오기
+async function getDirectionsRoute(coordinates, mode) {
+    const apiKeyId = 'e696ij4ub6';
+    const apiKey = 'VE4dq3vAamH8MibpCpjxskfG1l8MbSrUcJBk9Qzz';
+    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    const baseUrl5 = 'https://naveropenapi.apigw.ntruss.com/map-direction/v1/';
+    const baseUrl15 = 'https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/';
+    let start = `${coordinates[0].lng},${coordinates[0].lat}`;
+    let goal = `${coordinates[coordinates.length - 1].lng},${coordinates[coordinates.length - 1].lat}`;
+    let waypoints = coordinates.slice(1, -1).map(c => `${c.lng},${c.lat}`).join('|');
+    let apiPath = '';
+    if (mode === 'walking') apiPath = 'walking';
+    else if (mode === 'driving') apiPath = 'driving';
+    else if (mode === 'transit') apiPath = 'transit';
+    let apiUrl5 = `${baseUrl5}${apiPath}?start=${start}&goal=${goal}`;
+    let apiUrl15 = `${baseUrl15}${apiPath}?start=${start}&goal=${goal}`;
+    if (waypoints) {
+        apiUrl5 += `&waypoints=${waypoints}`;
+        apiUrl15 += `&waypoints=${waypoints}`;
+    }
+    // Directions 5 먼저 시도, 실패(404 등)시 Directions 15로 재시도
+    let data = null;
+    let url = corsProxy + apiUrl5;
+    let response = await fetch(url, {
+        headers: {
+            'X-NCP-APIGW-API-KEY-ID': apiKeyId,
+            'X-NCP-APIGW-API-KEY': apiKey,
+            'Accept': 'application/json'
+        }
     });
-}
-
-// 최적 경로 찾기 (Greedy)
-async function findOptimizedRoute(coordinates) {
-    if (coordinates.length <= 2) return coordinates;
-    const startPoint = coordinates.find(c => c.type === 'start');
-    const endPoint = coordinates.find(c => c.type === 'end');
-    const waypoints = coordinates.filter(c => c.type === 'waypoint');
-    if (waypoints.length === 0) return [startPoint, endPoint];
-    const distanceMatrix = await calculateDistanceMatrix(coordinates);
-    return findOptimalOrder(startPoint, endPoint, waypoints, distanceMatrix);
-}
-
-// 거리 매트릭스 계산
-async function calculateDistanceMatrix(coordinates) {
-    const matrix = {};
-    for (let i = 0; i < coordinates.length; i++) {
-        for (let j = 0; j < coordinates.length; j++) {
-            if (i !== j) {
-                const key = `${i}-${j}`;
-                matrix[key] = calculateDistance(
-                    coordinates[i].lat, coordinates[i].lng,
-                    coordinates[j].lat, coordinates[j].lng
-                );
-            }
-        }
-    }
-    return matrix;
-}
-// 두 지점 간 거리
-function calculateDistance(lat1, lng1, lat2, lng2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-}
-// 최적 순서 찾기 (Greedy)
-function findOptimalOrder(startPoint, endPoint, waypoints, distanceMatrix) {
-    if (waypoints.length === 0) return [startPoint, endPoint];
-    const visited = new Set();
-    const route = [startPoint];
-    let currentPoint = startPoint;
-    while (visited.size < waypoints.length) {
-        let nearestPoint = null;
-        let nearestDistance = Infinity;
-        waypoints.forEach((waypoint, index) => {
-            if (!visited.has(index)) {
-                const distance = calculateDistance(
-                    currentPoint.lat, currentPoint.lng,
-                    waypoint.lat, waypoint.lng
-                );
-                if (distance < nearestDistance) {
-                    nearestDistance = distance;
-                    nearestPoint = waypoint;
-                }
+    if (response.status === 404) {
+        url = corsProxy + apiUrl15;
+        response = await fetch(url, {
+            headers: {
+                'X-NCP-APIGW-API-KEY-ID': apiKeyId,
+                'X-NCP-APIGW-API-KEY': apiKey,
+                'Accept': 'application/json'
             }
         });
-        if (nearestPoint) {
-            route.push(nearestPoint);
-            visited.add(waypoints.indexOf(nearestPoint));
-            currentPoint = nearestPoint;
-        }
     }
-    route.push(endPoint);
-    return route;
+    data = await response.json();
+    console.log('Directions API 응답:', data);
+    if (!data.route) throw new Error('경로 탐색 실패');
+    let path = [];
+    if (mode === 'walking' && data.route.trafast) {
+        path = data.route.trafast[0].path;
+    } else if (mode === 'driving' && data.route.trafast) {
+        path = data.route.trafast[0].path;
+    } else if (mode === 'transit' && data.route.subPath) {
+        data.route.subPath.forEach(sp => {
+            if (sp.path) path = path.concat(sp.path);
+        });
+    }
+    return path.map(([lng, lat]) => new naver.maps.LatLng(lat, lng));
 }
 
-// 지도에 경로 표시
-function displayRouteOnMap(optimizedRoute) {
+// polyline 좌표로 지도에 경로 표시 (마커+실제 경로)
+function displayRouteOnMapWithPolyline(points, polylineCoords) {
     if (!currentMap) return;
     currentMarkers.forEach(marker => marker.setMap(null));
     currentMarkers = [];
     if (currentPath) { currentPath.setMap(null); currentPath = null; }
-    const pathCoords = [];
-    optimizedRoute.forEach((point, index) => {
+    if (window.routeDistanceOverlays) {
+        window.routeDistanceOverlays.forEach(o => o.setMap(null));
+    }
+    window.routeDistanceOverlays = [];
+    // 출발/경유/도착 마커
+    points.forEach((point, index) => {
         const marker = new naver.maps.Marker({
             position: new naver.maps.LatLng(point.lat, point.lng),
             map: currentMap,
             title: point.name,
             icon: {
-                content: `<div style="background: ${point.type === 'start' ? '#4CAF50' : point.type === 'end' ? '#F44336' : '#FF9800'}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">${index + 1}</div>`,
-                anchor: new naver.maps.Point(15, 15)
+                content: `<div style="background: ${point.type === 'start' ? '#4CAF50' : point.type === 'end' ? '#F44336' : '#FF9800'}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${index + 1}</div>` +
+                    `<div style='margin-top:2px;font-size:11px;background:#fff;color:#333;padding:2px 6px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap;'>${point.name}</div>`,
+                anchor: new naver.maps.Point(15, 35)
             }
         });
         currentMarkers.push(marker);
-        pathCoords.push(new naver.maps.LatLng(point.lat, point.lng));
     });
+    // 실제 경로 polyline
     currentPath = new naver.maps.Polyline({
-        path: pathCoords,
+        path: polylineCoords,
         strokeColor: '#2196F3',
         strokeWeight: 4,
         strokeOpacity: 0.8,
         map: currentMap
     });
+    // 경로 구간별 거리 오버레이는 생략(실제 경로이므로)
     const bounds = new naver.maps.LatLngBounds();
-    pathCoords.forEach(coord => bounds.extend(coord));
+    polylineCoords.forEach(coord => bounds.extend(coord));
     currentMap.fitBounds(bounds);
 }
 
-// 경로 정보 표시
-function displayRouteInfo(optimizedRoute) {
+// polyline 경로로부터 구간별 거리 및 정보 생성(간단 버전)
+function optimizedRouteFromPolyline(points, polylineCoords) {
+    // 출발~도착 구간만 표시
     let totalDistance = 0;
-    let routeInfo = '<div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;">';
-    routeInfo += '<h3>최적화된 경로</h3>';
-    for (let i = 0; i < optimizedRoute.length - 1; i++) {
-        const distance = calculateDistance(
-            optimizedRoute[i].lat, optimizedRoute[i].lng,
-            optimizedRoute[i + 1].lat, optimizedRoute[i + 1].lng
+    for (let i = 0; i < polylineCoords.length - 1; i++) {
+        totalDistance += calculateDistance(
+            polylineCoords[i].lat(), polylineCoords[i].lng(),
+            polylineCoords[i + 1].lat(), polylineCoords[i + 1].lng()
         );
-        totalDistance += distance;
-        routeInfo += `<p>${i + 1}. ${optimizedRoute[i].name} → ${optimizedRoute[i + 1].name} (${distance.toFixed(1)}km)</p>`;
     }
-    routeInfo += `<p><strong>총 거리: ${totalDistance.toFixed(1)}km</strong></p>`;
-    routeInfo += '</div>';
-
-    // 기존 경로 정보 제거 후 추가
-    const existingInfo = document.querySelector('.route-info');
-    if (existingInfo) existingInfo.remove();
-    const routePlannerEl = document.getElementById('route-planner');
-    if (routePlannerEl) {
-        const infoDiv = document.createElement('div');
-        infoDiv.className = 'route-info';
-        infoDiv.innerHTML = routeInfo;
-        routePlannerEl.appendChild(infoDiv);
-    }
+    return [
+        { name: `${points[0].name} → ${points[points.length - 1].name}`, distance: totalDistance }
+    ];
 }
 
 // 로딩 표시

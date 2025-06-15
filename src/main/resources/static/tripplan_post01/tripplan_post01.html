@@ -34,6 +34,11 @@
                 <input type="text" id="end-point" placeholder="도착지를 입력하세요" readonly>
             </div>
         </div>
+        <div class="route-mode-select" style="margin: 10px 0; text-align: center;">
+            <label><input type="radio" name="routeMode" value="walking" checked> 도보</label>
+            <label style="margin-left: 16px;"><input type="radio" name="routeMode" value="driving"> 자차</label>
+            <label style="margin-left: 16px;"><input type="radio" name="routeMode" value="transit"> 대중교통</label>
+        </div>
         <button class="route-search-btn" onclick="searchRoute()">
             🔍 경로 검색
         </button>
