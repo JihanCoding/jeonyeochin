@@ -2,6 +2,18 @@
 const profileImgInput = document.getElementById('profile-img-input');
 const profileImgPreview = document.getElementById('profile-img-preview');
 
+function updateProfileImgUI() {
+    const img = document.getElementById('profile-img-preview');
+    const label = document.querySelector('.profile-img-label');
+    if (!img.src || img.src.endsWith('/') || img.src === window.location.href) {
+        label.classList.add('no-img');
+        img.style.display = 'none';
+    } else {
+        label.classList.remove('no-img');
+        img.style.display = 'block';
+    }
+}
+
 if (profileImgInput && profileImgPreview) {
     profileImgInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
@@ -9,10 +21,13 @@ if (profileImgInput && profileImgPreview) {
             const reader = new FileReader();
             reader.onload = function (ev) {
                 profileImgPreview.src = ev.target.result;
+                updateProfileImgUI();
             };
             reader.readAsDataURL(file);
         }
     });
+    // 페이지 로드시에도 체크
+    updateProfileImgUI();
 }
 
 // 년월 옆 꺽쇠 클릭 시 mypage_postgroup.html로 이동
@@ -56,3 +71,13 @@ function enableHorizontalDragScroll(selector) {
         });
     });
 }
+
+// 마이페이지 뒤로가기 버튼(index로 이동)
+document.addEventListener('DOMContentLoaded', function() {
+    const backBtn = document.querySelector('.app-header .back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            window.location.href = '/index/index.html';
+        });
+    }
+});

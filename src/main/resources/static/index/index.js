@@ -4,6 +4,16 @@ menuToggle.addEventListener('click', () => {
     sideMenu.classList.toggle('show');
 });
 
+document.getElementById('notificationBtn').onclick = function () {
+    window.location.href = '/notifications/notifications.html';
+};
+
+const writeBtn = document.querySelector('.write-button');
+if (writeBtn) {
+    writeBtn.addEventListener('click', function() {
+        window.location.href = '/newpost/newpost.html';
+    });
+}
 
 const filterButtons = document.querySelectorAll('.filters button');
 const allButton = document.querySelector('.filters button[data-type="전체"]');

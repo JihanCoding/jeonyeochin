@@ -1,106 +1,60 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전여친 커뮤니티 - 게시글 작성</title>
-    <link rel="stylesheet" href="/newPost/newPost.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>글 작성</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newPost/newPost.css">
 </head>
 <body>
+  <header class="app-header">
+    <span class="material-icons back-button" onclick="history.back()">chevron_left</span>
+    <div class="logo">글 작성</div>
+    <span class="material-icons" style="opacity: 0">menu</span>
+  </header>
 
-
-    <!-- 메인 컨테이너 -->
-    <div class="container">
-        <!-- 헤더 -->
-        <header class="header" style="display: flex; align-items: center; justify-content: center; position: relative;">
-            <button class="back-btn" onclick="goBack()" style="position: absolute; left: 0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            </button>
-            <h1 class="header-title" style="margin: 0; text-align: center; color: blue;" >전여친 커뮤니티</h1>
-        </header>
-
-        <!-- 폼 영역 -->
-        <div class="form-container">
-            <!-- 위치 선택 -->
-            <div class="location-section" style="color: lightblue;">
-                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                </svg>
-                <span>게시글 위치 선택</span>
-            </div>
-            <!-- 카테고리와 제목 -->
-            <div class="title-category-row">
-                <div class="category-dropdown">
-                    <select class="category-select" id="categorySelect">
-                        <option value="question">카테고리 선택</option>
-                        <option value="post">게시글</option>
-                        <option value="review">후기</option>
-                        <option value="tip">팁</option>
-                        <option value="photo">사진</option>
-                    </select>
-                </div>
-                <input type="text" class="title-input" placeholder="제목" id="titleInput">
-            </div>
-            
-            <!-- 태그 입력 섹션 (카테고리와 이미지 업로드 사이에 추가) -->
-            <div class="tag-section">
-                <div class="tag-input-container">
-                    <input type="text" class="tag-input" placeholder="태그를 입력하세요" id="tagInput">
-                    <div class="tag-tooltip">
-                        쉼표 혹은 엔터를 입력하여 태그를 등록 할 수 있습니다.<br>
-                        등록된 태그를 클릭하면 삭제됩니다.
-                    </div>
-                </div>
-                <div class="tag-list" id="tagList"></div>
-            </div>
-            
-
-            <!-- 이미지 업로드 -->
-            <div class="upload-section">
-                <label class="upload-btn">
-                    <input type="file" multiple accept="image/*" id="cameraInput">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                        <circle cx="12" cy="13" r="4"/>
-                    </svg>
-                </label>
-                
-                <label class="upload-btn">
-                    <input type="file" multiple accept="image/*" id="galleryInput">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
-                </label>
-            </div>
-
-            <!-- 이미지 미리보기 -->
-            <div class="image-preview" id="imagePreview"></div>
-
-            <!-- 내용 입력 -->
-            <div class="content-section">
-                <textarea class="content-textarea" placeholder="내용" id="contentTextarea"></textarea>
-            </div>
-
-            <!-- 하단 여백 -->
-            <div class="form-bottom-spacer"></div>
-        </div>
-
-        <!-- 하단 고정 영역 -->
-        <div class="bottom-section">
-            <div class="notice-text">
-                전남 여행은 전여친과 함께~
-            </div>
-            <div class="submit-area">
-                <button class="submit-btn" id="submitBtn" onclick="submitPost()">작성하기</button>
-            </div>
-        </div>
-
+  <div class="form-container">
+    <div class="form-group">
+      <label>위치 선택</label>
+      <div class="map-select" onclick="">
+        지도에서 위치 선택하기
+      </div>
     </div>
 
-    <script src="/newPost/newPost.js"></script>
+    <div class="form-row">
+      <div class="form-group category">
+        <label for="category">카테고리</label>
+        <select id="category">
+          <option value="">선택</option>
+          <option value="후기">후기</option>
+          <option value="질문">질문</option>
+          <option value="정보">정보</option>
+          <option value="추천">추천</option>
+        </select>
+      </div>
+      <div class="form-group title">
+        <label for="title">제목</label>
+        <input type="text" id="title" placeholder="제목을 입력하세요" />
+      </div>
+    </div>
+
+    <div class="photo-grid">
+      <div class="photo-box">
+        <span class="material-icons">photo_camera</span>
+      </div>
+      <div class="photo-box">
+        <span class="material-icons">add</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="content">내용</label>
+      <textarea id="content" placeholder="내용을 입력하세요"></textarea>
+    </div>
+  </div>
+
+  <button class="submit-btn">등록</button>
 </body>
 </html>

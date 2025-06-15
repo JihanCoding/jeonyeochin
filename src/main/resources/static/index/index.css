@@ -17,7 +17,7 @@ body {
     background: #fff;
 }
 
-#map {
+#post {
     background-color: #e2e2e2;
     height: 100vh;
     width: 100%;
@@ -55,6 +55,7 @@ body {
     font-size: 1.8rem;
     font-weight: 500;
 }
+
 
 /* 사이드 메뉴 */
 .side-menu {
@@ -143,8 +144,16 @@ body {
 
 .filters {
     display: flex;
-    gap: 0.4rem;
+    gap: 0;
     white-space: nowrap;
+}
+
+.filters button:last-child {
+    margin-right: 0;
+    /* gap 효과 제거 */
+}
+.filters button:not(:last-child) {
+    margin-right: 0.4rem;
 }
 
 .filters button {
@@ -154,7 +163,7 @@ body {
     color: #6dd5ed;
     font-weight: 600;
     font-size: 1.0rem;
-    cursor: pointer;    
+    cursor: pointer;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
