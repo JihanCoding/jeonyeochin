@@ -42,7 +42,7 @@ filterButtons.forEach(button => {
 updateAllButtonState();
 
 
-// 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
+ // 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
 const backButton = document.getElementById('backButton');
 backButton.addEventListener('click', () => {
     sideMenu.classList.remove('show');
@@ -178,30 +178,33 @@ searchBar.addEventListener('click', function (e) {
 
 // 지도에 마커 표시 (글 목록)
 window.addEventListener('DOMContentLoaded', function () {
-    fetch('/api/posts')
-        .then(res => res.json())
-        .then(posts => {
-            posts.forEach(post => {
-                if (post.lat && post.lng) {
-                    const marker = new naver.maps.Marker({
-                        position: new naver.maps.LatLng(post.lat, post.lng),
-                        map: map
-                    });
-                    // 마커 클릭 시 정보창
-                    const infoHtml = `
-                        <div style="min-width:180px;max-width:220px;word-break:break-all;">
-                            <b>${post.title}</b><br>
-                            <span>${post.category ? '['+post.category+'] ' : ''}${post.content}</span><br>
-                            ${post.imageUrls && post.imageUrls.length > 0 ? `<img src='${post.imageUrls[0]}' style='width:100%;margin-top:6px;border-radius:8px;'>` : ''}
-                        </div>
-                    `;
-                    const infowindow = new naver.maps.InfoWindow({
-                        content: infoHtml
-                    });
-                    naver.maps.Event.addListener(marker, 'click', function () {
-                        infowindow.open(map, marker);
-                    });
-                }
+    // localStorage에서 임시 글 목록 읽어 마커 표시
+    const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+    posts.forEach(post => {
+        if (post.lat && post.lng) {
+            const marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(post.lat, post.lng),
+                map: map
             });
-        });
+            // 마커 클릭 시 정보창
+            const infoHtml = `
+                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
+                    <b>${post.title}</b><br>
+                    <span>${post.category ? '['+post.category+'] ' : ''}${post.content}</span><br>
+                    ${post.cameraImage ? `<img src='${post.cameraImage}' style='width:100%;margin-top:6px;border-radius:8px;'>` : ''}
+                    ${post.galleryImages && post.galleryImages.length > 0 ? `<img src='${post.galleryImages[0]}' style='width:100%;margin-top:6px;border-radius:8px;'>` : ''}
+                </div>
+            `;
+            const infowindow = new naver.maps.InfoWindow({ content: infoHtml });
+            naver.maps.Event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+                // 지도 클릭 시 InfoWindow 닫기
+                const closeOnMapClick = function() {
+                    infowindow.close();
+                    naver.maps.Event.removeListener(mapClickListener);
+                };
+                const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
+            });
+        }
+    });
 });

@@ -28,32 +28,38 @@ document.querySelector('.submit-btn').addEventListener('click', function (e) {
         return;
     }
 
-    const formData = new FormData();
-    formData.append('lat', coords.lat);
-    formData.append('lng', coords.lng);
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('category', category);
-    if (cameraFile) {
-        formData.append('cameraImage', cameraFile);
-    }
-    for (let i = 0; i < galleryFiles.length; i++) {
-        formData.append('galleryImages', galleryFiles[i]);
+    // 임시: 이미지 파일을 base64로 변환해서 저장
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            if (!file) return resolve(null);
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     }
 
-    fetch('/api/posts', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => {
-        if (res.ok) {
-            alert('글이 등록되었습니다!');
-            window.location.href = '/index/index.html';
-        } else {
-            alert('등록 실패!');
-        }
-    })
-    .catch(() => alert('서버 오류!'));
+    Promise.all([
+        fileToBase64(cameraFile),
+        ...Array.from(galleryFiles).map(fileToBase64)
+    ]).then(results => {
+        const cameraImageBase64 = results[0];
+        const galleryImagesBase64 = results.slice(1);
+        // 기존 localStorage 글 목록 불러오기
+        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+        posts.push({
+            lat: coords.lat,
+            lng: coords.lng,
+            title,
+            content,
+            category,
+            cameraImage: cameraImageBase64,
+            galleryImages: galleryImagesBase64
+        });
+        localStorage.setItem('testPosts', JSON.stringify(posts));
+        alert('임시로 글이 등록되었습니다!');
+        window.location.href = '/index/index.html';
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
