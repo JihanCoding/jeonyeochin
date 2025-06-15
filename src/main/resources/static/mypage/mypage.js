@@ -74,9 +74,9 @@ function enableHorizontalDragScroll(selector) {
 
 // 마이페이지 뒤로가기 버튼(index로 이동)
 document.addEventListener('DOMContentLoaded', function() {
-    const backBtn = document.querySelector('.app-header .back-btn');
-    if (backBtn) {
-        backBtn.addEventListener('click', function() {
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+        backButton.addEventListener('click', function() {
             window.location.href = '/index/index.html';
         });
     }
