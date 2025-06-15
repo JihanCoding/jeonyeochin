@@ -502,3 +502,18 @@ function showLoading(show) {
         if (loadingEl) loadingEl.remove();
     }
 }
+
+async function saveTripInfoForNextPage() {
+    const start = document.getElementById('start-point').value;
+    const end = document.getElementById('end-point').value;
+    const waypoints = Array.from(document.querySelectorAll('.waypoint-input-field'))
+        .filter(input => input.style.display !== 'none' && input.value.trim() !== '')
+        .map(input => input.value.trim());
+    localStorage.setItem('trip_start', start);
+    localStorage.setItem('trip_end', end);
+    localStorage.setItem('trip_waypoints', JSON.stringify(waypoints));
+    // 페이지 이동은 a 태그의 기본 동작 사용
+}
+
+// 기존 경로 검색 버튼 클릭 이벤트에 아래 함수 연결
+// document.querySelector('.route-search-btn').onclick = searchRoute;

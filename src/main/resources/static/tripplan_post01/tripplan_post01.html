@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>경로 설정</title>
     <link rel="stylesheet" href="tripplan_post01.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
     <div class="page-container">
-        <button class="back-btn" onclick="history.back()">&lt;</button>
-        <h1>경로 설정</h1>
+        <header class="app-header">
+            <button class="back-btn" onclick="history.back()">
+                <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
+            </button>
+            <div class="header-title">경로 설정</div>
+            <span class="material-icons" style="visibility: hidden;">menu</span>
+        </header>
         <div class="instruction-text">
             🗺️ 지도에서 원하는 위치를 클릭하면 자동으로 주소가 입력됩니다
         </div>
@@ -45,7 +51,7 @@
         <div id="map"></div>
         <div id="route-info" style="display: none;"></div>
         <div class="next-page-link">
-            <a href="../tripplan_post02/tripplan_post02.html" class="next-link">&gt;</a>
+            <a href="../tripplan_post02/tripplan_post02.html" class="next-link" onclick="saveTripInfoForNextPage()">&gt;</a>
         </div>
     </div>
     <div id="loading" class="loading" style="display: none;">

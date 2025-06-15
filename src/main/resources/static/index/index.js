@@ -10,7 +10,7 @@ document.getElementById('notificationBtn').onclick = function () {
 
 const writeBtn = document.querySelector('.write-button');
 if (writeBtn) {
-    writeBtn.addEventListener('click', function() {
+    writeBtn.addEventListener('click', function () {
         window.location.href = '/newpost/newpost.html';
     });
 }
@@ -42,7 +42,7 @@ filterButtons.forEach(button => {
 updateAllButtonState();
 
 
- // 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
+// 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
 const backButton = document.getElementById('backButton');
 backButton.addEventListener('click', () => {
     sideMenu.classList.remove('show');
@@ -190,16 +190,16 @@ window.addEventListener('DOMContentLoaded', function () {
             const infoHtml = `
                 <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
                     <b>${post.title}</b><br>
-                    <span>${post.category ? '['+post.category+'] ' : ''}${post.content}</span><br>
-                    ${post.cameraImage ? `<img src='${post.cameraImage}' style='width:100%;margin-top:6px;border-radius:8px;'>` : ''}
-                    ${post.galleryImages && post.galleryImages.length > 0 ? `<img src='${post.galleryImages[0]}' style='width:100%;margin-top:6px;border-radius:8px;'>` : ''}
+                    <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
+                    ${post.cameraImage ? `<img src='${post.cameraImage}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
+                    ${post.galleryImages && post.galleryImages.length > 0 ? `<img src='${post.galleryImages[0]}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
                 </div>
             `;
             const infowindow = new naver.maps.InfoWindow({ content: infoHtml });
             naver.maps.Event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
                 // 지도 클릭 시 InfoWindow 닫기
-                const closeOnMapClick = function() {
+                const closeOnMapClick = function () {
                     infowindow.close();
                     naver.maps.Event.removeListener(mapClickListener);
                 };
