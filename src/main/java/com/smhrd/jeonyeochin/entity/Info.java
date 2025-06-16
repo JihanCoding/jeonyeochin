@@ -35,15 +35,18 @@ public class Info {
     @Column(name = "info_images", length = 1000, nullable = true)
     private String infoImages; // 이미지 URL
 
-    @Column(name = "info_event_start_date", nullable = false)
+    @Column(name = "info_event_start_date", nullable = true)
     private String infoEventStartDate; // 이벤트 시작 날짜
 
-    @Column(name = "info_event_start_time", nullable = false)
+    @Column(name = "info_event_start_time", nullable = true)
     private String infoEventStartTime; // 이벤트 시작 시간
 
-    @Column(name = "info_event_end_date", nullable = false)
+    @Column(name = "info_event_end_date", nullable = true)
     private String infoEventEndDate; // 이벤트 종료 날짜
 
-    @Column(name = "info_event_end_time", nullable = false)
+    @Column(name = "info_event_end_time", nullable = true)
     private String infoEventEndTime; // 이벤트 종료 시간
+
+    @Column(name = "info_address", nullable = true)
+    private String infoAddress; // 주소
 }
