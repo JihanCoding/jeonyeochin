@@ -46,21 +46,21 @@ filterButtons.forEach(btn => {
 });
 
 // 더미 게시글 카드 생성
-function createCommunityCard(index) {
-  const card = document.createElement('div');
-  card.className = 'community-card';
-  card.innerHTML = `
-    <div class="card-header">
-      <div class="card-profile">👤</div>
-      <div class="card-meta">
-        <div class="card-type">게시글 종류</div>
-        <div class="card-author">작성자</div>
-      </div>
-    </div>
-    <div class="card-image">이미지</div>
-  `;
-  return card;
-}
+// function createCommunityCard(index) {
+//   const card = document.createElement('div');
+//   card.className = 'community-card';
+//   card.innerHTML = `
+//     <div class="card-header">
+//       <div class="card-profile">👤</div>
+//       <div class="card-meta">
+//         <div class="card-type">게시글 종류</div>
+//         <div class="card-author">작성자</div>
+//       </div>
+//     </div>
+//     <div class="card-image">이미지</div>
+//   `;
+//   return card;
+// }
 
 // 무한 스크롤 로딩
 const communityList = document.getElementById('communityList');

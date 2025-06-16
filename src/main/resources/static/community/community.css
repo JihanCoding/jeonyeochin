@@ -198,22 +198,20 @@ html {
 .spot-content {
     margin-left: 0.4rem;
     color: #777;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500;
 }
 
 .community-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 32px;
     padding: 24px;
 }
 
 .community-card {
     background: white;
     border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .write-button {
@@ -251,4 +249,68 @@ html {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
+}
+
+/* 커뮤니티 카드 헤더 스타일 (이미지 참고) */
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card-profile {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #ecf5ffcc;
+  margin-right: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+}
+
+.card-meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-type {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #777;
+  margin-bottom: 2px;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+.card-content {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #777;
+  margin: 0 8px;
+}
+
+/* 커뮤니티 카드 이미지 정사각형 */
+.card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 24px;
+  margin-bottom: 8px;
+  background-color: #ecf5ffcc;
+}
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
 }
