@@ -1,5 +1,4 @@
 package com.smhrd.jeonyeochin.controller;
-import com.smhrd.jeonyeochin.entity.Like;
 import com.smhrd.jeonyeochin.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +14,24 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
     
-    // 좋아요 생성~
-    @RequestMapping("/create")
-    public ResponseEntity<?> create(@RequestBody Like likeData) {
+    // 좋아요 토글(추가/취소)
+    @PostMapping("/toggle")
+    public ResponseEntity<?> toggleLike(@RequestParam Integer userId, @RequestParam Integer postId) {
         try {
-            // 좋아요 처리
-            Like savedLike = likeService.saveLike(likeData);
-            
-            // 좋아요 반환
+            boolean liked = likeService.toggleLike(userId, postId);
             return ResponseEntity.ok(Map.of(
-                "like", savedLike
+                "liked", liked,
+                "message", liked ? "좋아요 추가됨" : "좋아요 취소됨"
             ));
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                .body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+    
+    // 게시글별 좋아요 개수 반환
+    @GetMapping("/count/{postId}")
+    public ResponseEntity<?> countLikes(@PathVariable Integer postId) {
+        int count = likeService.countLikesByPostId(postId);
+        return ResponseEntity.ok(Map.of("likeCount", count));
     }
 }
