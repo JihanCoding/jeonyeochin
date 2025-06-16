@@ -17,7 +17,7 @@ if (writeBtn) {
     writeBtn.addEventListener('click', function () {
         sessionStorage.setItem('sideMenuOpen', 'false');
         setTimeout(() => {
-            window.location.href = '/newpost/newpost.html';
+            window.location.replace('/newpost/newpost.html');
         }, 200);
     });
 }

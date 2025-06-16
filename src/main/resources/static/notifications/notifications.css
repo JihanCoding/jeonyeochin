@@ -14,7 +14,7 @@
     padding: 1rem 24px;
     border-bottom: 1px solid #eee;
     background: white;
-    color: #6dd5ed;
+    color: #2196f3;
     position: relative;
     z-index: 20;
 }
@@ -23,7 +23,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #6dd5ed;
+    color: #2196f3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,7 +35,7 @@
     text-align: center;
     font-size: 1.3rem;
     font-weight: bold;
-    color: #6dd5ed;
+    color: #2196f3;
 }
 
 .notification-list {
@@ -45,13 +45,14 @@
 }
 
 .notification-item {
-    background: #f7fafd;
-    border: 1.5px solid #eaf6fb;
+    background: #ecf5ffcc;
+    border: 1.5px solid #ecf5ffcc;
     border-radius: 12px;
     padding: 1rem 1.2rem;
     margin-bottom: 16px;
-    color: #333;
-    font-size: 1.05rem;
+    color: #555;
+    font-size: 1rem;
+    font-weight: 500;
     box-shadow: 0 2px 8px rgba(33, 147, 176, 0.04);
 }
 
