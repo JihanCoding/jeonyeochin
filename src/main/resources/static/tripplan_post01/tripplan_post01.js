@@ -205,11 +205,8 @@ async function handleMapClick(coord) {
 
 // 네이버 클라우드 REST API 방식으로 주소 → 좌표 변환
 async function geocodeAddress(address) {
-    const apiKeyId = 'e696ij4ub6';
-    const apiKey = 'VE4dq3vAamH8MibpCpjxskfG1l8MbSrUcJBk9Qzz';
-    // const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-    const corsProxy = 'https://proxy.cors.sh/';
-    const url = corsProxy + `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
+    const apiUrl = `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
+    const url = `/api/proxy?url=${encodeURIComponent(apiUrl)}`;
     const response = await fetch(url, {
         headers: {
             'X-NCP-APIGW-API-KEY-ID': 'e696ij4ub6',
@@ -338,8 +335,6 @@ async function searchRoute() {
 async function getDirectionsRoute(coordinates, mode) {
     const apiKeyId = 'e696ij4ub6';
     const apiKey = 'VE4dq3vAamH8MibpCpjxskfG1l8MbSrUcJBk9Qzz';
-    // const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-    const corsProxy = 'https://proxy.cors.sh/';
     const baseUrl5 = 'https://naveropenapi.apigw.ntruss.com/map-direction/v1/';
     const baseUrl15 = 'https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/';
     let start = `${coordinates[0].lng},${coordinates[0].lat}`;
@@ -353,7 +348,7 @@ async function getDirectionsRoute(coordinates, mode) {
         apiUrl15 += `&waypoints=${waypoints}`;
     }
     let data = null;
-    let url = corsProxy + apiUrl5;
+    let url = `/api/proxy?url=${encodeURIComponent(apiUrl5)}`;
     let response = await fetch(url, {
         headers: {
             'X-NCP-APIGW-API-KEY-ID': 'e696ij4ub6',
@@ -362,7 +357,7 @@ async function getDirectionsRoute(coordinates, mode) {
         }
     });
     if (response.status === 404) {
-        url = corsProxy + apiUrl15;
+        url = `/api/proxy?url=${encodeURIComponent(apiUrl15)}`;
         response = await fetch(url, {
             headers: {
                 'X-NCP-APIGW-API-KEY-ID': 'e696ij4ub6',
