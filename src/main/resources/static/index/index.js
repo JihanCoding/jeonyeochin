@@ -208,3 +208,35 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// 네이버 지도 및 위치 선택 관련 코드 (기존 index.html <script>에서 이동)
+var map = new naver.maps.Map('map', {
+    center: new naver.maps.LatLng(34.7950926, 126.378867),
+    zoom: 12
+});
+// 지도 선택 모드일 때만 마커/선택 기능 활성화
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('mode') === 'select') {
+    let marker = null;
+    let selectedLatLng = null;
+    document.getElementById('select-location-btn').style.display = 'block';
+    naver.maps.Event.addListener(map, 'click', function (e) {
+        selectedLatLng = e.coord;
+        if (!marker) {
+            marker = new naver.maps.Marker({
+                position: selectedLatLng,
+                map: map
+            });
+        } else {
+            marker.setPosition(selectedLatLng);
+        }
+    });
+    document.getElementById('select-location-btn').onclick = function () {
+        if (selectedLatLng) {
+            localStorage.setItem('selectedCoords', JSON.stringify({ lat: selectedLatLng.y, lng: selectedLatLng.x }));
+            window.close();
+        } else {
+            alert('지도를 클릭해 위치를 선택하세요!');
+        }
+    }
+}

@@ -1,6 +1,11 @@
 package com.smhrd.jeonyeochin.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
@@ -11,12 +16,12 @@ public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookmark_id")
-    private Integer bookmarkId;
+    private Integer bookmarkId; // 북마크 ID
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private Integer userId; // 사용자 ID
 
     @Column(name = "post_id", nullable = false)
-    private Integer postId;
+    private Integer postId; // 게시글 ID
 
 }
