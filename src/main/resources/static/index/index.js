@@ -177,25 +177,40 @@ searchBar.addEventListener('click', function (e) {
 });
 
 // 지도에 마커 표시 (글 목록)
+let mapMarkers = [];
+function renderMarkersByCategory() {
+    const activeTypes = Array.from(document.querySelectorAll('.filters button.active')).map(btn => btn.dataset.type);
+    mapMarkers.forEach(({ marker, category }) => {
+        if (activeTypes.includes('전체') || activeTypes.includes(category)) {
+            marker.setMap(map);
+        } else {
+            marker.setMap(null);
+        }
+    });
+}
+
 window.addEventListener('DOMContentLoaded', function () {
     // localStorage에서 임시 글 목록 읽어 마커 표시
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+    mapMarkers = [];
     posts.forEach(post => {
         if (post.lat && post.lng) {
             const marker = new naver.maps.Marker({
                 position: new naver.maps.LatLng(post.lat, post.lng),
                 map: map
             });
+            mapMarkers.push({ marker, category: post.category || '기타' });
             // 마커 클릭 시 정보창
             const infoHtml = `
                 <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
                     <b>${post.title}</b><br>
+                    <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${post.category ? post.category : '기타'}</span><br>
                     <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
                     ${post.cameraImage ? `<img src='${post.cameraImage}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
                     ${post.galleryImages && post.galleryImages.length > 0 ? `<img src='${post.galleryImages[0]}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
                 </div>
             `;
-            const infowindow = new naver.maps.InfoWindow({ content: infoHtml });
+            const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
             naver.maps.Event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
                 // 지도 클릭 시 InfoWindow 닫기
@@ -206,6 +221,14 @@ window.addEventListener('DOMContentLoaded', function () {
                 const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
             });
         }
+    });
+    renderMarkersByCategory();
+});
+
+// 필터 버튼 클릭 시 마커 필터링
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        renderMarkersByCategory();
     });
 });
 

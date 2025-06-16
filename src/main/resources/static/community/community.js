@@ -5,18 +5,43 @@ document.getElementById('backButton')?.addEventListener('click', () => {
 
 // 필터 버튼 토글
 const filterButtons = document.querySelectorAll('.filters button');
+const communityCards = document.querySelectorAll('.community-card');
+
+function filterCommunityCards() {
+  // 활성화된 버튼의 data-type을 배열로 수집
+  const activeTypes = Array.from(filterButtons)
+    .filter(btn => btn.classList.contains('active'))
+    .map(btn => btn.dataset.type);
+
+  // 전체가 선택된 경우 모두 표시
+  if (activeTypes.includes('전체')) {
+    communityCards.forEach(card => card.style.display = '');
+    return;
+  }
+  // 각 카드의 data-type이 활성화된 타입에 포함되는 경우만 표시
+  communityCards.forEach(card => {
+    if (activeTypes.includes(card.dataset.type)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
 filterButtons.forEach(btn => {
   btn.addEventListener('click', () => {
-    const isAll = btn.dataset.type === '전체보기';
+    // 기존 토글 로직 유지
+    const isAll = btn.dataset.type === '전체';
     if (isAll) {
       const isActive = btn.classList.contains('active');
       filterButtons.forEach(b => b.classList.toggle('active', !isActive));
     } else {
       btn.classList.toggle('active');
-      const others = [...filterButtons].filter(b => b.dataset.type !== '전체보기');
+      const others = [...filterButtons].filter(b => b.dataset.type !== '전체');
       const allActive = others.every(b => b.classList.contains('active'));
-      document.querySelector('[data-type="전체보기"]').classList.toggle('active', allActive);
+      document.querySelector('[data-type="전체"]').classList.toggle('active', allActive);
     }
+    filterCommunityCards(); // 필터링 적용
   });
 });
 
