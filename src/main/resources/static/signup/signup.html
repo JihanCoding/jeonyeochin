@@ -20,20 +20,18 @@
         </header>
         <main class="signup-main">
             <form class="signup-form" autocomplete="off">
-                <div class="input-group id"><input type="text" placeholder="아이디" value="user1" /></div>
-                <div class="input-group pw"><input type="password" placeholder="비밀번호" value="1234" /></div>
-                <div class="input-group email"><input type="email" placeholder="이메일" /></div>
+                <div class="input-group email"><input type="email" id="useremail" placeholder="이메일" /></div>
+                <div class="input-group id"><input type="text" id="usernick"placeholder="닉네임"/></div>
+                <div class="input-group pw"><input type="password" id="userpassword" placeholder="비밀번호"/></div>
+                <div class="input-group pw"><input type="password" id="confirmpassword" placeholder="비밀번호"/></div>
                 <div class="space-box"></div>
-                <div class="input-group name"><input type="text" placeholder="이름" value="나" /></div>
-                <div class="input-group date-of-birth"><input type="text" placeholder="생년월일" /></div>
-                <div class="input-group mobile-carrier"><input type="text" placeholder="통신사" /></div>
-                <div class="input-group phone-num"><input type="text" placeholder="휴대전화 번호" /></div>
+                <div class="input-group name"><input type="text" id="username" placeholder="이름"/></div>
+                <div class="input-group date-of-birth"><input type="text" id="userbirth" placeholder="생년월일ex)19991010" /></div>
                 <div class="space-box"></div>
 
-                <div class="input-group certif-num"><input type="text" placeholder="인증번호 입력" /></div>
                 <div class="input-group agree-group"><input type="checkbox" id="agreeAll" /><label for="agreeAll">인증 약관
                         전체 동의</label></div>
-                <button type="button" class="signup-btn">인증요청</button>
+                <button type="button" id="signup-btn" class="signup-btn">회원가입</button>
             </form>
             <div style="margin-top:16px;">
                 <a href="/login/login.html">로그인으로 돌아가기</a>
