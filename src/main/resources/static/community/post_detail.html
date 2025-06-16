@@ -74,33 +74,35 @@
             line-height: 1.6;
             margin: 20px 0;
             white-space: pre-wrap;
-        }        .no-post {
+        }
+
+        .no-post {
             text-align: center;
             padding: 60px 20px;
             color: #888;
         }
-        
+
         /* 댓글 섹션 스타일 */
         .comments-section {
             margin-top: 40px;
             border-top: 1px solid #eee;
             padding-top: 24px;
         }
-        
+
         .comments-header {
             font-size: 1.1rem;
             font-weight: bold;
             margin-bottom: 20px;
             color: #333;
         }
-        
+
         .comment-input-area {
             background: #f8f9fa;
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 24px;
         }
-        
+
         .comment-input {
             width: 100%;
             border: 1px solid #ddd;
@@ -111,13 +113,13 @@
             min-height: 80px;
             font-family: 'Pretendard', sans-serif;
         }
-        
+
         .comment-input:focus {
             outline: none;
             border-color: #6dd5ed;
             box-shadow: 0 0 0 2px rgba(109, 213, 237, 0.2);
         }
-        
+
         .comment-submit-btn {
             background: #6dd5ed;
             color: white;
@@ -129,20 +131,20 @@
             margin-top: 8px;
             float: right;
         }
-        
+
         .comment-submit-btn:hover {
             background: #5bc0de;
         }
-        
+
         .comment-submit-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
-        
+
         .comments-list {
             margin-top: 20px;
         }
-        
+
         .comment-item {
             background: white;
             border: 1px solid #eee;
@@ -150,38 +152,38 @@
             padding: 16px;
             margin-bottom: 12px;
         }
-        
+
         .comment-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
         }
-        
+
         .comment-author {
             font-weight: 500;
             color: #333;
             font-size: 0.9rem;
         }
-        
+
         .comment-date {
             color: #888;
             font-size: 0.8rem;
         }
-        
+
         .comment-content {
             line-height: 1.5;
             color: #333;
             white-space: pre-wrap;
         }
-        
+
         .no-comments {
             text-align: center;
             color: #888;
             padding: 40px 20px;
             font-size: 0.9rem;
         }
-        
+
         .clearfix::after {
             content: "";
             display: table;
@@ -240,7 +242,7 @@
                     </div>
                 `;
             }
-        }        function displayPostDetail(post) {
+        } function displayPostDetail(post) {
             const container = document.getElementById('postDetailContainer');
 
             // 태그 HTML 생성
@@ -284,23 +286,23 @@
                     </div>
                 </div>
             `;
-              // 댓글 기능 초기화
+            // 댓글 기능 초기화
             initializeComments(post);
         }
-        
+
         // 댓글 기능 초기화
         function initializeComments(post) {
             const commentInput = document.getElementById('commentInput');
             const commentSubmitBtn = document.getElementById('commentSubmitBtn');
-            
+
             // 기존 댓글 로드
             loadComments(post);
-            
+
             // 댓글 작성 버튼 이벤트
             commentSubmitBtn.addEventListener('click', () => {
                 addComment(post);
             });
-            
+
             // Enter + Ctrl 키로 댓글 작성
             commentInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && e.ctrlKey) {
@@ -308,67 +310,67 @@
                     addComment(post);
                 }
             });
-            
+
             // 입력 상태에 따른 버튼 활성화
             commentInput.addEventListener('input', () => {
                 const hasText = commentInput.value.trim().length > 0;
                 commentSubmitBtn.disabled = !hasText;
             });
         }
-        
+
         // 댓글 로드
         function loadComments(post) {
             const postId = getPostId(post);
             const comments = JSON.parse(localStorage.getItem(`comments_${postId}`) || '[]');
             displayComments(comments);
         }
-        
+
         // 게시글 ID 생성 (제목과 작성시간 기반)
         function getPostId(post) {
             return btoa(encodeURIComponent(post.title + (post.createdAt || ''))).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
         }
-        
+
         // 댓글 추가
         function addComment(post) {
             const commentInput = document.getElementById('commentInput');
             const content = commentInput.value.trim();
-            
+
             if (!content) {
                 alert('댓글 내용을 입력해주세요.');
                 return;
             }
-            
+
             const postId = getPostId(post);
             const comments = JSON.parse(localStorage.getItem(`comments_${postId}`) || '[]');
-            
+
             const newComment = {
                 id: Date.now(),
                 content: content,
                 author: `사용자${Math.floor(Math.random() * 100) + 1}`,
                 createdAt: new Date().toISOString()
             };
-            
+
             comments.push(newComment);
             localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
-            
+
             // UI 업데이트
             commentInput.value = '';
             document.getElementById('commentSubmitBtn').disabled = true;
             displayComments(comments);
         }
-        
+
         // 댓글 표시
         function displayComments(comments) {
             const commentsList = document.getElementById('commentsList');
             const commentCount = document.getElementById('commentCount');
-            
+
             commentCount.textContent = comments.length;
-            
+
             if (comments.length === 0) {
                 commentsList.innerHTML = '<div class="no-comments">아직 댓글이 없습니다.<br>첫 번째 댓글을 작성해보세요!</div>';
                 return;
             }
-            
+
             // 최신 댓글부터 표시
             const commentsHtml = comments.reverse().map(comment => {
                 const commentDate = new Date(comment.createdAt).toLocaleString();
@@ -382,7 +384,7 @@
                     </div>
                 `;
             }).join('');
-            
+
             commentsList.innerHTML = commentsHtml;
         }
     </script>

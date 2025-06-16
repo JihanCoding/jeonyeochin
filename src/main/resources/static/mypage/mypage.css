@@ -159,12 +159,12 @@ body {
     font-size: 1.8rem;
     font-weight: 500;
     line-height: 1.1;
-    font-size:2rem;
-    font-weight:bold;
-    border:none;
-    background:transparent;
-    outline:none; 
-    width:120px;
+    font-size: 2rem;
+    font-weight: bold;
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 120px;
 }
 
 .username-edit-btn {
@@ -254,6 +254,25 @@ body {
     flex: 0 0 24px;
 }
 
+.post-card {
+    flex: 0 0 auto;
+    width: 120px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+}
+
+/* 이미지가 없는 경우의 카드 - 짧게 */
+.post-card.no-image {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .post-thumb {
     width: 80px;
     height: 80px;
@@ -263,14 +282,27 @@ body {
 }
 
 .post-title {
-    font-size: 1.1rem;
-    color: #888;
-    margin-bottom: 2px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .post-desc {
-    font-size: 1rem;
-    color: #bbb;
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 
