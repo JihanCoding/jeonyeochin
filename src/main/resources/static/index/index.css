@@ -115,7 +115,7 @@ body {
 }
 
 .search-bar input::placeholder {
-    color: #2196f3;
+    color: rgb(33, 150, 243, 0.4);
     font-size: 1.1rem;
     font-weight: 600;
     opacity: 1;

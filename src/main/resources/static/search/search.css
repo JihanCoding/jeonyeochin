@@ -32,7 +32,7 @@ body {
     padding: 1rem 24px;
     border-bottom: 1px solid #eee;
     background: white;
-    color: #6dd5ed;
+    color: #2196f3;
     position: relative;
     z-index: 20;
 }
@@ -51,7 +51,7 @@ body {
 .search-bar {
     display: flex;
     align-items: center;
-    border: 4px solid #6dd5ed;
+    border: 4px solid #2196f3;
     border-radius: 999px;
     padding: 0.9rem 1.6rem;
     margin: 20px 24px 9px 24px;
@@ -68,19 +68,22 @@ body {
     outline: none;
     flex: 1;
     min-width: 0;
+    color: #2196f3;
     font-size: 1.1rem;
+    font-weight: 600;
+    opacity: 1;
     background: transparent;
 }
 
 .search-bar input::placeholder {
-    color: rgb(109, 213, 237, 1);
+    color: rgb(33, 150, 243, 0.4);
     font-size: 1.1rem;
     font-weight: 600;
     opacity: 1;
 }
 
 .search-bar button {
-    color: #6dd5ed;
+    color: #2196f3;
     background: none;
     border: none;
     cursor: pointer;
@@ -116,9 +119,9 @@ body {
 
 .filters button {
     padding: 0.32rem 1rem;
-    border: 3px solid #6dd5ed;
+    border: 3px solid #2196f3;
     border-radius: 20px;
-    color: #6dd5ed;
+    color: #2196f3;
     font-weight: 600;
     font-size: 1.0rem;
     cursor: pointer;
@@ -128,9 +131,9 @@ body {
 }
 
 .filters button.active {
-    background: #6dd5ed;
+    background: #2196f3;
     color: #fff;
-    border-color: #6dd5ed;
+    border-color: #2196f3;
 }
 
 .filters::after {
@@ -153,7 +156,7 @@ body {
 .search-history-item .remove-btn {
     background: none;
     border: none;
-    color: #6dd5ed;
+    color: #2196f3;
     font-size: 1.2rem;
     margin-left: 2px;
     cursor: pointer;
@@ -163,7 +166,7 @@ body {
 }
 
 .search-history-item .remove-btn:active {
-    color: #2193b0;
+    color: #2196f3;
 }
 
 .search-history-item:hover {
@@ -175,7 +178,7 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    color: #3ec6e0;
+    color: #2196f3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,7 +186,7 @@ body {
 }
 
 .back-button:hover {
-    color: #6dd5ed;
+    color: #2196f3;
 }
 
 .search-history-wrapper {
@@ -221,5 +224,5 @@ body {
 .search-history-item:hover {
     border: 1.5px solid #eaf6fb;
     background: #eaf6fb;
-    color: #2193b0;
+    color: #2196f3;
 }

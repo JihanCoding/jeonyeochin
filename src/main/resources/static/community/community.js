@@ -126,3 +126,42 @@ function enableHorizontalDragScroll(selector) {
 }
 
 enableHorizontalDragScroll('.horizontal-scroll');
+
+// 커뮤니티 페이지에서 검색 시 검색어 저장 및 새로고침
+window.addEventListener('DOMContentLoaded', function() {
+    var input = document.getElementById('communitySearchInput');
+    var searchBtn = document.querySelector('.search-bar button');
+    function doCommunitySearch() {
+        if (input) {
+            localStorage.setItem('lastSearch', input.value);
+            window.location.href = '/community/community.html';
+        }
+    }
+    if (input) {
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') doCommunitySearch();
+        });
+    }
+    if (searchBtn) {
+        searchBtn.addEventListener('click', doCommunitySearch);
+    }
+});
+
+// 페이지 진입 시 localStorage의 lastSearch 값을 검색 input에 자동 입력
+window.addEventListener('DOMContentLoaded', function() {
+    var input = document.getElementById('communitySearchInput');
+    var lastSearch = localStorage.getItem('lastSearch');
+    if (input && lastSearch) {
+        input.value = lastSearch;
+        // 필요하다면 한 번 사용 후 삭제
+        // localStorage.removeItem('lastSearch');
+    }
+});
+
+// 알림 아이콘 클릭 시 알림 페이지로 이동
+const notificationBtn = document.getElementById('notificationBtn');
+if (notificationBtn) {
+    notificationBtn.addEventListener('click', function() {
+        window.location.href = '/notifications/notifications.html';
+    });
+}

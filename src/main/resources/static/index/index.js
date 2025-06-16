@@ -2,16 +2,23 @@ const menuToggle = document.getElementById('menuToggle');
 const sideMenu = document.getElementById('sideMenu');
 menuToggle.addEventListener('click', () => {
     sideMenu.classList.toggle('show');
+    sessionStorage.setItem('sideMenuOpen', sideMenu.classList.contains('show') ? 'true' : 'false');
 });
 
 document.getElementById('notificationBtn').onclick = function () {
-    window.location.href = '/notifications/notifications.html';
+    sessionStorage.setItem('sideMenuOpen', 'false');
+    setTimeout(() => {
+        window.location.href = '/notifications/notifications.html';
+    }, 200);
 };
 
 const writeBtn = document.querySelector('.write-button');
 if (writeBtn) {
     writeBtn.addEventListener('click', function () {
-        window.location.href = '/newpost/newpost.html';
+        sessionStorage.setItem('sideMenuOpen', 'false');
+        setTimeout(() => {
+            window.location.href = '/newpost/newpost.html';
+        }, 200);
     });
 }
 
@@ -42,7 +49,7 @@ filterButtons.forEach(button => {
 updateAllButtonState();
 
 
-// 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
+ // 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
 const backButton = document.getElementById('backButton');
 backButton.addEventListener('click', () => {
     sideMenu.classList.remove('show');
@@ -173,6 +180,8 @@ sheetContent.addEventListener('scroll', () => {
 // 검색창 클릭 시 search.html로 이동 (SPA 오버레이 제거)
 const searchBar = document.querySelector('.search-bar');
 searchBar.addEventListener('click', function (e) {
+    sideMenu.classList.remove('show');
+    sessionStorage.setItem('sideMenuOpen', 'false');
     window.location.href = '/search/search.html';
 });
 
@@ -263,3 +272,11 @@ if (urlParams.get('mode') === 'select') {
         }
     }
 }
+
+// 뒤로가기/복귀 시 사이드 메뉴 상태 복원
+window.addEventListener('pageshow', function() {
+    const sideMenu = document.getElementById('sideMenu');
+    if (sessionStorage.getItem('sideMenuOpen') !== 'true' && sideMenu) {
+        sideMenu.classList.remove('show');
+    }
+});

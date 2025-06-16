@@ -16,12 +16,12 @@
             <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
         </button>
         <div class="logo">전여친 커뮤니티</div>
-        <span class="material-icons" style="visibility: hidden;">menu</span>
+        <span class="material-icons" id="notificationBtn">notifications</span>
     </header>
 
     <!-- 검색창 -->
     <div class="search-bar">
-        <input type="text" placeholder="강진수국길축제" />
+        <input id="communitySearchInput" type="text" placeholder="" autocomplete="off"/>
         <button><span class="material-icons">search</span></button>
     </div>
 
@@ -53,6 +53,7 @@
             <div class="spot-card" onclick="window.location.href='/tripinfo/tripInfo.html'">
                 <div class="spot-img"></div>
                 <div class="spot-title">목포 장미의 거리</div>
+                <div class="spot-content">내용</div>
             </div>
             <div class="spot-card" onclick="window.location.href='/tripinfo/tripInfo.html'">
                 <div class="spot-img"></div>

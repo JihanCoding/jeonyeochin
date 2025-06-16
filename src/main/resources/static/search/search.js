@@ -39,18 +39,26 @@ removeBtns.forEach(btn => {
     });
 });
 
-// 검색창에서 엔터 또는 검색 버튼 클릭 시 community 페이지로 이동
+// 검색창에서 엔터 또는 검색 버튼 클릭 시 community 페이지로 이동하며 검색어 저장
 const searchInput = document.querySelector('.search-bar input');
 const searchBtn = document.querySelector('.search-bar button');
 if (searchInput) {
     searchInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
+            localStorage.setItem('lastSearch', searchInput.value);
             window.location.href = '/community/community.html';
         }
     });
 }
 if (searchBtn) {
     searchBtn.addEventListener('click', function() {
+        localStorage.setItem('lastSearch', searchInput.value);
         window.location.href = '/community/community.html';
     });
 }
+
+// 페이지 진입 시 검색 input에 자동 포커스
+window.addEventListener('DOMContentLoaded', function() {
+    var input = document.getElementById('searchInput');
+    if (input) input.focus();
+});
