@@ -43,6 +43,13 @@ async function login() {
 
   if (res.ok) {
     alert("로그인 성공");
+    const userSession = {
+        userId : result.result.userId,
+        userName : result.result.userName,
+        userNick : result.result.userNick,
+        userProfile : result.result.userProfile
+    }
+    sessionStorage.setItem('user', JSON.stringify(userSession));
     location.href = "/index/index.html";
   } else {
     alert("로그인 실패: " + result.error || "오류");

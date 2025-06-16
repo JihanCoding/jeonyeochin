@@ -280,3 +280,17 @@ window.addEventListener('pageshow', function() {
         sideMenu.classList.remove('show');
     }
 });
+
+ window.addEventListener("DOMContentLoaded", () => {
+    const userData = sessionStorage.getItem("user");
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        console.log("✅ 세션에 저장된 사용자 정보:", user);
+      } catch (e) {
+        console.warn("⚠️ 세션 데이터 파싱 실패:", e);
+      }
+    } else {
+      console.log("❌ 세션에 사용자 정보 없음");
+    }
+  });
