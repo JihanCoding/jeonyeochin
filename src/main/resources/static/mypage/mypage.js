@@ -102,3 +102,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// 사용자명 수정 및 저장
+const usernameInput = document.getElementById('profile-username-input');
+const usernameEditBtn = document.getElementById('username-edit-btn');
+
+if (usernameInput && usernameEditBtn) {
+    usernameEditBtn.addEventListener('click', function() {
+        usernameInput.setAttribute('readonly', true);
+        usernameEditBtn.disabled = true;
+        usernameEditBtn.querySelector('span').textContent = 'check';
+        // 실제 저장 로직 필요시 여기에 추가 (예: 서버 전송)
+        alert('사용자명이 저장되었습니다: ' + usernameInput.value);
+    });
+    usernameInput.addEventListener('input', function() {
+        usernameEditBtn.disabled = false;
+        usernameEditBtn.querySelector('span').textContent = 'check';
+        usernameInput.removeAttribute('readonly');
+    });
+}
