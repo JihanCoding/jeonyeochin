@@ -59,11 +59,11 @@ confirmPasswordInput.addEventListener("input", () => {
 
 async function registerUser() {
   if (!emailValid || !nickValid || !passwordMatch) {
-    sweetalert2("다시 확인해주세요."); // 입력값 확인 메시지 바꾸세요
+    alert("다시 확인해주세요."); // 입력값 확인 메시지 바꾸세요
     return;
   }
   if (!agreeAll.checked) {
-    sweetalert2("약관체크(문구 바꾸세요)"); // 약관 체크 메시지 바꾸세요
+    alert("약관체크(문구 바꾸세요)"); // 약관 체크 메시지 바꾸세요
     return;
   }
 
@@ -86,10 +86,10 @@ async function registerUser() {
   const result = await res.json();
 
   if (res.ok) {
-    sweetalert2("회원가입 성공!");
+    alert("회원가입 성공!");
     location.href = "/login/login.html";
   } else {
-    sweetalert2(`회원가입 실패: ${result.error || "서버 오류"}`);
+    alert(`회원가입 실패: ${result.error || "서버 오류"}`);
   }
 }
 
