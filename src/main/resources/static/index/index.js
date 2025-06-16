@@ -435,6 +435,7 @@ window.addEventListener('pageshow', function () {
     }
 });
 
+// 사용자 세션 정보 로드 개발 끝나면 지우세요
 window.addEventListener("DOMContentLoaded", () => {
     const userData = sessionStorage.getItem("user");
     if (userData) {
@@ -446,5 +447,41 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     } else {
         console.log("❌ 세션에 사용자 정보 없음");
+    }
+});
+
+
+// ---------------------------  페이지 이동 ---------------------------
+
+const goMyPage = document.getElementById('goMypage');
+goMyPage.addEventListener('click', () => {
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+    if (userData) {
+        window.location.href = '/mypage/mypage.html';
+    } else {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login/login.html';
+    }
+});
+
+const plan = document.getElementById('plan');
+plan.addEventListener('click', () => {
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+    if (userData) {
+        window.location.href = '/mypage/mypage.html';
+    } else {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login/login.html';
+    }
+});
+
+const writeButton = document.getElementById('writeButton');
+writeButton.addEventListener('click', () => {
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+    if (userData) {
+        window.location.href = '/mypage/mypage.html';
+    } else {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login/login.html';
     }
 });

@@ -274,6 +274,10 @@ body {
     margin-bottom: 12px;
     padding-left: 8px;
 }
+.menu-title:hover{
+     cursor: pointer;
+}
+    
 
 .menu-list {
     list-style: none;

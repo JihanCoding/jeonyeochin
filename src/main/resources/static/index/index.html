@@ -14,7 +14,7 @@
 <body>
 
     <div id="map">
-        <button class="write-button" onclick="window.location.href='/newPost/newPost.html'">
+        <button class="write-button" id="writeButton">
             <span class="material-icons">edit</span>
         </button>
     </div>
@@ -37,9 +37,9 @@
 
 
             <h3 class="menu-title" onclick="location.href='/community/community.html'">커뮤니티</h3>
-            <h3 class="menu-title" onclick="location.href='/mypage/mypage.html'">마이페이지</h3>
+            <h3 class="menu-title" id="goMypage" >마이페이지</h3>
             <h3 class="menu-title" onclick="location.href='/tripinfo/tripInfo.html'">전남 여행 정보</h3>
-            <h3 class="menu-title" onclick="location.href='/tripplan/tripplan.html'">여행 플랜</h3>
+            <h3 class="menu-title" id="plan">여행 플랜</h3>
 
             <div class="menu-footer">
                 <div class="footer-item" onclick="location.href='/notifications/notifications.html'">
