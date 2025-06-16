@@ -123,7 +123,7 @@ document.querySelector('.submit-btn').addEventListener('click', function (e) {
         });
         localStorage.setItem('testPosts', JSON.stringify(posts));
         alert(`글이 등록되었습니다! 선택된 태그: ${selectedTags.length > 0 ? selectedTags.join(', ') : '없음'}`);
-        window.location.href = '/index/index.html';
+        window.history.back();
     });
 });
 

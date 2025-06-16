@@ -17,7 +17,7 @@ body {
   padding: 1rem 24px;
   border-bottom: 1px solid #eee;
   background: white;
-  color: #6dd5ed;
+  color: #2196f3;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -28,28 +28,50 @@ body {
   font-weight: bold;
 }
 
-.back-button {
-  font-size: 2rem;
+#backButton {
+  background: none;
+  border: none;
   cursor: pointer;
+  color: #2196f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .form-container {
-  padding: 24px 24px 100px 24px; /* 하단에 100px 여백 추가 */
+  padding: 20px 24px 100px 24px;
+  /* 하단에 100px 여백 추가 */
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .form-group label {
-  font-size: 0.95rem;
+  margin-left: 8px;
+  font-size: 1rem;
   color: #555;
   font-weight: 500;
+}
+
+
+
+/* textarea placeholder 스타일 cross-browser 적용 */
+#title input {}
+
+#title::placeholder,
+#content::placeholder,
+#tagInput::placeholder {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 0.8rem;
+  font-weight:400;
+  color: #999;
 }
 
 .form-row {
@@ -58,7 +80,8 @@ body {
 }
 
 .form-row .category {
-  flex: 0 0 100px;
+
+  flex: 0 0 80px;
 }
 
 .form-row .title {
@@ -69,11 +92,20 @@ input[type="text"],
 select,
 textarea {
   padding: 14px;
-  border: 1.5px solid #ddd;
+  border: 1px solid #ddd;
   border-radius: 14px;
   font-size: 1rem;
   background: #f9f9f9;
   width: 100%;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border: 1px solid #1976d2;
+  box-shadow: 0 2px 12px rgba(33, 150, 243, 0.3);
+
 }
 
 textarea {
@@ -84,13 +116,13 @@ textarea {
 .map-select {
   width: 100%;
   height: 120px;
-  background: #eaf6fb;
+  background: #ecf5ffcc;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.95rem;
-  color: #2193b0;
+  color: #2196f3;
   font-weight: 500;
   cursor: pointer;
 }
@@ -102,32 +134,36 @@ textarea {
 }
 
 .photo-box {
-  flex: 0 0 calc((100% - 24px) / 3);
-  max-width: calc((100% - 24px) / 3);
-  aspect-ratio: 1 / 1;
-  background: #f0f9fd;
-  border: 2px dashed #6dd5ed;
+  width: 80px;
+  height: 80px;
+  flex: none;
+  max-width: none;
+  aspect-ratio: unset;
+  background: #ecf5ffcc;
+  border: 1px solid #2196f3;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  color: #6dd5ed;
+  font-size: 1.5rem;
+  color: #2196f3;
   cursor: pointer;
-  margin-bottom: 12px;
+}
+
+.photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 
 @media (max-width: 700px) {
   .photo-box {
-    flex: 0 0 calc((100% - 12px) / 2);
-    max-width: calc((100% - 12px) / 2);
-  }
-}
-
-@media (max-width: 480px) {
-  .photo-box {
-    flex: 0 0 calc((100% - 12px) / 2);
-    max-width: calc((100% - 12px) / 2);
+    width: 80px;
+    height: 80px;
+    font-size: 1.2rem;
   }
 }
 
@@ -136,7 +172,7 @@ textarea {
   bottom: 24px;
   left: 24px;
   right: 24px;
-  background: #6dd5ed;
+  background: #2196f3;
   color: #fff;
   font-size: 1.1rem;
   font-weight: bold;
@@ -148,10 +184,7 @@ textarea {
   z-index: 100;
 }
 
-/* 태그 입력 스타일 */
-.tag-input-help {
-  margin-top: 6px;
-}
+
 
 .selected-tags {
   margin-top: 12px;
@@ -164,7 +197,7 @@ textarea {
 
 .selected-tags .tag-chip {
   display: inline-block;
-  background: #6dd5ed;
+  background: #2196f3;
   color: white;
   padding: 6px 12px;
   border-radius: 16px;
@@ -191,7 +224,38 @@ textarea {
 }
 
 #tagInput:focus {
-  border-color: #6dd5ed;
+  border-color: #2196f3;
   outline: none;
   box-shadow: 0 0 0 2px rgba(109, 213, 237, 0.2);
+}
+
+/* 드롭다운 스타일 */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #f9f9f9 url('data:image/svg+xml;utf8,<svg fill="%232196f3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 1.2em center/1.2em 1.2em;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  color: #777;
+  padding: 14px 40px 14px 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+select:focus {
+  outline: none;
+  border: 1px solid #1976d2;
+  box-shadow: 0 2px 12px rgba(33, 150, 243, 0.3);
+}
+
+select,
+select option {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+select option {
+  background: #fff;
+  color: #555;
 }
