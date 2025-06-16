@@ -57,4 +57,15 @@ public class UserController {
         boolean exists = userService.isNickExists(userNick);
         return ResponseEntity.ok(Map.of("result", exists));
     }
+
+    // userId로 유저 정보 조회
+    @GetMapping("/info/{userId}")
+    public ResponseEntity<?> getUserInfo(@PathVariable Integer userId) {
+        User user = userService.getUserById(userId);
+        if (user != null) {
+            return ResponseEntity.ok(Map.of("user", user));
+        } else {
+            return ResponseEntity.status(404).body(Map.of("error", "사용자를 찾을 수 없습니다."));
+        }
+    }
 }

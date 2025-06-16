@@ -3,6 +3,9 @@ package com.smhrd.jeonyeochin.controller;
 import com.smhrd.jeonyeochin.entity.Post;
 import com.smhrd.jeonyeochin.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -50,5 +53,15 @@ public class PostController {
             // 4. 그 외의 예외는 400(Bad Request)로 반환
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+    
+    // 마이페이지 - 내가 쓴 게시글 목록 페이징 조회
+    @GetMapping("/mylist")
+    public ResponseEntity<?> getMyPosts(@RequestParam Integer userId,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postPage = postService.getPostsByUserId(userId, pageable);
+        return ResponseEntity.ok(postPage);
     }
 }

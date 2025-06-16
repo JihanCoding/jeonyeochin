@@ -42,4 +42,9 @@ public class UserService {
     public boolean isNickExists(String userNick) {
         return userRepository.existsByUserNick(userNick);
     }
+
+    // userId로 유저 정보 조회
+    public User getUserById(Integer userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
 }

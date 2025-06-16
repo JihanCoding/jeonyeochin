@@ -4,6 +4,8 @@ import com.smhrd.jeonyeochin.entity.Post;
 import com.smhrd.jeonyeochin.repository.PostRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,5 +40,10 @@ public class PostService {
         post.setPostLongitude(updateData.getPostLongitude());
         // 필요시 post.setPostAuthor 등 추가
         return postRepository.save(post);
+    }
+
+    // 특정 사용자의 게시글 목록 페이징 조회
+    public Page<Post> getPostsByUserId(Integer userId, Pageable pageable) {
+        return postRepository.findAllByUserId(userId, pageable);
     }
 }
