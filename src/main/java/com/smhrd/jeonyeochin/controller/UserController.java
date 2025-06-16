@@ -68,4 +68,17 @@ public class UserController {
             return ResponseEntity.status(404).body(Map.of("error", "사용자를 찾을 수 없습니다."));
         }
     }
+
+    // userNick 변경
+    @PostMapping("/update")
+    public ResponseEntity<String> updateNickname(@RequestBody Map<String, Object> data) {
+        Integer userId = ((Number) data.get("userId")).intValue();
+        String userNick = (String) data.get("userNick");
+        boolean result = userService.updateNickname(userId, userNick);
+        if (result) {
+            return ResponseEntity.ok("닉네임 변경 완료");
+        } else {
+            return ResponseEntity.status(404).body("사용자 없음");
+        }
+    }
 }

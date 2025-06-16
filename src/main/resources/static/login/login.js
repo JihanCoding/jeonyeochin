@@ -47,7 +47,8 @@ async function login() {
         userId : result.result.userId,
         userName : result.result.userName,
         userNick : result.result.userNick,
-        userProfile : result.result.userProfile
+        userProfile : result.result.userProfile,
+        userEmail : result.result.userEmail
     }
     sessionStorage.setItem('user', JSON.stringify(userSession));
     location.href = "/index/index.html";
