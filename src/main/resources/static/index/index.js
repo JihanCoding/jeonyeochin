@@ -468,7 +468,7 @@ const plan = document.getElementById('plan');
 plan.addEventListener('click', () => {
     const userData = JSON.parse(sessionStorage.getItem("user"));
     if (userData) {
-        window.location.href = '/mypage/mypage.html';
+        window.location.href = '/tripplan/tripplan.html';
     } else {
         alert('로그인이 필요합니다.');
         window.location.href = '/login/login.html';
@@ -479,7 +479,7 @@ const writeButton = document.getElementById('writeButton');
 writeButton.addEventListener('click', () => {
     const userData = JSON.parse(sessionStorage.getItem("user"));
     if (userData) {
-        window.location.href = '/mypage/mypage.html';
+        window.location.replace('/newPost/newPost.html');
     } else {
         alert('로그인이 필요합니다.');
         window.location.href = '/login/login.html';

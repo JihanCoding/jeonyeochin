@@ -115,7 +115,7 @@ body {
 }
 
 .search-bar input::placeholder {
-    color: rgb(33, 150, 243, 0.4);
+    color: rgb(33, 150, 243, 0.6);
     font-size: 1.1rem;
     font-weight: 600;
     opacity: 1;
@@ -262,7 +262,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 0 0 0;
+    padding: 0;
 }
 
 

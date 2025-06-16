@@ -51,7 +51,7 @@ async function login() {
         userEmail : result.result.userEmail
     }
     sessionStorage.setItem('user', JSON.stringify(userSession));
-    location.href = "/index/index.html";
+    window.location.replace("/index/index.html");
   } else {
     alert("로그인 실패: " + result.error || "오류");
   }
