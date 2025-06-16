@@ -38,6 +38,6 @@ public class Travelplan {
     @Column(name = "travelplan_destination", nullable = false, length = 255)
     private String travelplanDestination; // 여행 계획 목적지
 
-    @Column(name = "travelplan_layover", nullable = false, length = 255)
+    @Column(name = "travelplan_layover", nullable = true, length = 255)
     private String travelplanLayover; // 여행 계획 경유지
 }

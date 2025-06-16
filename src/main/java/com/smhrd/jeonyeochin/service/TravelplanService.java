@@ -31,4 +31,21 @@ public class TravelplanService {
     public Travelplan getTravelplanById(Integer planId) {
         return travelplanRepository.findById(planId).orElse(null);
     }
+
+    // 여행계획 수정
+    public Travelplan updateTravelplan(Integer planId, Travelplan updateData, Integer userId) {
+        Travelplan plan = travelplanRepository.findById(planId)
+            .orElseThrow(() -> new IllegalArgumentException("여행계획을 찾을 수 없습니다."));
+        if (!plan.getUserId().equals(userId)) {
+            throw new SecurityException("본인 여행계획만 수정할 수 있습니다.");
+        }
+        plan.setTravelplanTitle(updateData.getTravelplanTitle());
+        plan.setTravelplanContent(updateData.getTravelplanContent());
+        plan.setTravelplanStartdate(updateData.getTravelplanStartdate());
+        plan.setTravelplanEnddate(updateData.getTravelplanEnddate());
+        plan.setTravelplanDeparture(updateData.getTravelplanDeparture());
+        plan.setTravelplanDestination(updateData.getTravelplanDestination());
+        plan.setTravelplanLayover(updateData.getTravelplanLayover());
+        return travelplanRepository.save(plan);
+    }
 }

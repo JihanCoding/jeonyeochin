@@ -54,4 +54,19 @@ public class TravelplanController {
             return ResponseEntity.status(404).body(Map.of("error", "여행계획을 찾을 수 없습니다."));
         }
     }
+    
+    // 여행계획 수정 (본인만 가능)
+    @PutMapping("/update/{planId}")
+    public ResponseEntity<?> updateTravelplan(@PathVariable Integer planId,
+                                              @RequestBody Travelplan updateData,
+                                              @RequestParam Integer userId) {
+        try {
+            Travelplan updatedPlan = travelplanService.updateTravelplan(planId, updateData, userId);
+            return ResponseEntity.ok(Map.of("travelplan", updatedPlan));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
 }
