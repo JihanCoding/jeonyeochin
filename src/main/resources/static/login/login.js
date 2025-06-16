@@ -21,7 +21,7 @@ async function login() {
   const email = document.getElementById("userId").value;
   const pw = document.getElementById("userPw").value;
   if (!email || !pw) {
-    alert("이메일 비밀번호 안적혀있음"); // 수정하셔용
+    alert("이메일 or 비밀번호 안적혀있음"); // 수정하셔용
     return;
   }
 
@@ -49,3 +49,8 @@ async function login() {
   }
 }
 document.getElementById("login-btn").addEventListener("click", login);
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    login();
+  }
+});
