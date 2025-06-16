@@ -38,6 +38,7 @@ body {
     cursor: pointer;
     transition: color 0.2s;
 }
+
 .back-btn:hover {
     color: #2193b0;
 }
@@ -84,6 +85,7 @@ body {
     background: transparent;
     transition: border-color 0.2s;
 }
+
 #plan-title:focus {
     border-bottom: 2px solid #2193b0;
 }
@@ -121,6 +123,7 @@ body {
     background: #f9f9f9;
     transition: border-color 0.2s;
 }
+
 #plan-content:focus {
     border-color: #2193b0;
 }
@@ -139,10 +142,12 @@ body {
     box-shadow: 0 2px 6px rgba(109, 213, 237, 0.10);
     transition: background 0.2s, color 0.2s;
 }
+
 .submit-btn:disabled {
     background: #b0b0b0;
     color: #fff;
 }
+
 .submit-btn:hover:enabled {
     background: #2193b0;
 }
@@ -155,15 +160,19 @@ body {
         border-radius: 0;
         padding: 16px 4vw 24px 4vw;
     }
+
     .header-title {
         font-size: 1em;
     }
+
     .plan-form {
         gap: 8px;
     }
+
     #plan-content {
         min-height: 70px;
     }
+
     .submit-btn {
         width: 40px;
         height: 40px;
