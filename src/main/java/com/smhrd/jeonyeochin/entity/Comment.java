@@ -28,6 +28,9 @@ public class Comment {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt; // 댓글 작성 시간
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt; // 댓글 수정 시간
+
     @Column(name = "comment_content", nullable = false, length = 1000)
     private String commentContent; // 댓글 내용
 }
