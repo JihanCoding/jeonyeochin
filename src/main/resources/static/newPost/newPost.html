@@ -34,7 +34,7 @@
           <option value="후기">후기</option>
           <option value="질문">질문</option>
           <option value="정보">정보</option>
-          <option value="추천">추천</option>
+          <option value="자유게시글">자유게시글</option>
         </select>
       </div>
       <div class="form-group title">
@@ -56,32 +56,41 @@
       <label for="content">내용</label>
       <textarea id="content" placeholder="내용을 입력하세요"></textarea>
     </div>
-  </div>
+    <div class="form-group">
+      <label for="tagInput">태그 입력</label>
+      <input type="text" id="tagInput" placeholder="태그를 입력하고 Enter를 누르세요 (예: 후기, 맛집, 추천)" />
+      <div class="tag-input-help">
+        <small style="color: #666;">쉼표(,)로 여러 태그를 한번에 입력하거나, 하나씩 입력 후 Enter를 눌러주세요</small>
+      </div>
+      <div class="selected-tags" id="selectedTags">
+        <span style="color: #888; font-size: 0.85rem;">입력된 태그가 여기에 표시됩니다</span>
+      </div>
+    </div>
 
-  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
-  <input type="file" id="galleryInput" multiple accept="image/*" style="display:none">
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="galleryInput" multiple accept="image/*" style="display:none">
 
-  <button class="submit-btn">등록</button>
-  <script src="/newPost/newPost.js"></script>
-  <script>
-    function openMapSelector() {
-      // mapSelect.html로 변경
-      window.open('/index/mapSelect.html', 'mapSelector', 'width=600,height=700');
-    }
-    // 좌표가 localStorage에 있으면 표시
-    function showSelectedCoords() {
-      const coords = localStorage.getItem('selectedCoords');
-      const el = document.getElementById('selected-coords');
-      if (coords) {
-        const { lat, lng } = JSON.parse(coords);
-        el.textContent = `선택한 위치: 위도 ${lat}, 경도 ${lng}`;
-      } else {
-        el.textContent = '';
+    <button class="submit-btn">등록</button>
+    <script src="/newPost/newPost.js"></script>
+    <script>
+      function openMapSelector() {
+        // mapSelect.html로 변경
+        window.open('/index/mapSelect.html', 'mapSelector', 'width=600,height=700');
       }
-    }
-    window.addEventListener('focus', showSelectedCoords);
-    window.addEventListener('DOMContentLoaded', showSelectedCoords);
-  </script>
+      // 좌표가 localStorage에 있으면 표시
+      function showSelectedCoords() {
+        const coords = localStorage.getItem('selectedCoords');
+        const el = document.getElementById('selected-coords');
+        if (coords) {
+          const { lat, lng } = JSON.parse(coords);
+          el.textContent = `선택한 위치: 위도 ${lat}, 경도 ${lng}`;
+        } else {
+          el.textContent = '';
+        }
+      }
+      window.addEventListener('focus', showSelectedCoords);
+      window.addEventListener('DOMContentLoaded', showSelectedCoords);
+    </script>
 </body>
 
 </html>
