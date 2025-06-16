@@ -39,5 +39,6 @@ public class HealthController {
             status.put("status", "DOWN");
             status.put("error", e.getMessage());
             return ResponseEntity.status(500).body(status);
-        }    }
+        }
+    }
 }

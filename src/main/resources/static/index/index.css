@@ -152,6 +152,7 @@ body {
     margin-right: 0;
     /* gap 효과 제거 */
 }
+
 .filters button:not(:last-child) {
     margin-right: 0.4rem;
 }
@@ -178,6 +179,59 @@ body {
 .filters::after {
     content: "";
     flex: 0 0 24px;
+}
+
+/* 태그 필터 스타일 */
+.tag-filters-wrapper {
+    overflow-x: auto;
+    padding: 0 24px;
+    background: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 13;
+    margin-top: 8px;
+}
+
+.tag-filters-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.tag-filters {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+}
+
+.tag-filters button:last-child {
+    margin-right: 0;
+}
+
+.tag-filters button:not(:last-child) {
+    margin-right: 0.4rem;
+}
+
+.tag-filter {
+    padding: 0.25rem 0.8rem;
+    border: 2px solid #6dd5ed;
+    border-radius: 16px;
+    color: #6dd5ed;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
+
+.tag-filter.active {
+    background: #6dd5ed;
+    color: #fff;
+    border-color: #6dd5ed;
+}
+
+.tag-filters::after {
+    content: "";
+    flex: 0 0 24px;
+    height: 1px;
 }
 
 .write-button {

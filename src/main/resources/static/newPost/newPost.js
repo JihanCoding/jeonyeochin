@@ -9,6 +9,69 @@ function getSelectedCoords() {
     return null;
 }
 
+// 선택된 태그 관리
+let selectedTags = [];
+
+function updateSelectedTagsDisplay() {
+    const container = document.getElementById('selectedTags');
+    
+    if (selectedTags.length === 0) {
+        container.innerHTML = '<span style="color: #888; font-size: 0.85rem;">입력된 태그가 여기에 표시됩니다</span>';
+    } else {
+        const tagHtml = selectedTags.map((tag, index) =>
+            `<span class="tag-chip" data-index="${index}">${tag}</span>`
+        ).join('');
+        
+        container.innerHTML = tagHtml;
+
+        // 태그 클릭 시 삭제 기능
+        container.querySelectorAll('.tag-chip').forEach(chip => {
+            chip.addEventListener('click', function () {
+                const index = parseInt(this.dataset.index);
+                selectedTags.splice(index, 1);
+                updateSelectedTagsDisplay();
+            });
+        });
+    }
+}
+
+function initializeTagInput() {
+    const tagInput = document.getElementById('tagInput');
+
+    tagInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTagsFromInput();
+        }
+    });
+
+    tagInput.addEventListener('blur', function () {
+        if (this.value.trim()) {
+            addTagsFromInput();
+        }
+    });
+}
+
+function addTagsFromInput() {
+    const tagInput = document.getElementById('tagInput');
+    const inputValue = tagInput.value.trim();
+    
+    if (!inputValue) return;
+
+    // 쉼표로 구분된 여러 태그 처리
+    const newTags = inputValue.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+    newTags.forEach(tag => {
+        // 중복 태그 방지 및 최대 개수 제한 (예: 10개)
+        if (!selectedTags.includes(tag) && selectedTags.length < 10 && tag.length <= 20) {
+            selectedTags.push(tag);
+        }
+    });
+    
+    tagInput.value = '';
+    updateSelectedTagsDisplay();
+}
+
 document.querySelector('.submit-btn').addEventListener('click', function (e) {
     e.preventDefault();
     // 값 수집
@@ -46,23 +109,28 @@ document.querySelector('.submit-btn').addEventListener('click', function (e) {
         const cameraImageBase64 = results[0];
         const galleryImagesBase64 = results.slice(1);
         // 기존 localStorage 글 목록 불러오기
-        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
-        posts.push({
+        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]'); posts.push({
+            type: 'user_post', // 사용자 게시글 타입 추가
             lat: coords.lat,
             lng: coords.lng,
             title,
             content,
             category,
             cameraImage: cameraImageBase64,
-            galleryImages: galleryImagesBase64
+            galleryImages: galleryImagesBase64,
+            tags: selectedTags, // 선택된 태그 추가
+            createdAt: new Date().toISOString()
         });
         localStorage.setItem('testPosts', JSON.stringify(posts));
-        alert('임시로 글이 등록되었습니다!');
+        alert(`글이 등록되었습니다! 선택된 태그: ${selectedTags.length > 0 ? selectedTags.join(', ') : '없음'}`);
         window.location.href = '/index/index.html';
     });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+    // 태그 입력 기능 초기화
+    initializeTagInput();
+
     const photoGrid = document.querySelector('.photo-grid');
     const cameraInput = document.getElementById('cameraInput');
     const galleryInput = document.getElementById('galleryInput');
