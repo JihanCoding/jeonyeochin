@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내가 쓴 글 상세</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 18px 0 12px 0;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 12px;
+        }
+
+        .logo {
+            flex: 1;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #6dd5ed;
+            letter-spacing: -1px;
+        }
+
+        .post-container {
+            max-width: 420px;
+            margin: 32px auto 0 auto;
+            background: #f8f8f8;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            padding: 28px 24px 24px 24px;
+        }
+
+        .post-title {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .post-meta {
+            color: #888;
+            font-size: 0.97rem;
+            margin-bottom: 18px;
+        }
+
+        .post-content {
+            font-size: 1.05rem;
+            color: #222;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <button onclick="history.back()" class="back-button"><span class="material-icons"
+                style="font-size:1.8rem; color:#2196f3; vertical-align:middle;">chevron_left</span></button>
+        <div class="logo">내가 쓴 글 상세</div>
+    </header>
+    <div class="post-container">
+        <div class="post-title">[후기] 강진수국길축제 다녀왔어요!</div>
+        <div class="post-meta">작성자: 나 | 2025-06-10</div>
+        <img class="post-image"
+            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&q=80"
+            alt="임시이미지">
+        <div class="post-content">정말 재밌었고 사진도 많이 찍었어요.<br>축제장 분위기 최고!</div>
+    </div>
+</body>
+
+</html>

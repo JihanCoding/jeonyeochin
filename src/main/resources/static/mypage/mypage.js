@@ -31,10 +31,10 @@ if (profileImgInput && profileImgPreview) {
 }
 
 // 년월 옆 꺽쇠 클릭 시 mypage_postgroup.html로 이동
-window.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.posts-group-header .arrow').forEach(function(arrow) {
+window.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.posts-group-header .arrow').forEach(function (arrow) {
         arrow.style.cursor = 'pointer';
-        arrow.addEventListener('click', function(e) {
+        arrow.addEventListener('click', function (e) {
             window.location.href = 'mypage_postgroup.html';
         });
     });
@@ -43,10 +43,10 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 // 년월 그룹 헤더 클릭 시 해당 년월 정보와 함께 이동
-window.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.posts-group-header').forEach(function(header) {
+window.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.posts-group-header').forEach(function (header) {
         header.style.cursor = 'pointer';
-        header.addEventListener('click', function(e) {
+        header.addEventListener('click', function (e) {
             // 텍스트에서 년, 월 추출 (예: '25년 6월')
             var text = header.textContent.trim();
             var match = text.match(/(\d+)년\s*(\d+)월/);
@@ -65,25 +65,25 @@ window.addEventListener('DOMContentLoaded', function() {
 
 // 데스크톱에서 게시글 가로 스크롤 마우스 드래그 지원
 function enableHorizontalDragScroll(selector) {
-    document.querySelectorAll(selector).forEach(function(list) {
+    document.querySelectorAll(selector).forEach(function (list) {
         let isDown = false;
         let startX, scrollLeft;
         list.style.cursor = 'grab';
-        list.addEventListener('mousedown', function(e) {
+        list.addEventListener('mousedown', function (e) {
             isDown = true;
             list.classList.add('dragging');
             startX = e.pageX - list.offsetLeft;
             scrollLeft = list.scrollLeft;
         });
-        list.addEventListener('mouseleave', function() {
+        list.addEventListener('mouseleave', function () {
             isDown = false;
             list.classList.remove('dragging');
         });
-        list.addEventListener('mouseup', function() {
+        list.addEventListener('mouseup', function () {
             isDown = false;
             list.classList.remove('dragging');
         });
-        list.addEventListener('mousemove', function(e) {
+        list.addEventListener('mousemove', function (e) {
             if (!isDown) return;
             e.preventDefault();
             const x = e.pageX - list.offsetLeft;
@@ -94,10 +94,10 @@ function enableHorizontalDragScroll(selector) {
 }
 
 // 마이페이지 뒤로가기 버튼(index로 이동)
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const backButton = document.getElementById('backButton');
     if (backButton) {
-        backButton.addEventListener('click', function() {
+        backButton.addEventListener('click', function () {
             window.location.href = '/index/index.html';
         });
     }
@@ -108,14 +108,14 @@ const usernameInput = document.getElementById('profile-username-input');
 const usernameEditBtn = document.getElementById('username-edit-btn');
 
 if (usernameInput && usernameEditBtn) {
-    usernameEditBtn.addEventListener('click', function() {
+    usernameEditBtn.addEventListener('click', function () {
         usernameInput.setAttribute('readonly', true);
         usernameEditBtn.disabled = true;
         usernameEditBtn.querySelector('span').textContent = 'check';
         // 실제 저장 로직 필요시 여기에 추가 (예: 서버 전송)
         alert('사용자명이 저장되었습니다: ' + usernameInput.value);
     });
-    usernameInput.addEventListener('input', function() {
+    usernameInput.addEventListener('input', function () {
         usernameEditBtn.disabled = false;
         usernameEditBtn.querySelector('span').textContent = 'check';
         usernameInput.removeAttribute('readonly');

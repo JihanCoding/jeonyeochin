@@ -18,13 +18,13 @@
         <div class="logo">전여친 커뮤니티</div>
         <span class="material-icons" style="visibility: hidden;">menu</span>
     </header>
-    
+
     <!-- 검색창 -->
     <div class="search-bar">
         <input type="text" placeholder="강진수국길축제" />
         <button><span class="material-icons">search</span></button>
     </div>
-    
+
     <!-- 필터 -->
     <div class="filters-wrapper">
         <div class="filters">
@@ -40,13 +40,13 @@
     <section>
         <h3 class="section-title">실시간 Q&A</h3>
         <div class="horizontal-scroll qa-list">
-            <div class="qa-card" onclick="window.location.href='/community/qa_detail.html'">Q. 강진수국길축제 일정이 어떻게 되나요?</div>
+            <div class="qa-card" onclick="window.location.href='/community/qa_detail.html'">Q. 강진수국길축제 일정이 어떻게 되나요?
+            </div>
             <div class="qa-card" onclick="window.location.href='/community/qa_detail.html'">Q. 목포 장미의 거리 위치 알려주세요</div>
             <div class="qa-card" onclick="window.location.href='/community/qa_detail.html'">Q. 전남 축제 추천 좀!</div>
             <div class="qa-card" onclick="window.location.href='/community/qa_detail.html'">Q. 전시회 정보 궁금해요</div>
         </div>
     </section>
-
     <section>
         <h3 class="section-title">추천 전남 스팟</h3>
         <div class="horizontal-scroll spot-list">
@@ -64,12 +64,48 @@
             </div>
         </div>
     </section>
-
     <div class="community-list" id="communityList">
-        <div class="community-card" onclick="window.location.href='/community/post_detail.html'">[후기] 강진수국길축제 다녀왔어요!</div>
-        <div class="community-card" onclick="window.location.href='/community/post_detail.html'">[정보] 목포 장미의 거리 꿀팁</div>
-        <div class="community-card" onclick="window.location.href='/community/post_detail.html'">[질문] 전남 축제 중 추천?</div>
+        <div class="community-card" onclick="window.location.href='/community/post_detail.html'">
+            <div class="card-header">
+                <div class="card-profile">👤</div>
+                <div class="card-meta">
+                    <div class="card-type">후기</div>
+                    <div class="card-author">나</div>
+                </div>
+            </div>
+            <div class="card-image"><img
+                    src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=200&q=80"
+                    alt="임시이미지" style="width:100%;height:80px;object-fit:cover;border-radius:8px;"></div>
+            <div class="card-title">강진수국길축제 다녀왔어요!</div>
+        </div>
+        <div class="community-card" onclick="window.location.href='/community/post_detail.html'">
+            <div class="card-header">
+                <div class="card-profile">👤</div>
+                <div class="card-meta">
+                    <div class="card-type">정보</div>
+                    <div class="card-author">user1</div>
+                </div>
+            </div>
+            <div class="card-image"><img
+                    src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=200&q=80"
+                    alt="임시이미지" style="width:100%;height:80px;object-fit:cover;border-radius:8px;"></div>
+            <div class="card-title">목포 장미의 거리 꿀팁</div>
+        </div>
+        <div class="community-card" onclick="window.location.href='/community/post_detail.html'">
+            <div class="card-header">
+                <div class="card-profile">👤</div>
+                <div class="card-meta">
+                    <div class="card-type">질문</div>
+                    <div class="card-author">user2</div>
+                </div>
+            </div>
+            <div class="card-image"><img
+                    src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=facearea&w=200&q=80"
+                    alt="임시이미지" style="width:100%;height:80px;object-fit:cover;border-radius:8px;"></div>
+            <div class="card-title">전남 축제 중 추천?</div>
+        </div>
     </div>
+    <div style="margin:24px 0; color:#888; text-align:center;">* 임시데이터로 동작 중입니다.</div>
 
     <button class="write-button" onclick="window.location.href='/newPost/newPost.html'">
         <span class="material-icons">edit</span>
