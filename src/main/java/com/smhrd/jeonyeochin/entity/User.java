@@ -32,8 +32,11 @@ public class User {
     @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword; // 사용자 비밀번호
 
-    @Column(name = "user_profile", nullable = false, length = 255)
+    @Column(name = "user_profile", nullable = true, length = 255)
     private String userProfile; // 사용자 프로필 사진 URL
+
+    @Column(name = "user_birth", nullable = false, length = 255)
+    private String userBirth; // 사용자 생년월일 
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt; // 사용자 생성 시간

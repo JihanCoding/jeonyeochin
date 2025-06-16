@@ -32,4 +32,14 @@ public class UserService {
         user.setUserPassword(encodedPassword);
         return userRepository.save(user);
     }
+
+    // 이메일 중복 확인
+    public boolean isEmailExists(String userEmail) {
+        return userRepository.existsByUserEmail(userEmail);
+    }
+
+    // 닉네임 중복 확인
+    public boolean isNickExists(String userNick) {
+        return userRepository.existsByUserNick(userNick);
+    }
 }
