@@ -11,36 +11,38 @@
 </head>
 
 <body>
+    <header class="app-header">
+        <button id="backButton" class="back-button" onclick="window.location.href='/index/index.html'">
+            <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
+        </button>
+        <div class="logo">전남 여행</div>
+        <span class="material-icons" style="visibility: hidden;">menu</span>
+    </header>
     <div class="tripinfo-container">
-        <header class="app-header">
-            <button id="backButton" class="back-button" onclick="window.location.href='/index/index.html'">
-                <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
-            </button>
-            <div class="logo">전남 여행</div>
-            <span class="material-icons" style="visibility: hidden;">menu</span>
-        </header>
-        <div class="search-bar">
-            <input type="text" placeholder="강진수국길축제" value="강진수국길축제" />
-            <button><span class="material-icons">search</span></button>
-        </div>
         <main class="tripinfo-main">
             <section class="tripinfo-section">
                 <div class="section-header">축제 <span class="material-icons section-arrow">chevron_right</span></div>
                 <div class="tripinfo-horizontal-scroll">
                     <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#축제 #여행 #전남</div>
-                        <div class="tripinfo-post-content">목포 장미의 거리<br>06.09 - 07.13<br>김태완 탄신 기념 축제</div>
+                        <div class="tripinfo-post-image"></div>
+                        <div class="tripinfo-post-tags" name="ti-festival-tags">#평화광장 #김경호</div>
+                        <div class="tripinfo-post-title" name="ti-festival-title">목포 해상 W쇼</div>
+                        <div class="tripinfo-post-content" name="ti-festival-place">목포 평화광장</div>
+                        <div class="tripinfo-post-content" name="ti-festival-date">06.09 - 07.13</div>
                     </div>
                     <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#축제</div>
-                        <div class="tripinfo-post-content">강진수국길축제<br>06.15 - 06.30<br>수국이 만개!</div>
+                        <div class="tripinfo-post-image"></div>
+                        <div class="tripinfo-post-tags" name="ti-festival-tags">#여름꽃축제 #꽃길만걷자</div>
+                        <div class="tripinfo-post-title" name="ti-festival-title">강진수국길축제</div>
+                        <div class="tripinfo-post-content" name="ti-festival-place">보은산 V랜드공원</div>
+                        <div class="tripinfo-post-content" name="ti-festival-date">06.15 - 06.30</div>
                     </div>
                     <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#축제</div>
-                        <div class="tripinfo-post-content">여수 밤바다 축제<br>07.01 - 07.10</div>
+                        <div class="tripinfo-post-image"></div>
+                        <div class="tripinfo-post-tags" name="ti-festival-tags">#워터樂풀파티 #수상체험</div>
+                        <div class="tripinfo-post-title" name="ti-festival-title">정남진 장흥 물축제</div>
+                        <div class="tripinfo-post-content" name="ti-festival-place">탐진강 및 정남진 편백숲우드랜드</div>
+                        <div class="tripinfo-post-content" name="ti-festival-date">07.26 - 08.03</div>
                     </div>
                 </div>
             </section>
@@ -48,19 +50,11 @@
                 <div class="section-header">공연 <span class="material-icons section-arrow">chevron_right</span></div>
                 <div class="tripinfo-horizontal-scroll">
                     <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#공연</div>
-                        <div class="tripinfo-post-content">목포<br>03.03 - 08.08<br>전국 삽발의 날</div>
-                    </div>
-                    <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#공연</div>
-                        <div class="tripinfo-post-content">여수 재즈 페스티벌<br>08.15 - 08.17</div>
-                    </div>
-                    <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#공연</div>
-                        <div class="tripinfo-post-content">광양 락 페스티벌<br>09.01 - 09.03</div>
+                        <div class="tripinfo-post-image"></div>
+                        <div class="tripinfo-post-tags" name="ti-concert-tags">#비상,바다를날다 #클래식</div>
+                        <div class="tripinfo-post-title" name="ti-concert-title">제10회 2025 여수에코국제음악제</div>
+                        <div class="tripinfo-post-content" name="ti-concert-place">GS칼텍스 예울마루</div>
+                        <div class="tripinfo-post-content" name="ti-concert-date">06.19 - 06.22</div>
                     </div>
                 </div>
             </section>
@@ -68,19 +62,11 @@
                 <div class="section-header">전시 <span class="material-icons section-arrow">chevron_right</span></div>
                 <div class="tripinfo-horizontal-scroll">
                     <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#전시</div>
-                        <div class="tripinfo-post-content">순천만 미술관 특별전<br>10.01 - 10.31</div>
-                    </div>
-                    <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#전시</div>
-                        <div class="tripinfo-post-content">목포 해양박물관 전시<br>11.01 - 11.30</div>
-                    </div>
-                    <div class="tripinfo-post-block" onclick="window.location.href='/tripinfo/detail.html'">
-                        <div class="tripinfo-post-image" style="background:#e0e0e0;"></div>
-                        <div class="tripinfo-post-tags">#전시</div>
-                        <div class="tripinfo-post-content">여수 아트페어<br>12.01 - 12.10</div>
+                        <div class="tripinfo-post-image"></div>
+                        <div class="tripinfo-post-tags" name="ti-display-tags">#점유하는광장 #‘Occupy운동’</div>
+                        <div class="tripinfo-post-title" name="ti-display-title">Occupy:우리는 연결되고, 점유한다</div>
+                        <div class="tripinfo-post-content" name="ti-display-place">전남도립미술관</div>
+                        <div class="tripinfo-post-content" name="ti-display-date">06.10 - 09.03</div>
                     </div>
                 </div>
             </section>
