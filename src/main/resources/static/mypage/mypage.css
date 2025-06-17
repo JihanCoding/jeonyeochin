@@ -20,9 +20,9 @@ body {
     position: fixed;
     bottom: 6rem;
     right: 2rem;
-    color: #6dd5ed;
+    color: #2196f3;
     background: #ffffff;
-    border: 4px solid #6dd5ed;
+    border: 4px solid #2196f3;
     border-radius: 50%;
     width: 52px;
     height: 52px;
@@ -42,7 +42,7 @@ body {
     padding: 1rem 24px;
     border-bottom: 1px solid #eee;
     background: white;
-    color: #6dd5ed;
+    color: #2196f3;
     position: relative;
     z-index: 20;
 }
@@ -50,24 +50,22 @@ body {
 .logo {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #6dd5ed;
+    color: #2196f3;
 }
 
-.back-button {
+#backButton {
     background: none;
     border: none;
     cursor: pointer;
-    color: #3ec6e0;
+    color: #2196f3;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
 }
 
-.back-btn {
-    cursor: pointer;
-    font-size: 1.8rem;
-    color: #bbb;
+#notificationBtn {
+    font-size: 1.4rem;
 }
 
 .profile-section {
@@ -82,9 +80,13 @@ body {
 .profile-img-bg {
     width: 120px;
     height: 120px;
-    border-radius: 100%;
     background: #fff;
-    border: 1px solid #6dd5ed;
+    border: 1px solid #2196f3;
+    border-radius: 100%;
+    box-shadow:
+        0 4px 24px 0 rgba(33, 150, 243, 0.80),
+        0 1.5px 8px 0 rgba(0, 0, 0, 0.16),
+        0 0.5px 1.5px 0 rgba(33, 150, 243, 0.32);
     position: relative;
     display: block;
     z-index: 0;
@@ -102,7 +104,7 @@ body {
     top: 0;
     width: 120px;
     height: 120px;
-    border: 1px solid #6dd5ed;
+    border: 1px solid #2196f3;
     border-radius: 100%;
     object-fit: cover;
     display: none;
@@ -114,8 +116,8 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.2rem;
-    color: #6dd5ed;
+    font-size: 2rem;
+    color: #2196f3;
     pointer-events: none;
     z-index: 2;
     display: none;
@@ -139,12 +141,13 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .profile-id {
     font-size: 1rem;
-    color: #888;
+    font-weight: 500;
+    color: #777;
 }
 
 .profile-username-row {
@@ -208,7 +211,7 @@ body {
 .posts-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
 .posts-group {
@@ -305,7 +308,6 @@ body {
     -webkit-box-orient: vertical;
 }
 
-
 @media (max-width: 480px) {
     .mypage-container {
         padding: 0 24px;
@@ -323,4 +325,13 @@ body {
     }
 }
 
-/* 프로필 이미지 업로드 시 이미지가 보이도록 JS에서 display:block 처리 필요 */
+.no-posts-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    /* 필요시 조정 */
+    text-align: center;
+    color: #888;
+}

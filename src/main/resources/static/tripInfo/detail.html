@@ -11,11 +11,12 @@
 
 <body>
     <header class="app-header">
-        <button onclick="history.back()" class="back-button"
-            style="background:none; border:none; cursor:pointer; padding:0; margin-right:8px;"><span
-                class="material-icons"
-                style="font-size:1.8rem; color:#2196f3; vertical-align:middle;">chevron_left</span></button>
+        <button id="backButton" class="back-button" onclick="window.location.href='/index/index.html'">
+            <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
+        </button>
         <div class="logo">여행정보 상세</div>
+        <span class="material-icons" style="visibility: hidden;">menu</span>
+
     </header>
     <main style="padding:24px;">
         <h2>목포 장미의 거리</h2>

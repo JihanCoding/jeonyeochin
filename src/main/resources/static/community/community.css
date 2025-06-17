@@ -36,6 +36,10 @@ html {
     padding: 0;
 }
 
+#notificationBtn {
+    font-size: 1.4rem;
+}
+
 /* index 페이지 검색창 스타일로 통일 */
 .search-bar {
     max-width: 100%;

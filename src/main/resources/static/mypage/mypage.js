@@ -17,12 +17,11 @@ function loadUserPosts() {
 
   if (posts.length === 0) {
     postsSection.innerHTML = `
-      <div style="text-align: center; padding: 60px 20px; color: #888;">
-        <div style="font-size: 3rem; margin-bottom: 16px;">📝</div>
+      <div class="no-posts-center">
         <h3>작성한 게시글이 없습니다</h3>
         <p>첫 번째 게시글을 작성해보세요!</p>
         <button onclick="window.location.href='/newPost/newPost.html'" 
-                style="margin-top: 16px; padding: 12px 24px; background: #6dd5ed; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                style="margin-top: 16px; padding: 12px 24px; background: #2196f3; color: white; border: none; border-radius: 8px; cursor: pointer;">
           게시글 작성하기
         </button>
       </div>

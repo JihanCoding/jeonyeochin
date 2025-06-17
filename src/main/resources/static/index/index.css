@@ -56,6 +56,10 @@ body {
     font-weight: 500;
 }
 
+#notificationBtn {
+    font-size: 1.4rem;
+}
+
 
 /* 사이드 메뉴 */
 .side-menu {

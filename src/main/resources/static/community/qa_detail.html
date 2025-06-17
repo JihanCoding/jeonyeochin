@@ -8,7 +8,14 @@
     <link rel="stylesheet" href="/community/community.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
-
+<style>    
+    #notificationBtn {
+        visibility: hidden;
+    }
+    h2 {
+        margin: 16px 0 8px 0;
+    }
+</style>
 <body>
     <header class="app-header">
         <button onclick="history.back()" class="back-button"
@@ -16,11 +23,20 @@
                 class="material-icons"
                 style="font-size:1.8rem; color:#2196f3; vertical-align:middle;">chevron_left</span></button>
         <div class="logo">Q&A 상세</div>
+        <span class="material-icons" id="notificationBtn">notifications</span>
+
     </header>
     <main style="padding:24px;">
         <h2>Q. 강진수국길축제 일정이 어떻게 되나요?</h2>
-        <div style="margin:16px 0 8px 0; color:#2196f3;">A. 6월 15일부터 6월 30일까지 진행됩니다!</div>
-        <div style="color:#888; font-size:0.95rem;">작성자: user1 | 2025-06-10</div>
+        <div style="display: flex; justify-content: flex-start; align-items: center; gap: 12px; color:#777; font-size:0.9rem;">
+            <span>2025-06-10</span>
+            <span>작성자: user1</span>
+        </div>
+        <div style="margin:32px 0 4px 0; color:#2196f3;">A. 6월 15일부터 6월 30일까지 진행됩니다!</div>
+        <div style="display: flex; justify-content: flex-start; align-items: center; gap: 12px; color:#777; font-size:0.9rem;">
+            <span>2025-06-10</span>
+            <span>작성자: user2</span>
+        </div>
     </main>
 </body>
 

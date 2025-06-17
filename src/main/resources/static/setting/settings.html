@@ -17,7 +17,8 @@
                 <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
             </button>
             <div class="settings-title">설정</div>
-            <span class="material-icons" style="visibility: hidden;">menu</span>
+            <span class="material-icons" id="notificationBtn" onclick="window.location.href='/notifications/notifications.html'">notifications</span>
+
         </header>
         <main class="settings-main">
             <button class="login-btn" id="login-btn">
@@ -107,7 +108,7 @@
                                 </li>
                                 <li>
                                     <div class="settings-toggle-row">
-                                        <span>여정 정보 알림</span>
+                                        <span>여행 정보 알림</span>
                                         <label class="switch">
                                             <input type="checkbox" checked>
                                             <span class="slider"></span>
@@ -124,7 +125,6 @@
                             <ul class="settings-sub-list">
                                 <li>
                                     <div class="settings-radio-row">
-                                        <span>테마</span>
                                         <label><input type="radio" name="theme" checked> Light Mode</label>
                                         <label><input type="radio" name="theme"> Dark Mode</label>
                                     </div>
@@ -140,9 +140,7 @@
                                 <li>
                                     <div class="settings-radio-row">
                                         <label><input type="radio" name="lang" checked> 한국어</label>
-                                        <br>
                                         <label><input type="radio" name="lang"> English</label>
-                                        <br>
                                         <label><input type="radio" name="lang"> 日本語</label>
                                     </div>
                                 </li>
