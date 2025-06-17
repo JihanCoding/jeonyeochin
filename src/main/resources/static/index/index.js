@@ -344,10 +344,31 @@ window.addEventListener('DOMContentLoaded', function () {
 
     posts.forEach(post => {
         if (post.lat && post.lng) {
-            const marker = new naver.maps.Marker({
+            // 카테고리별 마커 색상 지정 (네이버 지도 기본 마커)
+            let iconOptions = {};
+            switch (post.category) {
+                case '축제':
+                    iconOptions = { icon: { content: '<div style="background:#ffb300;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '공연':
+                    iconOptions = { icon: { content: '<div style="background:#42a5f5;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '전시':
+                    iconOptions = { icon: { content: '<div style="background:#66bb6a;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '테마파크':
+                    iconOptions = { icon: { content: '<div style="background:#ab47bc;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '게시글':
+                    iconOptions = { icon: { content: '<div style="background:#ef5350;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                default:
+                    iconOptions = {};
+            }
+            const marker = new naver.maps.Marker(Object.assign({
                 position: new naver.maps.LatLng(post.lat, post.lng),
                 map: map
-            });
+            }, iconOptions));
             mapMarkers.push({
                 marker,
                 category: post.category || '기타',
