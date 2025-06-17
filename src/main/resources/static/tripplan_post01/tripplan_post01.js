@@ -34,6 +34,18 @@ window.naverMapInit = function () {
     const startInput = document.getElementById('start-point');
     const endInput = document.getElementById('end-point');
     const waypointsContainer = document.getElementById('waypoints-container');
+    const overlay = document.getElementById('route-planner-overlay');
+
+    // 입력란 클릭 시 오버레이 숨김
+    function hideOverlay() { overlay.style.display = 'none'; }
+    function showOverlay() { overlay.style.display = 'block'; }
+
+    startInput.addEventListener('focus', hideOverlay);
+    endInput.addEventListener('focus', hideOverlay);
+    waypointsContainer.addEventListener('focusin', function(e) {
+        if (e.target.classList.contains('waypoint-input-field')) hideOverlay();
+    });
+    // blur/focusout에서 showOverlay 제거
 
     // 경유지 버튼 클릭 핸들러
     waypointsContainer.addEventListener('click', onWaypointButtonClick);
@@ -181,25 +193,17 @@ async function handleMapClick(coord) {
             if (endInput) {
                 endInput.value = address;
             }
-        } else if (mapSelectionMode === 'waypoint' && currentWaypointInput) {
-            currentWaypointInput.value = address;
+        } else if (mapSelectionMode === 'waypoint') {
+            if (currentWaypointInput) {
+                currentWaypointInput.value = address;
+            }
         }
-
-        // 임시 마커 추가
-        addTemporaryMarker(coord, mapSelectionMode, address);
-
-        // 지도 선택 모드 해제
-        if (window.disableMapSelection) {
-            window.disableMapSelection();
-        } else {
-            mapSelectionMode = null;
-            currentWaypointInput = null;
-            hideMapSelectionGuide();
-        }
-
-    } catch (error) {
-        console.error('주소 변환 오류:', error);
-        alert('해당 위치의 주소를 가져올 수 없습니다.');
+        // 지도 클릭 시 오버레이 다시 표시
+        const overlay = document.getElementById('route-planner-overlay');
+        if (overlay) overlay.style.display = 'block';
+        disableMapSelection();
+    } catch (e) {
+        alert('주소 변환에 실패했습니다.');
     }
 }
 
