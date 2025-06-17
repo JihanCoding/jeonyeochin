@@ -1019,6 +1019,14 @@ if (bottomSheetElement && dragHandleElement && sheetContentElement) {
     });
 }
 
+// 전역 검색어 변수 선언 (currentSearchTerm 오류 방지)
+let currentSearchTerm = '';
+
+// initializeSearch 오류 방지: 함수가 필요 없으면 아래 호출 주석처리 또는 함수 더미 추가
+function initializeSearch() {
+    // 필요시 검색 초기화 코드 작성, 현재는 빈 함수로 둠
+}
+
 // 게시글/공공데이터(축제, 공연, 관광, 테마파크 등) 모두 지원하는 리스트 아이템 생성 함수
 function createPostListItem(item, isSearchResult = false) {
     const li = document.createElement('li');
@@ -1061,12 +1069,4 @@ function createPostListItem(item, isSearchResult = false) {
         });
     }
     return li;
-}
-
-// 전역 검색어 변수 선언 (currentSearchTerm 오류 방지)
-let currentSearchTerm = '';
-
-// initializeSearch 오류 방지: 함수가 필요 없으면 아래 호출 주석처리 또는 함수 더미 추가
-function initializeSearch() {
-    // 필요시 검색 초기화 코드 작성, 현재는 빈 함수로 둠
 }
