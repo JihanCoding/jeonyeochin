@@ -109,7 +109,7 @@ document.querySelector('.submit-btn').addEventListener('click', function (e) {
         const cameraImageBase64 = results[0];
         const galleryImagesBase64 = results.slice(1);
         // 기존 localStorage 글 목록 불러오기
-        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]'); posts.push({
+        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');        posts.push({
             type: 'user_post', // 사용자 게시글 타입 추가
             lat: coords.lat,
             lng: coords.lng,
@@ -120,8 +120,7 @@ document.querySelector('.submit-btn').addEventListener('click', function (e) {
             galleryImages: galleryImagesBase64,
             tags: selectedTags, // 선택된 태그 추가
             createdAt: new Date().toISOString()
-        });
-        localStorage.setItem('testPosts', JSON.stringify(posts));
+        });        localStorage.setItem('testPosts', JSON.stringify(posts));
         alert(`글이 등록되었습니다! 선택된 태그: ${selectedTags.length > 0 ? selectedTags.join(', ') : '없음'}`);
         window.location.replace('/index/index.html');
     });
@@ -217,8 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     galleryImages.splice(idx, 1);
                     renderGalleryImages();
                 }
-            });
-            photoGrid.insertBefore(box, addBox);
+            });            photoGrid.insertBefore(box, addBox);
         });
     }
 });
