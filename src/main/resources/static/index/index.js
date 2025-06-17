@@ -52,7 +52,7 @@ function filterPostsByTags() {
         }
 
         // 공공데이터 필터들이 선택된 경우
-        ['축제', '공연', '전시', '테마파크'].forEach(filter => {
+        ['축제', '공연', '관광', '테마파크'].forEach(filter => {
             if (activeFilters.includes(filter)) {
                 const matchingData = publicData.filter(item => item.type === filter);
                 filteredData = [...filteredData, ...matchingData];
@@ -72,7 +72,7 @@ function filterPostsByTags() {
                 shouldShow = true;
             }
             // 공공데이터인 경우
-            else if (['축제', '공연', '전시', '테마파크'].includes(dataType) && activeFilters.includes(dataType)) {
+            else if (['축제', '공연', '관광', '테마파크'].includes(dataType) && activeFilters.includes(dataType)) {
                 shouldShow = true;
             }
         }
@@ -95,9 +95,7 @@ function updateBottomSheetContentWithFilter(filteredPosts) {
     const postsListContainer = document.createElement('ul');
     postsListContainer.style.listStyle = 'none';
     postsListContainer.style.padding = '0';
-    postsListContainer.style.margin = '0';
-
-    filteredPosts.reverse().forEach((post, index) => {
+    postsListContainer.style.margin = '0'; filteredPosts.reverse().forEach((post, index) => {
         const li = document.createElement('li');
         li.style.padding = '12px 20px';
         li.style.borderBottom = '1px solid #eee';
@@ -119,6 +117,12 @@ function updateBottomSheetContentWithFilter(filteredPosts) {
             </div>
             <div style="color:#999;font-size:0.8em;margin-top:4px;">작성일: ${dateStr}</div>
         `;
+
+        // 게시물 클릭 시 상세 페이지로 이동
+        li.addEventListener('click', () => {
+            sessionStorage.setItem('selectedPost', JSON.stringify(post));
+            window.location.href = '/community/post_detail.html';
+        });
 
         postsListContainer.appendChild(li);
     });
@@ -202,17 +206,27 @@ requestAnimationFrame(() => {
 // 바텀시트: pointer 이벤트만 사용 (PC/모바일 모두 지원)
 dragHandle.addEventListener('pointerdown', (e) => {
     e.preventDefault(); // sheetContent 등 내용 드래그/선택 방지
+    e.stopPropagation(); // 이벤트 버블링 방지
     if (e.pointerType === 'mouse' && e.button !== 0) return; // 마우스는 왼쪽 버튼만 허용, 터치/펜은 무조건 허용
     isDragging = true;
     startY = e.clientY;
     startHeight = bottomSheet.getBoundingClientRect().height;
     dragHandle.style.cursor = 'grabbing';
+
+    // 지도 이벤트 비활성화
+    const mapElement = document.getElementById('map');
+    if (mapElement) {
+        mapElement.style.pointerEvents = 'none';
+    }
+
     document.addEventListener('pointermove', pointerMoveHandler);
     document.addEventListener('pointerup', pointerUpHandler);
     document.addEventListener('pointercancel', pointerCancelHandler);
 });
 function pointerMoveHandler(e) {
     if (!isDragging) return;
+    e.preventDefault();
+    e.stopPropagation();
     const dy = e.clientY - startY; // 위로 올리면 음수, 아래로 내리면 양수
     setHeight(startHeight - dy); // 위로 올릴수록 height 증가
 }
@@ -220,6 +234,13 @@ function pointerUpHandler(e) {
     if (!isDragging) return;
     isDragging = false;
     dragHandle.style.cursor = 'grab';
+
+    // 지도 이벤트 재활성화
+    const mapElement = document.getElementById('map');
+    if (mapElement) {
+        mapElement.style.pointerEvents = 'auto';
+    }
+
     updateMaxHeight();
     const currentHeight = bottomSheet.getBoundingClientRect().height;
     document.removeEventListener('pointermove', pointerMoveHandler);
@@ -241,6 +262,13 @@ function pointerCancelHandler(e) {
     if (!isDragging) return;
     isDragging = false;
     dragHandle.style.cursor = 'grab';
+
+    // 지도 이벤트 재활성화
+    const mapElement = document.getElementById('map');
+    if (mapElement) {
+        mapElement.style.pointerEvents = 'auto';
+    }
+
     setHeight(minHeight);
     document.removeEventListener('pointermove', pointerMoveHandler);
     document.removeEventListener('pointerup', pointerUpHandler);
@@ -261,9 +289,7 @@ function updateBottomSheetContent() {
     const postsListContainer = document.createElement('ul');
     postsListContainer.style.listStyle = 'none';
     postsListContainer.style.padding = '0';
-    postsListContainer.style.margin = '0';
-
-    posts.reverse().forEach((post, index) => {
+    postsListContainer.style.margin = '0'; posts.reverse().forEach((post, index) => {
         const li = document.createElement('li');
         li.style.padding = '12px 20px';
         li.style.borderBottom = '1px solid #eee';
@@ -285,6 +311,12 @@ function updateBottomSheetContent() {
             </div>
             <div style="color:#999;font-size:0.8em;margin-top:4px;">작성일: ${dateStr}</div>
         `;
+
+        // 게시물 클릭 시 상세 페이지로 이동
+        li.addEventListener('click', () => {
+            sessionStorage.setItem('selectedPost', JSON.stringify(post));
+            window.location.href = '/community/post_detail.html';
+        });
 
         postsListContainer.appendChild(li);
     });
@@ -353,7 +385,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 case '공연':
                     iconOptions = { icon: { content: '<div style="background:#42a5f5;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
                     break;
-                case '전시':
+                case '관광':
                     iconOptions = { icon: { content: '<div style="background:#66bb6a;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
                     break;
                 case '테마파크':
@@ -546,3 +578,19 @@ writeButton.addEventListener('click', () => {
         window.location.href = '/login/login.html';
     }
 });
+
+// bottomSheet 전체에 터치 이벤트 차단
+const bottomSheetElement = document.getElementById('bottomSheet');
+if (bottomSheetElement) {
+    bottomSheetElement.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+    });
+
+    bottomSheetElement.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+    });
+
+    bottomSheetElement.addEventListener('touchend', (e) => {
+        e.stopPropagation();
+    });
+}

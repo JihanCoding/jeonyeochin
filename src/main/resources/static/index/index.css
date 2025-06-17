@@ -85,6 +85,7 @@ body {
     transform: translateX(0);
 }
 
+/* 사이드 메뉴 리스트 스타일 */
 .side-menu ul {
     list-style: none;
     padding: 0;
@@ -144,6 +145,7 @@ body {
     background: rgba(255, 255, 255, 0);
     position: relative;
     z-index: 14;
+    pointer-events: auto;
 }
 
 .filters-wrapper::-webkit-scrollbar {
@@ -189,58 +191,7 @@ body {
     flex: 0 0 24px;
 }
 
-/* 태그 필터 스타일 */
-.tag-filters-wrapper {
-    overflow-x: auto;
-    padding: 0 24px;
-    background: rgba(255, 255, 255, 0.9);
-    position: relative;
-    z-index: 13;
-    margin-top: 8px;
-}
-
-.tag-filters-wrapper::-webkit-scrollbar {
-    display: none;
-}
-
-.tag-filters {
-    display: flex;
-    gap: 0;
-    white-space: nowrap;
-}
-
-.tag-filters button:last-child {
-    margin-right: 0;
-}
-
-.tag-filters button:not(:last-child) {
-    margin-right: 0.4rem;
-}
-
-.tag-filter {
-    padding: 0.25rem 0.8rem;
-    border: 2px solid #6dd5ed;
-    border-radius: 16px;
-    color: #6dd5ed;
-    font-weight: 500;
-    font-size: 0.9rem;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(8px);
-    transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
-}
-
-.tag-filter.active {
-    background: #6dd5ed;
-    color: #fff;
-    border-color: #6dd5ed;
-}
-
-.tag-filters::after {
-    content: "";
-    flex: 0 0 24px;
-    height: 1px;
-}
+/* 태그 필터 - 사용되지 않음, 제거됨 */
 
 .write-button {
     position: fixed;
@@ -287,25 +238,7 @@ body {
     cursor: pointer;
 }
 
-
-.menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.menu-list li {
-    border: none;
-    padding: 0.4rem 0;
-    padding-left: 16px;
-    font-size: 0.2rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.menu-list li:hover {
-    background-color: #f5f5f5;
-}
+/* 메뉴 푸터 */
 
 .menu-item {
     padding: 0;
@@ -368,11 +301,12 @@ body {
     border-top-right-radius: 12px;
     transition: height 0.2s ease;
     overflow: hidden;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
+    pointer-events: auto;
 }
 
 #dragHandle {
@@ -405,52 +339,4 @@ body {
     padding: 0 24px;
 }
 
-/* 검색 오버레이 */
-.search-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.1);
-    z-index: 200;
-    overflow-y: auto;
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-}
-
-.search-overlay-content {
-    background: #fff;
-    width: 100vw;
-    min-height: 100vh;
-    margin: 0;
-    max-width: none;
-    border-radius: 0;
-    box-shadow: none;
-    position: relative;
-}
-
-.search-overlay .close-btn {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    background: rgba(255, 255, 255, 0.8);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: #2196f3;
-    z-index: 10;
-    cursor: pointer;
-}
-
-.search-overlay .close-btn:active {
-    background: #e0f7fa;
-}
+/* 검색 오버레이 - 사용되지 않음, 제거됨 */
