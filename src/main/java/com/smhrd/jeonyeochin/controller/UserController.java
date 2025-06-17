@@ -48,14 +48,18 @@ public class UserController {
     @GetMapping("/check-email")
     public ResponseEntity<?> checkEmail(@RequestParam String userEmail) {
         boolean exists = userService.isEmailExists(userEmail);
-        return ResponseEntity.ok(Map.of("result", exists));
+        return ResponseEntity.ok(Map.of(
+            "result", exists
+        ));
     }
 
     // 닉네임 중복 확인
     @GetMapping("/check-nick")
     public ResponseEntity<?> checkNick(@RequestParam String userNick) {
         boolean exists = userService.isNickExists(userNick);
-        return ResponseEntity.ok(Map.of("result", exists));
+        return ResponseEntity.ok(Map.of(
+            "result", exists
+        ));
     }
 
     // userId로 유저 정보 조회
@@ -63,7 +67,9 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(@PathVariable Integer userId) {
         User user = userService.getUserById(userId);
         if (user != null) {
-            return ResponseEntity.ok(Map.of("user", user));
+            return ResponseEntity.ok(Map.of(
+                "result", user
+            ));
         } else {
             return ResponseEntity.status(404).body(Map.of("error", "사용자를 찾을 수 없습니다."));
         }

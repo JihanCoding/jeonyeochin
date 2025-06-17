@@ -28,7 +28,7 @@ public class PostController {
             
             // 게시글 반환!!
             return ResponseEntity.ok(Map.of(
-                "post", savedPost
+                "result", savedPost
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -45,7 +45,9 @@ public class PostController {
              // 1. 서비스의 updatePost 메서드 호출 (게시글 ID, 수정할 데이터, 로그인한 유저 ID 전달)
             Post updatedPost = postService.updatePost(postId, updateData, userId);
             // 2. 수정된 게시글을 응답으로 반환
-            return ResponseEntity.ok(Map.of("post", updatedPost));
+            return ResponseEntity.ok(Map.of(
+                "result", updatedPost
+            ));
         } catch (SecurityException e) {
             // 3. 본인 게시글이 아닐 경우 403(권한 없음) 에러 반환
             return ResponseEntity.status(403).body(Map.of("error", e.getMessage()));
@@ -62,6 +64,8 @@ public class PostController {
                                         @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> postPage = postService.getPostsByUserId(userId, pageable);
-        return ResponseEntity.ok(postPage);
+        return ResponseEntity.ok(Map.of(
+            "result", postPage
+        ));
     }
 }

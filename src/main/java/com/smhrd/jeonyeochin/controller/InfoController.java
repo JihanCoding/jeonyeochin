@@ -30,7 +30,8 @@ public class InfoController {
 
             // 정보 반환
             return ResponseEntity.ok(Map.of(
-                    "info", savedInfo));
+                    "result", savedInfo
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", e.getMessage()));
@@ -41,7 +42,9 @@ public class InfoController {
     @GetMapping("/list")
     public ResponseEntity<?> getAllInfo() {
         try {
-            return ResponseEntity.ok(infoService.findAll());
+            return ResponseEntity.ok(Map.of(
+                "result",infoService.findAll()
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

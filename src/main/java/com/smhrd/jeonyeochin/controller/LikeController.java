@@ -20,8 +20,10 @@ public class LikeController {
         try {
             boolean liked = likeService.toggleLike(userId, postId);
             return ResponseEntity.ok(Map.of(
-                "liked", liked,
-                "message", liked ? "좋아요 추가됨" : "좋아요 취소됨"
+                "result",Map.of(
+                    "liked", liked,
+                    "message", liked ? "좋아요 추가됨" : "좋아요 취소됨"
+                )
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -32,6 +34,8 @@ public class LikeController {
     @GetMapping("/count/{postId}")
     public ResponseEntity<?> countLikes(@PathVariable Integer postId) {
         int count = likeService.countLikesByPostId(postId);
-        return ResponseEntity.ok(Map.of("likeCount", count));
+        return ResponseEntity.ok(Map.of(
+            "result", count
+        ));
     }
 }
