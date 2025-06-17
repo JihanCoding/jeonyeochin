@@ -13,18 +13,22 @@
 <body>
     <div class="tripplanmy-container">
         <header class="app-header">
-            <span class="material-icons back-btn" onclick="history.back()">chevron_left</span>
+            <button id="backButton" class="back-button" onclick="history.back()">
+                <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
+            </button>
             <div class="logo">내 여행 플랜</div>
             <span class="material-icons" style="visibility: hidden;">menu</span>
         </header>
         <main class="tripplanmy-main">
-            <div class="route-breadcrumb">여행 루트1 &gt; 여행 루트2 &gt; 여행 루트3 &gt; 여행루트4 &gt; 여행루트5 &gt; 여행루트6</div>
+            <div class="route-breadcrumb">여행루트1 > 여행루트2 &gt; 여행루트3 &gt; 여행루트4 &gt; 여행루트5 &gt; 여행루트6</div>
             <div class="plan-title-row">
                 <input class="plan-title-input" type="text" placeholder="여행 플랜 제목" />
                 <div class="plan-date" style="position: relative; display: flex; align-items: center; gap: 6px;">
                     <label style="margin:0; padding:0; position:relative; display:inline-block; cursor:pointer;">
-                        <span class="material-icons plan-date-icon" tabindex="0" style="pointer-events:none;">calendar_today</span>
-                        <input type="date" class="plan-date-input" aria-label="날짜 선택" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;" />
+                        <span class="material-icons plan-date-icon" tabindex="0"
+                            style="pointer-events:none;">calendar_today</span>
+                        <input type="date" class="plan-date-input" aria-label="날짜 선택"
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;" />
                     </label>
                     <span class="plan-date-text">25-06-21</span>
                 </div>
