@@ -146,11 +146,6 @@ function filterPostsByTags() {
 }
 
 function updateBottomSheetContentWithFilter(filteredPosts) {
-    // 검색 중이면 검색 결과 업데이트 사용
-    if (currentSearchTerm !== '') {
-        updateBottomSheetWithSearch();
-        return;
-    }
 
     const sheetContent = document.getElementById('sheetContent');
 
@@ -221,168 +216,172 @@ filterButtons.forEach(button => {
 // 초기 상태도 맞춰주기 (필터 버튼들 모두 켜져있다고 가정)
 updateAllButtonState();
 
-// 검색 관련 변수
-let currentSearchTerm = '';
-let searchResults = [];
 
-// 검색 기능 초기화
-function initializeSearch() {
-    // 검색 버튼 클릭 이벤트
-    searchButton.addEventListener('click', performSearch);
+// 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
 
-    // 엔터 키 이벤트
-    searchInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            performSearch();
-        }
-    });
 
-    // 검색창이 비워질 때 검색 결과 초기화
-    searchInput.addEventListener('input', function (e) {
-        if (e.target.value.trim() === '') {
-            currentSearchTerm = '';
-            searchResults = [];
-            filterPostsByTags(); // 기존 필터 적용하여 원래 상태로 복원
-        }
-    });
-}
+// // 검색 관련 변수
+// let currentSearchTerm = '';
+// let searchResults = [];
 
-// 검색 실행 함수
-function performSearch() {
-    const searchTerm = searchInput.value.trim();
+// // 검색 기능 초기화
+// function initializeSearch() {
+//     // 검색 버튼 클릭 이벤트
+//     searchButton.addEventListener('click', performSearch);
 
-    if (searchTerm === '') {
-        currentSearchTerm = '';
-        searchResults = [];
-        filterPostsByTags();
-        return;
-    }
+//     // 엔터 키 이벤트
+//     searchInput.addEventListener('keypress', function (e) {
+//         if (e.key === 'Enter') {
+//             performSearch();
+//         }
+//     });
 
-    currentSearchTerm = searchTerm;
+//     // 검색창이 비워질 때 검색 결과 초기화
+//     searchInput.addEventListener('input', function (e) {
+//         if (e.target.value.trim() === '') {
+//             currentSearchTerm = '';
+//             searchResults = [];
+//             filterPostsByTags(); // 기존 필터 적용하여 원래 상태로 복원
+//         }
+//     });
+// }
 
-    // 모든 게시물에서 태그로 검색
-    const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
-    const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
-    const allPosts = [...posts, ...publicData];
+// // 검색 실행 함수
+// function performSearch() {
+//     const searchTerm = searchInput.value.trim();
 
-    // 태그에서 검색어가 포함된 게시물 찾기
-    searchResults = allPosts.filter(post => {
-        if (!post.tags || !Array.isArray(post.tags)) return false;
-        return post.tags.some(tag =>
-            tag.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    });
+//     if (searchTerm === '') {
+//         currentSearchTerm = '';
+//         searchResults = [];
+//         filterPostsByTags();
+//         return;
+//     }
 
-    // 검색 결과가 있으면 하단 시트 업데이트
-    updateBottomSheetWithSearch();
-}
+//     currentSearchTerm = searchTerm;
 
-// 검색 결과를 포함한 하단 시트 업데이트
-function updateBottomSheetWithSearch() {
-    const sheetContent = document.getElementById('sheetContent');
+//     // 모든 게시물에서 태그로 검색
+//     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+//     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
+//     const allPosts = [...posts, ...publicData];
 
-    if (searchResults.length === 0 && currentSearchTerm !== '') {
-        sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">검색 결과가 없습니다.</div>';
-        return;
-    }
+//     // 태그에서 검색어가 포함된 게시물 찾기
+//     searchResults = allPosts.filter(post => {
+//         if (!post.tags || !Array.isArray(post.tags)) return false;
+//         return post.tags.some(tag =>
+//             tag.toLowerCase().includes(searchTerm.toLowerCase())
+//         );
+//     });
 
-    // 검색 결과가 있으면 검색 결과 + 원래 게시물 표시
-    if (currentSearchTerm !== '' && searchResults.length > 0) {
-        // 현재 필터에 맞는 원래 게시물들 가져오기
-        const activeFilters = [...document.querySelectorAll('.filters button')]
-            .filter(btn => btn.classList.contains('active') && btn.dataset.type !== '전체')
-            .map(btn => btn.dataset.type);
+//     // 검색 결과가 있으면 하단 시트 업데이트
+//     updateBottomSheetWithSearch();
+// }
 
-        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
-        const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
-        const allButton = document.querySelector('.filters button[data-type="전체"]');
+// // 검색 결과를 포함한 하단 시트 업데이트
+// function updateBottomSheetWithSearch() {
+//     const sheetContent = document.getElementById('sheetContent');
 
-        // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
-        const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
+//     if (searchResults.length === 0 && currentSearchTerm !== '') {
+//         sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">검색 결과가 없습니다.</div>';
+//         return;
+//     }
 
-        let originalPosts = [];
+//     // 검색 결과가 있으면 검색 결과 + 원래 게시물 표시
+//     if (currentSearchTerm !== '' && searchResults.length > 0) {
+//         // 현재 필터에 맞는 원래 게시물들 가져오기
+//         const activeFilters = [...document.querySelectorAll('.filters button')]
+//             .filter(btn => btn.classList.contains('active') && btn.dataset.type !== '전체')
+//             .map(btn => btn.dataset.type);
 
-        // 전체가 선택된 경우 또는 아무것도 선택 안된 경우
-        if (allButton.classList.contains('active') || activeFilters.length === 0) {
-            originalPosts = [...recentPosts, ...publicData];
-        } else {
-            // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
-            if (activeFilters.includes('게시글')) {
-                originalPosts = [...originalPosts, ...recentPosts];
-            }
+//         const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+//         const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
+//         const allButton = document.querySelector('.filters button[data-type="전체"]');
 
-            // 공공데이터 필터들이 선택된 경우
-            ['축제', '공연', '관광', '테마파크'].forEach(filter => {
-                if (activeFilters.includes(filter)) {
-                    const matchingData = publicData.filter(item => item.type === filter);
-                    originalPosts = [...originalPosts, ...matchingData];
-                }
-            });
-        }
+//         // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
+//         const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
 
-        // 검색 결과에 포함된 게시물들의 ID/제목을 기준으로 원래 게시물에서 제외
-        const searchResultIds = searchResults.map(post => post.title || post.id);
-        const filteredOriginalPosts = originalPosts.filter(post =>
-            !searchResultIds.includes(post.title || post.id)
-        );
+//         let originalPosts = [];
 
-        // HTML 생성
-        const postsListContainer = document.createElement('div');
+//         // 전체가 선택된 경우 또는 아무것도 선택 안된 경우
+//         if (allButton.classList.contains('active') || activeFilters.length === 0) {
+//             originalPosts = [...recentPosts, ...publicData];
+//         } else {
+//             // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
+//             if (activeFilters.includes('게시글')) {
+//                 originalPosts = [...originalPosts, ...recentPosts];
+//             }
 
-        // 검색 결과 섹션
-        if (searchResults.length > 0) {
-            const searchSection = document.createElement('div');
-            searchSection.innerHTML = `
-                <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
-                    🔍 검색 결과 (${searchResults.length}개)
-                </div>
-            `;
+//             // 공공데이터 필터들이 선택된 경우
+//             ['축제', '공연', '관광', '테마파크'].forEach(filter => {
+//                 if (activeFilters.includes(filter)) {
+//                     const matchingData = publicData.filter(item => item.type === filter);
+//                     originalPosts = [...originalPosts, ...matchingData];
+//                 }
+//             });
+//         }
 
-            const searchList = document.createElement('ul');
-            searchList.style.listStyle = 'none';
-            searchList.style.padding = '0';
-            searchList.style.margin = '0';
+//         // 검색 결과에 포함된 게시물들의 ID/제목을 기준으로 원래 게시물에서 제외
+//         const searchResultIds = searchResults.map(post => post.title || post.id);
+//         const filteredOriginalPosts = originalPosts.filter(post =>
+//             !searchResultIds.includes(post.title || post.id)
+//         );
 
-            searchResults.forEach(post => {
-                const li = createPostListItem(post, true); // 검색 결과임을 표시
-                searchList.appendChild(li);
-            });
+//         // HTML 생성
+//         const postsListContainer = document.createElement('div');
 
-            searchSection.appendChild(searchList);
-            postsListContainer.appendChild(searchSection);
-        }
+//         // 검색 결과 섹션
+//         if (searchResults.length > 0) {
+//             const searchSection = document.createElement('div');
+//             searchSection.innerHTML = `
+//                 <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
+//                     🔍 검색 결과 (${searchResults.length}개)
+//                 </div>
+//             `;
 
-        // 원래 게시물 섹션 (15px 공백 후)
-        if (filteredOriginalPosts.length > 0) {
-            const originalSection = document.createElement('div');
-            originalSection.style.marginTop = '15px';
-            originalSection.innerHTML = `
-                <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
-                    📋 다른 게시물
-                </div>
-            `;
+//             const searchList = document.createElement('ul');
+//             searchList.style.listStyle = 'none';
+//             searchList.style.padding = '0';
+//             searchList.style.margin = '0';
 
-            const originalList = document.createElement('ul');
-            originalList.style.listStyle = 'none';
-            originalList.style.padding = '0';
-            originalList.style.margin = '0';
+//             searchResults.forEach(post => {
+//                 const li = createPostListItem(post, true); // 검색 결과임을 표시
+//                 searchList.appendChild(li);
+//             });
 
-            filteredOriginalPosts.reverse().forEach(post => {
-                const li = createPostListItem(post, false);
-                originalList.appendChild(li);
-            });
+//             searchSection.appendChild(searchList);
+//             postsListContainer.appendChild(searchSection);
+//         }
 
-            originalSection.appendChild(originalList);
-            postsListContainer.appendChild(originalSection);
-        }
+//         // 원래 게시물 섹션 (15px 공백 후)
+//         if (filteredOriginalPosts.length > 0) {
+//             const originalSection = document.createElement('div');
+//             originalSection.style.marginTop = '15px';
+//             originalSection.innerHTML = `
+//                 <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
+//                     📋 다른 게시물
+//                 </div>
+//             `;
 
-        sheetContent.innerHTML = '';
-        sheetContent.appendChild(postsListContainer);
-    } else {
-        // 검색어가 없으면 기존 필터 적용
-        filterPostsByTags();
-    }
-}
+//             const originalList = document.createElement('ul');
+//             originalList.style.listStyle = 'none';
+//             originalList.style.padding = '0';
+//             originalList.style.margin = '0';
+
+//             filteredOriginalPosts.reverse().forEach(post => {
+//                 const li = createPostListItem(post, false);
+//                 originalList.appendChild(li);
+//             });
+
+//             originalSection.appendChild(originalList);
+//             postsListContainer.appendChild(originalSection);
+//         }
+
+//         sheetContent.innerHTML = '';
+//         sheetContent.appendChild(postsListContainer);
+//     } else {
+//         // 검색어가 없으면 기존 필터 적용
+//         filterPostsByTags();
+//     }
+// }
 
 // 현재 지도 뷰포트에 보이는 마커들만 가져오는 함수
 function getVisibleMarkers() {
@@ -451,20 +450,6 @@ function updateBottomSheetWithVisiblePosts() {
 
     const postsListContainer = document.createElement('div');
 
-    // 현재 지도 영역 헤더
-    const headerSection = document.createElement('div');
-    headerSection.innerHTML = `
-        <div style="padding:12px 20px;background:#e3f2fd;border-bottom:2px solid #2196f3;font-weight:600;color:#1976d2;text-align:center;">
-            📍 현재 지도 영역의 게시물 (${visibleItems.length}개)
-        </div>
-    `;
-    postsListContainer.appendChild(headerSection);
-
-    const postsList = document.createElement('ul');
-    postsList.style.listStyle = 'none';
-    postsList.style.padding = '0';
-    postsList.style.margin = '0';
-
     // 최신 게시물부터 표시
     const sortedItems = visibleItems.sort((a, b) => {
         const dateA = new Date(a.createdAt || 0);
@@ -480,47 +465,6 @@ function updateBottomSheetWithVisiblePosts() {
     postsListContainer.appendChild(postsList);
     sheetContent.innerHTML = '';
     sheetContent.appendChild(postsListContainer);
-}
-
-// 게시물 리스트 아이템 생성 함수
-function createPostListItem(post, isSearchResult = false) {
-    const li = document.createElement('li');
-    li.style.padding = '12px 20px';
-    li.style.borderBottom = '1px solid #eee';
-    li.style.cursor = 'pointer';    // 검색 결과인 경우 테두리만 변경
-    if (isSearchResult) {
-        li.style.backgroundColor = 'transparent';
-        li.style.borderLeft = '3px solid #2196f3';
-    }
-
-    const tagsHtml = post.tags && post.tags.length > 0
-        ? `<div style="margin:4px 0;">${post.tags.map(tag => {
-            // 검색어가 포함된 태그는 하이라이트
-            const highlightedTag = currentSearchTerm !== '' && tag.toLowerCase().includes(currentSearchTerm.toLowerCase())
-                ? tag.replace(new RegExp(`(${currentSearchTerm})`, 'gi'), '<mark>$1</mark>')
-                : tag;
-            return `<span style="display:inline-block;margin:1px 2px;padding:1px 6px;border-radius:8px;background:#e8f4fd;color:#2193b0;font-size:0.75em;">${highlightedTag}</span>`;
-        }).join('')}</div>`
-        : '';
-
-    const dateStr = post.createdAt ? new Date(post.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
-
-    li.innerHTML = `
-        <div style="font-weight:500;">${post.title}</div>
-        ${tagsHtml}
-        <div style="color:#888;font-size:0.85em;margin-top:4px;">
-            ${post.category ? '[' + post.category + '] ' : ''}${post.content ? post.content.substring(0, 50) : ''}${post.content && post.content.length > 50 ? '...' : ''}
-        </div>
-        <div style="color:#999;font-size:0.8em;margin-top:4px;">작성일: ${dateStr}</div>
-    `;
-
-    // 게시물 클릭 시 상세 페이지로 이동
-    li.addEventListener('click', () => {
-        sessionStorage.setItem('selectedPost', JSON.stringify(post));
-        window.location.href = '/community/post_detail.html';
-    });
-
-    return li;
 }
 
 const backButton = document.getElementById('backButton');
