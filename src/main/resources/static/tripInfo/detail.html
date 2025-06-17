@@ -8,6 +8,80 @@
     <link rel="stylesheet" href="/tripinfo/tripInfo.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
+<style>
+    .tripInfo-title {
+        margin: 0 4px;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2196f3;
+    }
+
+    .tripInfo-tags {
+        margin: 0 4px;
+        color: #555;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .tripInfo-place {
+        margin: 0 4px;
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .tripInfo-date,
+    .tripInfo-content {
+        margin: 0 4px;
+        color: #333;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .tripInfo-content {
+        margin: 0 4px;
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .tripInfo-link {
+        width: 20%;
+        margin: 20px auto 80px auto;
+        padding: 16px 20px;
+        border-radius: 16px;
+        background-color: #2196f3;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .tripinfo-post-image {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        background: #ecf5ffcc;
+        border-radius: 24px;
+        margin-bottom: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+        flex-grow: 0;
+        display: block;
+    }
+
+    .tripinfo-post-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 24px;
+        display: block;
+    }
+</style>
 
 <body>
     <header class="app-header">
@@ -19,9 +93,51 @@
 
     </header>
     <main style="padding:24px;">
-        <h2>목포 장미의 거리</h2>
-        <div style="margin:16px 0;">06.09 - 07.13<br>김태완 탄신 기념 축제<br>축제장 위치: 전남 목포시 장미로 123</div>
-        <div style="color:#888; font-size:0.95rem;">#축제 #여행 #전남</div>
+        <div class="tripInfo-title" name="tripInfo-title">강진 수국길축제</div>
+        <section class="tripinfo-section">
+            <div class="tripinfo-horizontal-scroll" style="margin: 0px;">
+                <div class="tripinfo-post-block">
+                    <div class="tripinfo-post-image"><img
+                            src="https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/726b815a-509f-4fe0-92c7-2b91357cc97d_3.jpg"
+                            alt=""></div>
+                </div>
+                <div class="tripinfo-post-block">
+                    <div class="tripinfo-post-image"><img
+                            src="https://www.gangjin.go.kr/culture/contents/30078/hydrangea_img_03.jpg?build_20250611002"
+                            alt=""></div>
+                </div>
+                <div class="tripinfo-post-block">
+                    <div class="tripinfo-post-image"><img
+                            src="https://www.gangjin.go.kr/culture/contents/30078/hydrangea_img_06.jpg?build_20250611002"
+                            alt=""></div>
+                </div>
+                <div class="tripinfo-post-block">
+                    <div class="tripinfo-post-image"><img
+                            src="https://www.gangjin.go.kr/culture/contents/30078/hydrangea_img_02.jpg?build_20250611002"
+                            alt=""></div>
+                </div>
+            </div>
+        </section>
+        <div style="margin: 0 8px;">
+            <div class="tripInfo-tags" name="tripInfo-tags">#여름꽃축제 #꽃길만걷자</div>
+            <div class="tripInfo-place" name="tripInfo-place">보은산 V랜드공원</div>
+            <div class="tripInfo-date" name="tripInfo-date">06.27 - 06.29</div><br>
+            <div class="tripInfo-content" name="tripInfo-content">강진수국길축제는 전국 최고의 수국을 생산하는 강진화훼 농가로부터 무상 기증받은 수국으로 강진읍
+                고성사, 금곡사, 보은산 등산로 일대 약 8㎞에 달하는 수국길에서 펼쳐진다.<br> 이 축제는 꽃을 테마로 지역 관광자원 브랜드를 콘텐츠한 강진만의 여름축제로 매년 추진하고 있다.<br>
+                제3회
+                강진수국길 축제는 "꽃길만 걷자"라는 주제로 6월 27일(금)부터 6월 29일(일)까지 3일간 진행된다.
+                <br><br>
+                [행사내용] <br>
+                1. 공식행사 : 개장식, 개장축하음악회<br>
+                2. 공연분야 : 수국길 가든음악회, 어린이 마술 및 솜사탕 공연, 어린이 싱어롱쇼<br>
+                3. 체험분야 : 목공체험, 수국활용 체험(화관만들기, 향수만들기 등), 행운의 엽전던지기, 사진인화<br>
+                4. 부대(연계)프로그램 : 고성사 산사음악회, 물총서바이벌게임
+            </div>
+            <div class="tripInfo-link">
+                홈페이지<link rel="stylesheet" href="https://www.gangjin.go.kr/culture/festival/hydrangea/overview">
+            </div>
+
+        </div>
     </main>
 </body>
 

@@ -77,13 +77,13 @@ body, html {
 
 .myplan-icon {
     font-size: 1.6rem;
-    color: #555;
+    color: #2196f3;
 }
 
 .myplan-title {
     font-size: 1.3rem;
     font-weight: 500;
-    color: #555;
+    color: #2196f3;
 }
 
 .myplan-list {
@@ -98,7 +98,7 @@ body, html {
     justify-content: space-between;
     font-size: 1rem;
     font-weight: 500;
-    color: #777;
+    color: #555;
     padding: 18px 0;
     border-bottom: 1px solid #e0e0e0;
     cursor: pointer;
