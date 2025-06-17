@@ -113,6 +113,7 @@ body {
     margin-right: 0;
     /* gap 효과 제거 */
 }
+
 .filters button:not(:last-child) {
     margin-right: 0.4rem;
 }
@@ -225,4 +226,253 @@ body {
     border: 1.5px solid #eaf6fb;
     background: #eaf6fb;
     color: #2196f3;
+}
+
+/* 검색 결과 영역 */
+.search-results {
+    padding: 20px 24px;
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.results-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2196f3;
+}
+
+.results-count {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.result-item {
+    background: transparent;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: none;
+}
+
+.result-item:hover {
+    border-color: #2196f3;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+    transform: translateY(-1px);
+}
+
+.result-item.highlight {
+    background: transparent;
+    border-color: #2196f3;
+    border-left: 4px solid #2196f3;
+}
+
+.result-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.result-category {
+    display: inline-block;
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.result-tags {
+    margin: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.result-tag {
+    display: inline-block;
+    background: #f8f9fa;
+    color: #495057;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    border: 1px solid #e9ecef;
+}
+
+.result-tag.matched {
+    background: transparent;
+    color: #2196f3;
+    font-weight: 600;
+    border: 2px solid #2196f3;
+}
+
+.result-content {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.result-date {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.no-results .material-icons {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 16px;
+}
+
+/* 검색어 하이라이트 */
+mark {
+    background-color: transparent;
+    color: #2196f3;
+    padding: 1px 2px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* 검색 모드 토글 */
+.search-mode-toggle {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 2px;
+    margin-bottom: 8px;
+    gap: 2px;
+}
+
+.mode-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-btn.active {
+    background: #2196f3;
+    color: white;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+.mode-btn .material-icons {
+    font-size: 1rem;
+}
+
+.mode-btn:hover:not(.active) {
+    background: #e9ecef;
+    color: #495057;
+}
+
+/* 태그 제안 영역 */
+.tag-suggestions {
+    margin: 12px 24px 0 24px;
+    background: transparent;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.suggestions-header {
+    padding: 12px 16px;
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.suggestions-list {
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.suggestion-tag:hover {
+    background: #2196f3;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
+}
+
+.suggestion-tag .material-icons {
+    font-size: 0.9rem;
+}
+
+.tag-count {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    margin-left: 4px;
+}
+
+/* 태그 모드일 때 검색창 스타일 */
+.search-bar.tag-mode input {
+    border-color: #ff9800;
+    background: transparent;
+}
+
+.search-bar.tag-mode input::placeholder {
+    color: #ff9800;
+}
+
+.search-bar.tag-mode button {
+    color: #ff9800;
 }

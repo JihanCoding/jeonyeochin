@@ -36,7 +36,7 @@
             </button>
 
 
-            <h3 class="menu-title" onclick="location.href='/community/community.html'">커뮤니티</h3>
+            <h3 class="menu-title" onclick="goToCommunityWithSearch()">커뮤니티</h3>
             <h3 class="menu-title" id="goMypage">마이페이지</h3>
             <h3 class="menu-title" onclick="location.href='/tripinfo/tripInfo.html'">전남 여행 정보</h3>
             <h3 class="menu-title" id="plan">여행 플랜</h3>
@@ -52,13 +52,11 @@
                     <span>환경설정</span>
                 </div>
             </div>
-        </div>
-
-        <!-- 검색창 -->
+        </div> <!-- 검색창 -->
         <div class="search-bar">
-            <input type="text" placeholder="강진수국길축제" />
-            <button><span class="material-icons">search</span></button>
-        </div> <!-- 필터 -->
+            <input type="text" id="searchInput" placeholder="태그로 검색하세요" />
+            <button id="searchButton"><span class="material-icons">search</span></button>
+        </div><!-- 필터 -->
         <div class="filters-wrapper">
             <div class="filters">
                 <button class="active" data-type="전체">전체</button>

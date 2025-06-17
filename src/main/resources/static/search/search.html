@@ -17,11 +17,9 @@
             <span class="material-icons menu-toggle" id="backButton">chevron_left</span>
             <div class="logo">전여친</div>
             <span class="material-icons" style="visibility: hidden;">menu</span>
-        </header>
-
-        <!-- 검색창 -->
+        </header> <!-- 검색창 -->
         <div class="search-bar">
-            <input id="searchInput" type="text" placeholder="강진수국길축제" autocomplete="off"/>
+            <input id="searchInput" type="text" placeholder="강진수국길축제" autocomplete="off" />
             <button><span class="material-icons">search</span></button>
         </div>
 
@@ -39,14 +37,33 @@
         <!-- 검색기록 -->
         <div class="search-history-wrapper">
             <div class="search-history">
-                <div class="search-history-item">유달산 봄축제 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">광주 전시회 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">장미 축제 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">장미의 거리 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">목포 애견 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">해상쇼 가수 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">평화광장 축제 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
-                <div class="search-history-item">목포 해상 w쇼 <button class="remove-btn" title="삭제"><span class="material-icons">close</span></button></div>
+                <div class="search-history-item">유달산 봄축제 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">광주 전시회 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">장미 축제 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">장미의 거리 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">목포 애견 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">해상쇼 가수 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">평화광장 축제 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+                <div class="search-history-item">목포 해상 w쇼 <button class="remove-btn" title="삭제"><span
+                            class="material-icons">close</span></button></div>
+            </div>
+        </div>
+
+        <!-- 검색 결과 영역 -->
+        <div class="search-results" id="searchResults" style="display:none;">
+            <div class="results-header">
+                <h3 id="resultsTitle">검색 결과</h3>
+                <div class="results-count" id="resultsCount">0개 결과</div>
+            </div>
+            <div class="results-list" id="resultsList">
+                <!-- 검색 결과가 여기에 표시됩니다 -->
             </div>
         </div>
     </div>

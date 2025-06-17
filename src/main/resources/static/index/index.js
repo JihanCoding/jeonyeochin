@@ -1,3 +1,15 @@
+// 커뮤니티로 검색어와 함께 이동하는 함수
+function goToCommunityWithSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchTerm = searchInput ? searchInput.value.trim() : '';
+
+    if (searchTerm !== '') {
+        localStorage.setItem('lastSearch', searchTerm);
+    }
+
+    window.location.href = '/community/community.html';
+}
+
 const menuToggle = document.getElementById('menuToggle');
 const sideMenu = document.getElementById('sideMenu');
 menuToggle.addEventListener('click', () => {
@@ -12,14 +24,35 @@ document.getElementById('notificationBtn').onclick = function () {
     }, 200);
 };
 
-const writeBtn = document.querySelector('.write-button');
+const writeBtn = document.getElementById('writeButton');
 if (writeBtn) {
-    writeBtn.addEventListener('click', function () {
+    // 기존 이벤트 리스너 제거 (중복 방지)
+    writeBtn.removeEventListener('click', handleWriteButtonClick);
+    writeBtn.addEventListener('click', handleWriteButtonClick);
+}
+
+function handleWriteButtonClick() {
+    const userDataString = sessionStorage.getItem("user");
+    let userData = null;
+    
+    if (userDataString) {
+        try {
+            userData = JSON.parse(userDataString);
+        } catch (e) {
+            console.error('사용자 데이터 파싱 오류:', e);
+            userData = null;
+        }
+    }
+    
+    if (userData) {
         sessionStorage.setItem('sideMenuOpen', 'false');
         setTimeout(() => {
             window.location.replace('/newpost/newpost.html');
         }, 200);
-    });
+    } else {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login/login.html';
+    }
 }
 
 const filterButtons = document.querySelectorAll('.filters button');
@@ -54,12 +87,15 @@ function filterPostsByTags() {
     // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
     const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
 
-    let filteredData = [];
-
-    // 전체가 선택된 경우 또는 아무것도 선택 안된 경우
-    if (allButton.classList.contains('active') || activeFilters.length === 0) {
+    let filteredData = [];    // 전체가 선택된 경우
+    if (allButton.classList.contains('active')) {
         filteredData = [...recentPosts, ...publicData]; // 3일 이내 게시물만 포함
-    } else {
+    }
+    // 아무것도 선택되지 않은 경우 (전체도 비활성화)
+    else if (activeFilters.length === 0) {
+        filteredData = []; // 빈 배열로 아무것도 표시하지 않음
+    }
+    else {
         // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
         if (activeFilters.includes('게시글')) {
             filteredData = [...filteredData, ...recentPosts];
@@ -72,43 +108,50 @@ function filterPostsByTags() {
                 filteredData = [...filteredData, ...matchingData];
             }
         });
-    }
-
-    // 마커 필터링 (3일 제한 적용)
+    }    // 마커 필터링 (3일 제한 적용)
     mapMarkers.forEach(({ marker, category, dataType, post }) => {
         let shouldShow = false;
 
-        // 사용자 게시글인 경우 3일 제한 확인
-        if ((dataType === 'user_post' || !dataType) && post) {
-            const isRecent = isWithinThreeDays(post.createdAt);
-            if (!isRecent) {
-                shouldShow = false; // 3일 지난 게시물은 무조건 숨김
-            } else {
-                // 3일 이내인 경우 필터 조건 확인
-                if (allButton.classList.contains('active') || activeFilters.length === 0) {
+        // 전체가 비활성화되고 다른 필터도 없으면 모든 마커 숨김
+        if (!allButton.classList.contains('active') && activeFilters.length === 0) {
+            shouldShow = false;
+        } else {
+            // 사용자 게시글인 경우 3일 제한 확인
+            if ((dataType === 'user_post' || !dataType) && post) {
+                const isRecent = isWithinThreeDays(post.createdAt);
+                if (!isRecent) {
+                    shouldShow = false; // 3일 지난 게시물은 무조건 숨김
+                } else {
+                    // 3일 이내인 경우 필터 조건 확인
+                    if (allButton.classList.contains('active')) {
+                        shouldShow = true;
+                    } else if (activeFilters.includes('게시글')) {
+                        shouldShow = true;
+                    }
+                }
+            }
+            // 공공데이터인 경우 (날짜 제한 없음)
+            else if (['축제', '공연', '관광', '테마파크'].includes(dataType)) {
+                if (allButton.classList.contains('active')) {
                     shouldShow = true;
-                } else if (activeFilters.includes('게시글')) {
+                } else if (activeFilters.includes(dataType)) {
                     shouldShow = true;
                 }
             }
         }
-        // 공공데이터인 경우 (날짜 제한 없음)
-        else if (['축제', '공연', '관광', '테마파크'].includes(dataType)) {
-            if (allButton.classList.contains('active') || activeFilters.length === 0) {
-                shouldShow = true;
-            } else if (activeFilters.includes(dataType)) {
-                shouldShow = true;
-            }
-        }
 
         marker.setVisible(shouldShow);
-    });
-
-    // 하단 시트 업데이트
-    updateBottomSheetContentWithFilter(filteredData);
+    });// 하단 시트 업데이트 - 현재 지도에 보이는 게시물만 표시
+    updateBottomSheetWithVisiblePosts();
 }
 
 function updateBottomSheetContentWithFilter(filteredPosts) {
+    // 검색 중이면 검색 결과 업데이트 사용
+    if (currentSearchTerm !== '') {
+        updateBottomSheetWithSearch();
+        return;
+    }
+
     const sheetContent = document.getElementById('sheetContent');
 
     if (filteredPosts.length === 0) {
@@ -167,17 +210,319 @@ filterButtons.forEach(button => {
         } else {
             button.classList.toggle('active');
             updateAllButtonState();
+        }        // 필터 적용
+        if (currentSearchTerm !== '') {
+            updateBottomSheetWithSearch(); // 검색 중이면 검색 결과 업데이트
+        } else {
+            filterPostsByTags(); // 일반 필터 적용
         }
-
-        // 필터 적용
-        filterPostsByTags();
     });
 });
 // 초기 상태도 맞춰주기 (필터 버튼들 모두 켜져있다고 가정)
 updateAllButtonState();
 
+// 검색 관련 변수
+let currentSearchTerm = '';
+let searchResults = [];
 
-// 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
+// 검색 기능 초기화
+function initializeSearch() {
+    // 검색 버튼 클릭 이벤트
+    searchButton.addEventListener('click', performSearch);
+
+    // 엔터 키 이벤트
+    searchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    // 검색창이 비워질 때 검색 결과 초기화
+    searchInput.addEventListener('input', function (e) {
+        if (e.target.value.trim() === '') {
+            currentSearchTerm = '';
+            searchResults = [];
+            filterPostsByTags(); // 기존 필터 적용하여 원래 상태로 복원
+        }
+    });
+}
+
+// 검색 실행 함수
+function performSearch() {
+    const searchTerm = searchInput.value.trim();
+
+    if (searchTerm === '') {
+        currentSearchTerm = '';
+        searchResults = [];
+        filterPostsByTags();
+        return;
+    }
+
+    currentSearchTerm = searchTerm;
+
+    // 모든 게시물에서 태그로 검색
+    const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+    const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
+    const allPosts = [...posts, ...publicData];
+
+    // 태그에서 검색어가 포함된 게시물 찾기
+    searchResults = allPosts.filter(post => {
+        if (!post.tags || !Array.isArray(post.tags)) return false;
+        return post.tags.some(tag =>
+            tag.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
+
+    // 검색 결과가 있으면 하단 시트 업데이트
+    updateBottomSheetWithSearch();
+}
+
+// 검색 결과를 포함한 하단 시트 업데이트
+function updateBottomSheetWithSearch() {
+    const sheetContent = document.getElementById('sheetContent');
+
+    if (searchResults.length === 0 && currentSearchTerm !== '') {
+        sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">검색 결과가 없습니다.</div>';
+        return;
+    }
+
+    // 검색 결과가 있으면 검색 결과 + 원래 게시물 표시
+    if (currentSearchTerm !== '' && searchResults.length > 0) {
+        // 현재 필터에 맞는 원래 게시물들 가져오기
+        const activeFilters = [...document.querySelectorAll('.filters button')]
+            .filter(btn => btn.classList.contains('active') && btn.dataset.type !== '전체')
+            .map(btn => btn.dataset.type);
+
+        const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+        const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
+        const allButton = document.querySelector('.filters button[data-type="전체"]');
+
+        // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
+        const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
+
+        let originalPosts = [];
+
+        // 전체가 선택된 경우 또는 아무것도 선택 안된 경우
+        if (allButton.classList.contains('active') || activeFilters.length === 0) {
+            originalPosts = [...recentPosts, ...publicData];
+        } else {
+            // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
+            if (activeFilters.includes('게시글')) {
+                originalPosts = [...originalPosts, ...recentPosts];
+            }
+
+            // 공공데이터 필터들이 선택된 경우
+            ['축제', '공연', '관광', '테마파크'].forEach(filter => {
+                if (activeFilters.includes(filter)) {
+                    const matchingData = publicData.filter(item => item.type === filter);
+                    originalPosts = [...originalPosts, ...matchingData];
+                }
+            });
+        }
+
+        // 검색 결과에 포함된 게시물들의 ID/제목을 기준으로 원래 게시물에서 제외
+        const searchResultIds = searchResults.map(post => post.title || post.id);
+        const filteredOriginalPosts = originalPosts.filter(post =>
+            !searchResultIds.includes(post.title || post.id)
+        );
+
+        // HTML 생성
+        const postsListContainer = document.createElement('div');
+
+        // 검색 결과 섹션
+        if (searchResults.length > 0) {
+            const searchSection = document.createElement('div');
+            searchSection.innerHTML = `
+                <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
+                    🔍 검색 결과 (${searchResults.length}개)
+                </div>
+            `;
+
+            const searchList = document.createElement('ul');
+            searchList.style.listStyle = 'none';
+            searchList.style.padding = '0';
+            searchList.style.margin = '0';
+
+            searchResults.forEach(post => {
+                const li = createPostListItem(post, true); // 검색 결과임을 표시
+                searchList.appendChild(li);
+            });
+
+            searchSection.appendChild(searchList);
+            postsListContainer.appendChild(searchSection);
+        }
+
+        // 원래 게시물 섹션 (15px 공백 후)
+        if (filteredOriginalPosts.length > 0) {
+            const originalSection = document.createElement('div');
+            originalSection.style.marginTop = '15px';
+            originalSection.innerHTML = `
+                <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
+                    📋 다른 게시물
+                </div>
+            `;
+
+            const originalList = document.createElement('ul');
+            originalList.style.listStyle = 'none';
+            originalList.style.padding = '0';
+            originalList.style.margin = '0';
+
+            filteredOriginalPosts.reverse().forEach(post => {
+                const li = createPostListItem(post, false);
+                originalList.appendChild(li);
+            });
+
+            originalSection.appendChild(originalList);
+            postsListContainer.appendChild(originalSection);
+        }
+
+        sheetContent.innerHTML = '';
+        sheetContent.appendChild(postsListContainer);
+    } else {
+        // 검색어가 없으면 기존 필터 적용
+        filterPostsByTags();
+    }
+}
+
+// 현재 지도 뷰포트에 보이는 마커들만 가져오는 함수
+function getVisibleMarkers() {
+    if (!map) return [];
+
+    const bounds = map.getBounds();
+    const visibleMarkers = [];
+
+    mapMarkers.forEach(({ marker, post, dataType, category }) => {
+        const position = marker.getPosition();
+        if (bounds.hasLatLng(position) && marker.getVisible()) {
+            visibleMarkers.push({ marker, post, dataType, category });
+        }
+    });
+
+    return visibleMarkers;
+}
+
+// 지도 뷰포트에 보이는 게시물만 하단 시트에 표시하는 함수
+function updateBottomSheetWithVisiblePosts() {
+    // 필터 상태 확인
+    const activeFilters = [...document.querySelectorAll('.filters button.active')]
+        .filter(btn => btn.dataset.type !== '전체')
+        .map(btn => btn.dataset.type);
+    const allFiltersActive = document.querySelector('.filters button[data-type="전체"]').classList.contains('active');
+
+    const sheetContent = document.getElementById('sheetContent');
+
+    // 전체가 비활성화되고 다른 필터도 없으면 안내 메시지 표시
+    if (!allFiltersActive && activeFilters.length === 0) {
+        sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">필터를 선택하면 게시물이 표시됩니다.<br>상단의 필터 버튼을 활성화해주세요.</div>';
+        return;
+    }
+
+    const visibleMarkers = getVisibleMarkers();
+    const visibleItems = [];
+
+    // 공공데이터에서 실제 데이터 가져오기
+    const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
+
+    visibleMarkers.forEach(({ marker, post, dataType, category }) => {
+        if (post) {
+            // 사용자 게시물
+            visibleItems.push(post);
+        } else if (['축제', '공연', '관광', '테마파크'].includes(dataType)) {
+            // 공공데이터 - 해당 위치의 실제 데이터 찾기
+            const position = marker.getPosition();
+            const matchingPublicData = publicData.find(item =>
+                item.type === dataType &&
+                Math.abs(item.lat - position.lat()) < 0.0001 &&
+                Math.abs(item.lng - position.lng()) < 0.0001
+            );
+
+            if (matchingPublicData) {
+                visibleItems.push(matchingPublicData);
+            }
+        }
+    });
+
+    console.log(`현재 지도에 보이는 항목: ${visibleItems.length}개`);
+
+    if (visibleItems.length === 0) {
+        sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">현재 지도 영역에 표시된 게시물이 없습니다.<br>지도를 이동하거나 확대/축소해보세요.</div>';
+        return;
+    }
+
+    const postsListContainer = document.createElement('div');
+
+    // 현재 지도 영역 헤더
+    const headerSection = document.createElement('div');
+    headerSection.innerHTML = `
+        <div style="padding:12px 20px;background:#e3f2fd;border-bottom:2px solid #2196f3;font-weight:600;color:#1976d2;text-align:center;">
+            📍 현재 지도 영역의 게시물 (${visibleItems.length}개)
+        </div>
+    `;
+    postsListContainer.appendChild(headerSection);
+
+    const postsList = document.createElement('ul');
+    postsList.style.listStyle = 'none';
+    postsList.style.padding = '0';
+    postsList.style.margin = '0';
+
+    // 최신 게시물부터 표시
+    const sortedItems = visibleItems.sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0);
+        const dateB = new Date(b.createdAt || 0);
+        return dateB - dateA;
+    });
+
+    sortedItems.forEach((item, index) => {
+        const li = createPostListItem(item, false);
+        postsList.appendChild(li);
+    });
+
+    postsListContainer.appendChild(postsList);
+    sheetContent.innerHTML = '';
+    sheetContent.appendChild(postsListContainer);
+}
+
+// 게시물 리스트 아이템 생성 함수
+function createPostListItem(post, isSearchResult = false) {
+    const li = document.createElement('li');
+    li.style.padding = '12px 20px';
+    li.style.borderBottom = '1px solid #eee';
+    li.style.cursor = 'pointer';    // 검색 결과인 경우 테두리만 변경
+    if (isSearchResult) {
+        li.style.backgroundColor = 'transparent';
+        li.style.borderLeft = '3px solid #2196f3';
+    }
+
+    const tagsHtml = post.tags && post.tags.length > 0
+        ? `<div style="margin:4px 0;">${post.tags.map(tag => {
+            // 검색어가 포함된 태그는 하이라이트
+            const highlightedTag = currentSearchTerm !== '' && tag.toLowerCase().includes(currentSearchTerm.toLowerCase())
+                ? tag.replace(new RegExp(`(${currentSearchTerm})`, 'gi'), '<mark>$1</mark>')
+                : tag;
+            return `<span style="display:inline-block;margin:1px 2px;padding:1px 6px;border-radius:8px;background:#e8f4fd;color:#2193b0;font-size:0.75em;">${highlightedTag}</span>`;
+        }).join('')}</div>`
+        : '';
+
+    const dateStr = post.createdAt ? new Date(post.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
+
+    li.innerHTML = `
+        <div style="font-weight:500;">${post.title}</div>
+        ${tagsHtml}
+        <div style="color:#888;font-size:0.85em;margin-top:4px;">
+            ${post.category ? '[' + post.category + '] ' : ''}${post.content ? post.content.substring(0, 50) : ''}${post.content && post.content.length > 50 ? '...' : ''}
+        </div>
+        <div style="color:#999;font-size:0.8em;margin-top:4px;">작성일: ${dateStr}</div>
+    `;
+
+    // 게시물 클릭 시 상세 페이지로 이동
+    li.addEventListener('click', () => {
+        sessionStorage.setItem('selectedPost', JSON.stringify(post));
+        window.location.href = '/community/post_detail.html';
+    });
+
+    return li;
+}
+
 const backButton = document.getElementById('backButton');
 backButton.addEventListener('click', () => {
     sideMenu.classList.remove('show');
@@ -397,10 +742,8 @@ window.addEventListener('DOMContentLoaded', function () {
     // localStorage에서 임시 글 목록 읽어 마커 표시
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
-    mapMarkers = [];
-
-    // 하단 시트 콘텐츠 업데이트
-    updateBottomSheetContent();
+    mapMarkers = [];    // 하단 시트 콘텐츠 업데이트 - 현재 지도에 보이는 게시물만 표시
+    updateBottomSheetWithVisiblePosts();
 
     // 3일 이내 사용자 게시물만 마커로 표시
     const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
@@ -526,8 +869,29 @@ window.addEventListener('DOMContentLoaded', function () {
                 const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
             });
         }
-    });    // 초기 필터 상태 적용
+    });    // 지도 이동/줌 변경 시 하단 시트 업데이트
+    naver.maps.Event.addListener(map, 'bounds_changed', function () {
+        // 디바운스를 위해 약간의 지연 후 업데이트
+        setTimeout(() => {
+            if (currentSearchTerm === '') {
+                updateBottomSheetWithVisiblePosts();
+            }
+        }, 300);
+    });
+
+    naver.maps.Event.addListener(map, 'zoom_changed', function () {
+        setTimeout(() => {
+            if (currentSearchTerm === '') {
+                updateBottomSheetWithVisiblePosts();
+            }
+        }, 300);
+    });
+
+    // 초기 필터 상태 적용
     filterPostsByTags();
+
+    // 검색 기능 초기화
+    initializeSearch();
 });
 
 // 필터 버튼 클릭 시 마커 필터링
@@ -657,29 +1021,41 @@ plan.addEventListener('click', () => {
     }
 });
 
-const writeButton = document.getElementById('writeButton');
-writeButton.addEventListener('click', () => {
-    const userData = JSON.parse(sessionStorage.getItem("user"));
-    if (userData) {
-        window.location.replace('/newPost/newPost.html');
-    } else {
-        alert('로그인이 필요합니다.');
-        window.location.href = '/login/login.html';
-    }
-});
-
-// bottomSheet 전체에 터치 이벤트 차단
+// bottomSheet의 드래그 핸들에서만 터치 이벤트 차단, 콘텐츠 영역은 스크롤 허용
 const bottomSheetElement = document.getElementById('bottomSheet');
-if (bottomSheetElement) {
-    bottomSheetElement.addEventListener('touchstart', (e) => {
-        e.stopPropagation();
+const dragHandleElement = document.getElementById('dragHandle');
+const sheetContentElement = document.getElementById('sheetContent');
+
+if (bottomSheetElement && dragHandleElement && sheetContentElement) {
+    // sheetContent에서 스크롤 중일 때 드래그 방지
+    let isScrolling = false;
+
+    sheetContentElement.addEventListener('touchstart', (e) => {
+        isScrolling = true;
     });
 
-    bottomSheetElement.addEventListener('touchmove', (e) => {
-        e.stopPropagation();
+    sheetContentElement.addEventListener('touchend', (e) => {
+        setTimeout(() => {
+            isScrolling = false;
+        }, 100);
     });
 
-    bottomSheetElement.addEventListener('touchend', (e) => {
-        e.stopPropagation();
+    // 드래그 핸들에서만 pointer 이벤트 허용 (기존 pointer 이벤트와 별개)
+    dragHandleElement.addEventListener('touchstart', (e) => {
+        if (!isScrolling) {
+            e.stopPropagation();
+        }
+    });
+
+    dragHandleElement.addEventListener('touchmove', (e) => {
+        if (!isScrolling) {
+            e.stopPropagation();
+        }
+    });
+
+    dragHandleElement.addEventListener('touchend', (e) => {
+        if (!isScrolling) {
+            e.stopPropagation();
+        }
     });
 }

@@ -6,34 +6,52 @@ document.getElementById('backButton')?.addEventListener('click', () => {
 // 사용자 게시글 로드 및 표시 함수
 function loadUserPosts() {
   const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
-  const communityList = document.getElementById('communityList');
 
-  // 기존 샘플 카드들 제거 (실제 사용자 게시글로 교체)
-  const sampleCards = communityList.querySelectorAll('.community-card');
-  sampleCards.forEach(card => card.remove());
+  console.log('로드된 게시글 수:', posts.length);
+  console.log('게시글 데이터:', posts);
 
-  if (posts.length === 0) {
-    communityList.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">작성된 게시글이 없습니다.<br>첫 번째 게시글을 작성해보세요!</div>';
-    return;
-  }
+  // 전역 변수에 저장하여 검색에서 사용
+  allCommunityPosts = posts.slice().reverse(); // 최신 게시글부터 표시
 
-  // 최신 게시글부터 표시 (역순으로 정렬)
-  posts.reverse().forEach((post, index) => {
-    const card = createUserPostCard(post, index);
-    communityList.appendChild(card);
-  });
+  displayCommunityPosts(allCommunityPosts);
 }
 
 // 사용자 게시글 카드 생성 함수
-function createUserPostCard(post, index) {
+function createUserPostCard(post, index, isSearchResult = false) {
   const card = document.createElement('div');
   card.className = 'community-card';
   card.dataset.type = post.category || '자유게시글';
+  // 검색 결과인 경우 스타일 적용
+  if (isSearchResult) {
+    card.style.backgroundColor = 'transparent';
+    card.style.borderLeft = '3px solid #2196f3';
+  }
+  // 검색어 하이라이트 함수
+  const highlightText = (text, searchTerm) => {
+    if (!searchTerm || !text) return text;
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  };
 
-  // 태그 HTML 생성
-  const tagsHtml = post.tags && post.tags.length > 0
-    ? post.tags.map(tag => `#${tag}`).join(' ')
-    : '';
+  // 태그 HTML 생성 (검색어 하이라이트 포함)
+  let tagsHtml = '';
+  if (post.tags && post.tags.length > 0) {
+    tagsHtml = post.tags.map(tag => {
+      const highlightedTag = currentCommunitySearchTerm !== ''
+        ? highlightText(tag, currentCommunitySearchTerm)
+        : tag;
+      return `#${highlightedTag}`;
+    }).join(' ');
+  }
+
+  // 제목과 내용에 검색어 하이라이트 적용
+  const highlightedTitle = currentCommunitySearchTerm !== ''
+    ? highlightText(post.title, currentCommunitySearchTerm)
+    : post.title;
+
+  const highlightedContent = currentCommunitySearchTerm !== ''
+    ? highlightText(post.content, currentCommunitySearchTerm)
+    : post.content;
 
   // 작성일 포맷팅
   const createdDate = post.createdAt ? new Date(post.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
@@ -52,13 +70,12 @@ function createUserPostCard(post, index) {
     }
     imageSection = `<div class="card-image">${imageHtml}</div>`;
   }
-
   card.innerHTML = `
     <div class="card-header">
       <div class="card-profile"></div>
       <div class="card-meta">
         <div class="card-type">${post.category || '자유게시글'}</div>
-        <div class="card-title">${post.title}</div>
+        <div class="card-title">${highlightedTitle}</div>
       </div>
       <div class="card-info">
         <div class="card-author">사용자${index + 1}</div>
@@ -67,7 +84,7 @@ function createUserPostCard(post, index) {
     </div>
     ${imageSection}
     <div class="card-tags">${tagsHtml}</div>
-    <div class="card-content">${post.content}</div>
+    <div class="card-content">${highlightedContent}</div>
   `;
 
   // 카드 클릭 시 상세 페이지로 이동 (나중에 구현)
@@ -124,29 +141,32 @@ filterButtons.forEach(btn => {
   });
 });
 
-// 더미 게시글 카드 생성
-// function createCommunityCard(index) {
-//   const card = document.createElement('div');
-//   card.className = 'community-card';
-//   card.innerHTML = `
-//     <div class="card-header">
-//       <div class="card-profile">👤</div>
-//       <div class="card-meta">
-//         <div class="card-type">게시글 종류</div>
-//         <div class="card-author">작성자</div>
-//       </div>
-//     </div>
-//     <div class="card-image">이미지</div>
-//   `;
-//   return card;
-// }
+// 더미 게시글 카드 생성 (비활성화 - 사용자 게시글을 사용)
+function createCommunityCard(index) {
+  const card = document.createElement('div');
+  card.className = 'community-card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-profile">👤</div>
+      <div class="card-meta">
+        <div class="card-type">게시글 종류</div>
+        <div class="card-author">작성자</div>
+      </div>
+    </div>
+    <div class="card-image">이미지</div>
+  `;
+  return card;
+}
 
-// 무한 스크롤 로딩
+// 무한 스크롤 로딩 (비활성화 - 사용자 게시글을 사용)
 const communityList = document.getElementById('communityList');
 let page = 1;
 let loading = false;
 
 function loadMoreCommunity() {
+  // 더미 카드 생성 비활성화
+  return;
+  /*
   if (loading) return;
   loading = true;
   setTimeout(() => {
@@ -156,15 +176,18 @@ function loadMoreCommunity() {
     page++;
     loading = false;
   }, 500);
+  */
 }
 
-// 초기 로딩 및 스크롤 이벤트
-loadMoreCommunity();
+// 초기 로딩 및 스크롤 이벤트 (비활성화)
+// loadMoreCommunity();
+/*
 window.addEventListener('scroll', () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
     loadMoreCommunity();
   }
 });
+*/
 
 // 가로 스크롤 드래그 지원
 function enableHorizontalDragScroll(selector) {
@@ -206,37 +229,6 @@ function enableHorizontalDragScroll(selector) {
 
 enableHorizontalDragScroll('.horizontal-scroll');
 
-// 커뮤니티 페이지에서 검색 시 검색어 저장 및 새로고침
-window.addEventListener('DOMContentLoaded', function () {
-  var input = document.getElementById('communitySearchInput');
-  var searchBtn = document.querySelector('.search-bar button');
-  function doCommunitySearch() {
-    if (input) {
-      localStorage.setItem('lastSearch', input.value);
-      window.location.href = '/community/community.html';
-    }
-  }
-  if (input) {
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') doCommunitySearch();
-    });
-  }
-  if (searchBtn) {
-    searchBtn.addEventListener('click', doCommunitySearch);
-  }
-});
-
-// 페이지 진입 시 localStorage의 lastSearch 값을 검색 input에 자동 입력
-window.addEventListener('DOMContentLoaded', function () {
-  var input = document.getElementById('communitySearchInput');
-  var lastSearch = localStorage.getItem('lastSearch');
-  if (input && lastSearch) {
-    input.value = lastSearch;
-    // 필요하다면 한 번 사용 후 삭제
-    // localStorage.removeItem('lastSearch');
-  }
-});
-
 // 알림 아이콘 클릭 시 알림 페이지로 이동
 const notificationBtn = document.getElementById('notificationBtn');
 if (notificationBtn) {
@@ -245,7 +237,157 @@ if (notificationBtn) {
   });
 }
 
-// 페이지 로드 시 사용자 게시글 로드
+// 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function () {
+  // 검색 기능 초기화
+  initializeCommunitySearch();
+
+  // 사용자 게시글 로드
   loadUserPosts();
+
+  // 저장된 검색어가 있으면 자동 검색 실행
+  const searchInput = document.getElementById('communitySearchInput');
+  const lastSearch = localStorage.getItem('lastSearch');
+  if (searchInput && lastSearch && lastSearch.trim() !== '') {
+    searchInput.value = lastSearch;
+    // 검색 실행
+    setTimeout(() => {
+      performCommunitySearch();
+    }, 100);
+    // 사용 후 삭제
+    localStorage.removeItem('lastSearch');
+  }
 });
+
+// 검색 관련 변수 및 기능
+let currentCommunitySearchTerm = '';
+let allCommunityPosts = [];
+
+// 커뮤니티 검색 기능 초기화
+function initializeCommunitySearch() {
+  const searchInput = document.getElementById('communitySearchInput');
+  const searchButton = searchInput?.nextElementSibling;
+
+  if (!searchInput || !searchButton) return;
+
+  // 검색 버튼 클릭 이벤트
+  searchButton.addEventListener('click', performCommunitySearch);
+
+  // 엔터 키 이벤트
+  searchInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      performCommunitySearch();
+    }
+  });
+
+  // 검색창이 비워질 때 검색 결과 초기화
+  searchInput.addEventListener('input', function (e) {
+    if (e.target.value.trim() === '') {
+      currentCommunitySearchTerm = '';
+      displayCommunityPosts(allCommunityPosts);
+    }
+  });
+}
+
+// 커뮤니티 검색 실행 함수
+function performCommunitySearch() {
+  const searchInput = document.getElementById('communitySearchInput');
+  const searchTerm = searchInput.value.trim();
+
+  if (searchTerm === '') {
+    currentCommunitySearchTerm = '';
+    displayCommunityPosts(allCommunityPosts);
+    return;
+  }
+
+  currentCommunitySearchTerm = searchTerm;
+
+  // 태그와 제목, 내용에서 검색어가 포함된 게시물 찾기
+  const searchResults = allCommunityPosts.filter(post => {
+    // 태그에서 검색
+    const tagMatch = post.tags && Array.isArray(post.tags) &&
+      post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    // 제목에서 검색
+    const titleMatch = post.title && post.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // 내용에서 검색
+    const contentMatch = post.content && post.content.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return tagMatch || titleMatch || contentMatch;
+  });
+
+  console.log(`검색어: "${searchTerm}", 검색 결과: ${searchResults.length}개`);
+
+  // 검색 결과와 나머지 게시물 분리
+  const otherPosts = allCommunityPosts.filter(post => !searchResults.includes(post));
+
+  // 검색 결과를 먼저 표시하고 나머지를 뒤에 표시
+  displayCommunitySearchResults(searchResults, otherPosts);
+}
+
+// 검색 결과 표시 함수
+function displayCommunitySearchResults(searchResults, otherPosts) {
+  const communityList = document.getElementById('communityList');
+  communityList.innerHTML = '';
+
+  console.log(`표시할 검색 결과: ${searchResults.length}개, 기타 게시물: ${otherPosts.length}개`);
+
+  if (searchResults.length === 0) {
+    communityList.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #888;">
+                "<strong>${currentCommunitySearchTerm}</strong>"에 대한 검색 결과가 없습니다.
+            </div>
+        `;
+    return;
+  }
+
+  // 검색 결과 섹션
+  if (searchResults.length > 0) {
+    const searchSection = document.createElement('div');
+    searchSection.innerHTML = `
+            <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;margin-bottom:10px;">
+                🔍 검색 결과 "${currentCommunitySearchTerm}" (${searchResults.length}개)
+            </div>
+        `;
+    communityList.appendChild(searchSection);
+
+    searchResults.forEach((post, index) => {
+      const card = createUserPostCard(post, index, true); // 검색 결과임을 표시
+      communityList.appendChild(card);
+    });
+  }
+
+  // 나머지 게시물 섹션 (15px 공백 후)
+  if (otherPosts.length > 0) {
+    const otherSection = document.createElement('div');
+    otherSection.style.marginTop = '15px';
+    otherSection.innerHTML = `
+            <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;margin-bottom:10px;">
+                📋 다른 게시물 (${otherPosts.length}개)
+            </div>
+        `;
+    communityList.appendChild(otherSection);
+
+    otherPosts.forEach((post, index) => {
+      const card = createUserPostCard(post, index, false);
+      communityList.appendChild(card);
+    });
+  }
+}
+
+// 일반 게시물 표시 함수
+function displayCommunityPosts(posts) {
+  const communityList = document.getElementById('communityList');
+  communityList.innerHTML = '';
+
+  if (posts.length === 0) {
+    communityList.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">작성된 게시글이 없습니다.<br>첫 번째 게시글을 작성해보세요!</div>';
+    return;
+  }
+
+  posts.forEach((post, index) => {
+    const card = createUserPostCard(post, index, false);
+    communityList.appendChild(card);
+  });
+}

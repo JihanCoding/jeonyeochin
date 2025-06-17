@@ -85,6 +85,23 @@ html {
     flex-shrink: 0;
 }
 
+/* 검색 결과 하이라이트 */
+mark {
+    background-color: transparent;
+    color: #2196f3;
+    padding: 1px 2px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* 검색 입력창 포커스 스타일 */
+.search-bar input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
 .filters-wrapper {
     overflow-x: auto;
     padding: 0 24px;
@@ -338,10 +355,10 @@ html {
 
 /* 카드 태그 스타일 */
 .card-tags {
-  margin: 4px 8px 8px 8px;
-  font-size: 0.95rem;
-  color: #777;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  white-space: pre-line;
+    margin: 4px 8px 8px 8px;
+    font-size: 0.95rem;
+    color: #777;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    white-space: pre-line;
 }

@@ -320,6 +320,8 @@ body {
     pointer-events: auto;
     touch-action: none;
     user-select: none;
+    z-index: 1001;
+    /* sheetContent보다 위에 */
 }
 
 #dragHandle .bar {
@@ -336,7 +338,36 @@ body {
 #sheetContent {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 0 24px;
+    -webkit-overflow-scrolling: touch;
+    /* iOS에서 부드러운 스크롤 */
+    overscroll-behavior: contain;
+    /* 스크롤 바운스 방지 */
+    z-index: 1000;
+    /* dragHandle보다 아래 */
+    position: relative;
 }
 
-/* 검색 오버레이 - 사용되지 않음, 제거됨 */
+/* 검색 결과 하이라이트 */
+mark {
+    background-color: transparent;
+    color: #2196f3;
+    padding: 1px 2px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* 검색 결과 섹션 구분선 */
+.search-result-section {
+    border-top: 2px solid #007bff;
+    margin-top: 10px;
+}
+
+/* 검색 입력창 포커스 스타일 */
+.search-bar input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
