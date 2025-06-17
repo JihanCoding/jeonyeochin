@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smhrd.jeonyeochin.entity.Info;
@@ -44,6 +46,60 @@ public class InfoController {
         try {
             return ResponseEntity.ok(Map.of(
                 "result",infoService.findAll()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 특정 마커(정보) 상세 조회 API
+    @GetMapping("/{infoId}")
+    public ResponseEntity<?> getInfoById(@PathVariable Integer infoId) {
+        try {
+            Info info = infoService.findById(infoId);
+            if (info != null) {
+                return ResponseEntity.ok(Map.of(
+                    "result", info
+                ));
+            } else {
+                return ResponseEntity.status(404).body(Map.of("error", "정보를 찾을 수 없습니다."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 카테고리별 정보 리스트 조회
+    @GetMapping("/category")
+    public ResponseEntity<?> getInfoByCategory(@RequestParam String infoCategory) {
+        try {
+            return ResponseEntity.ok(Map.of("result", infoService.findByCategory(infoCategory)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 위치(위도/경도 범위) 내 정보 리스트 조회
+    @GetMapping("/location")
+    public ResponseEntity<?> getInfoByLocation(@RequestParam Double minLat, @RequestParam Double maxLat,
+                                               @RequestParam Double minLng, @RequestParam Double maxLng) {
+        try {
+            return ResponseEntity.ok(Map.of(
+                "result", infoService.findByLocation(minLat, maxLat, minLng, maxLng)
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // 카테고리+위치 동시 필터링
+    @GetMapping("/filter")
+    public ResponseEntity<?> getInfoByCategoryAndLocation(@RequestParam String infoCategory,
+                                                          @RequestParam Double minLat, @RequestParam Double maxLat,
+                                                          @RequestParam Double minLng, @RequestParam Double maxLng) {
+        try {
+            return ResponseEntity.ok(Map.of(
+                "result", infoService.findByCategoryAndLocation(infoCategory, minLat, maxLat, minLng, maxLng)
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

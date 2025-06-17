@@ -24,4 +24,24 @@ public class InfoService {
     public java.util.List<Info> findAll() {
         return infoRepository.findAll();
     }
+
+    // infoId로 Info 상세 조회
+    public Info findById(Integer infoId) {
+        return infoRepository.findById(infoId).orElse(null);
+    }
+
+    // 카테고리별 정보 리스트 조회
+    public java.util.List<Info> findByCategory(String infoCategory) {
+        return infoRepository.findAllByInfoCategory(infoCategory);
+    }
+
+    // 위치(위도/경도 범위) 내 정보 리스트 조회
+    public java.util.List<Info> findByLocation(Double minLat, Double maxLat, Double minLng, Double maxLng) {
+        return infoRepository.findAllByInfoLatitudeBetweenAndInfoLongitudeBetween(minLat, maxLat, minLng, maxLng);
+    }
+
+    // 카테고리+위치 동시 필터링
+    public java.util.List<Info> findByCategoryAndLocation(String infoCategory, Double minLat, Double maxLat, Double minLng, Double maxLng) {
+        return infoRepository.findAllByInfoCategoryAndInfoLatitudeBetweenAndInfoLongitudeBetween(infoCategory, minLat, maxLat, minLng, maxLng);
+    }
 }
