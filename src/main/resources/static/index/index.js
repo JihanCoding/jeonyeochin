@@ -34,7 +34,7 @@ if (writeBtn) {
 function handleWriteButtonClick() {
     const userDataString = sessionStorage.getItem("user");
     let userData = null;
-    
+
     if (userDataString) {
         try {
             userData = JSON.parse(userDataString);
@@ -43,7 +43,7 @@ function handleWriteButtonClick() {
             userData = null;
         }
     }
-    
+
     if (userData) {
         sessionStorage.setItem('sideMenuOpen', 'false');
         setTimeout(() => {
@@ -448,20 +448,26 @@ function updateBottomSheetWithVisiblePosts() {
         return;
     }
 
+    // 최신 게시물부터가 아니라, 랜덤 섞기
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    const shuffledItems = shuffleArray([...visibleItems]);
+
     const postsListContainer = document.createElement('div');
+    const postsList = document.createElement('ul');
+    postsList.style.listStyle = 'none';
+    postsList.style.padding = '0';
+    postsList.style.margin = '0';
 
-    // 최신 게시물부터 표시
-    const sortedItems = visibleItems.sort((a, b) => {
-        const dateA = new Date(a.createdAt || 0);
-        const dateB = new Date(b.createdAt || 0);
-        return dateB - dateA;
-    });
-
-    sortedItems.forEach((item, index) => {
+    shuffledItems.forEach((item, index) => {
         const li = createPostListItem(item, false);
         postsList.appendChild(li);
     });
-
     postsListContainer.appendChild(postsList);
     sheetContent.innerHTML = '';
     sheetContent.appendChild(postsListContainer);
@@ -682,7 +688,39 @@ function renderMarkersByCategory() {
     });
 }
 
+// [DB 연동] Info 마커 데이터 불러오기 및 localStorage에 저장
+function fetchInfoMarkersFromDB() {
+    fetch('/api/info/list')
+        .then(response => response.json())
+        .then(data => {
+            // Info 엔티티의 카테고리별 type 매핑
+            const publicData = data.map(item => ({
+                lat: item.infoLatitude,
+                lng: item.infoLongitude,
+                type: item.infoCategory, // '축제', '공연', '관광', '테마파크' 등
+                title: item.infoTitle,
+                content: item.infoContent || '',
+                image: item.infoImages || '',
+                address: item.infoAddress || '',
+                eventStartDate: item.infoEventStartDate || '',
+                eventEndDate: item.infoEventEndDate || ''
+            }));
+            localStorage.setItem('publicData', JSON.stringify(publicData));
+            // 마커 및 하단 시트 갱신
+            if (typeof renderMarkersByCategory === 'function') {
+                renderMarkersByCategory();
+            }
+            if (typeof updateBottomSheetWithVisiblePosts === 'function') {
+                updateBottomSheetWithVisiblePosts();
+            }
+        })
+        .catch(err => {
+            console.error('DB에서 마커 데이터 불러오기 실패:', err);
+        });
+}
+
 window.addEventListener('DOMContentLoaded', function () {
+    fetchInfoMarkersFromDB(); // 페이지 로드시 DB에서 마커 데이터 불러오기
     // localStorage에서 임시 글 목록 읽어 마커 표시
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
@@ -861,7 +899,7 @@ var map = new naver.maps.Map('map', {
     function startPress(coord) {
         if (!coord) return;
         downLatLng = coord;
-        moved = false;        pressTimer = setTimeout(function () {
+        moved = false; pressTimer = setTimeout(function () {
             if (downLatLng && !moved) {
                 localStorage.setItem('selectedCoords', JSON.stringify({ lat: downLatLng.y, lng: downLatLng.x }));
                 window.location.href = '/newPost/newPost.html';
@@ -979,4 +1017,56 @@ if (bottomSheetElement && dragHandleElement && sheetContentElement) {
             e.stopPropagation();
         }
     });
+}
+
+// 게시글/공공데이터(축제, 공연, 관광, 테마파크 등) 모두 지원하는 리스트 아이템 생성 함수
+function createPostListItem(item, isSearchResult = false) {
+    const li = document.createElement('li');
+    li.style.padding = '12px 20px';
+    li.style.borderBottom = '1px solid #eee';
+    li.style.cursor = 'pointer';
+
+    // 게시글/공공데이터 구분
+    const isPublic = ['축제', '공연', '관광', '테마파크'].includes(item.type);
+    const title = item.title || item.infoTitle || item.postTitle || '제목 없음';
+    const content = item.content || item.infoContent || item.postContent || '';
+    const category = item.type || item.category || item.infoCategory || '기타';
+    const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : (item.eventStartDate || '');
+    let image = item.image || item.infoImages || item.postImage || '';
+
+    // 이미지 경로 자동 보정: 한글/특수문자 인코딩 및 경로 누락 시 기본 이미지
+    const defaultImg = '/static/common/no-image.png'; // 실제 존재하는 기본 이미지 경로로 수정 필요
+    if (image) {
+        // 경로에 한글/특수문자 있을 경우 encodeURI 적용
+        image = encodeURI(image);
+    } else {
+        image = defaultImg;
+    }
+
+    li.innerHTML = `
+        <div style="font-weight:500;">${title}</div>
+        <div style="color:#888;font-size:0.85em;margin-top:4px;">
+            [${category}] ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}
+        </div>
+        <div style="color:#999;font-size:0.8em;margin-top:4px;">${dateStr ? '일자: ' + dateStr : ''}</div>
+        <img src='${image}' style='width:100px;max-height:60px;margin-top:6px;border-radius:8px;object-fit:cover;' onerror="this.onerror=null;this.src='${defaultImg}';">
+        ${isPublic ? `<span style='font-size:0.75em;color:#2193b0;'>공공데이터</span>` : ''}
+    `;
+
+    // 클릭 시 상세 페이지 이동(게시글만), 공공데이터는 상세 없음
+    if (!isPublic) {
+        li.addEventListener('click', () => {
+            sessionStorage.setItem('selectedPost', JSON.stringify(item));
+            window.location.href = '/community/post_detail.html';
+        });
+    }
+    return li;
+}
+
+// 전역 검색어 변수 선언 (currentSearchTerm 오류 방지)
+let currentSearchTerm = '';
+
+// initializeSearch 오류 방지: 함수가 필요 없으면 아래 호출 주석처리 또는 함수 더미 추가
+function initializeSearch() {
+    // 필요시 검색 초기화 코드 작성, 현재는 빈 함수로 둠
 }
