@@ -31,6 +31,7 @@ body {
     left: 0;
     width: 100%;
     z-index: 10;
+    pointer-events: none;
 }
 
 .app-header {
@@ -43,6 +44,7 @@ body {
     color: #2196f3;
     position: relative;
     z-index: 20;
+    pointer-events: auto;
 }
 
 .logo {
@@ -76,6 +78,7 @@ body {
     transition: transform 0.3s ease;
     z-index: 101;
     padding: 24px;
+    pointer-events: auto;
 }
 
 .side-menu.show {
@@ -107,6 +110,7 @@ body {
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 15;
+    pointer-events: auto;
 }
 
 .search-bar input {
@@ -278,10 +282,11 @@ body {
     margin-bottom: 12px;
     padding-left: 8px;
 }
-.menu-title:hover{
-     cursor: pointer;
+
+.menu-title:hover {
+    cursor: pointer;
 }
-    
+
 
 .menu-list {
     list-style: none;

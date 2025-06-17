@@ -400,32 +400,72 @@ var map = new naver.maps.Map('map', {
     center: new naver.maps.LatLng(34.7950926, 126.378867),
     zoom: 12
 });
-// 지도 선택 모드일 때만 마커/선택 기능 활성화
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('mode') === 'select') {
-    let marker = null;
-    let selectedLatLng = null;
-    document.getElementById('select-location-btn').style.display = 'block';
-    naver.maps.Event.addListener(map, 'click', function (e) {
-        selectedLatLng = e.coord;
-        if (!marker) {
-            marker = new naver.maps.Marker({
-                position: selectedLatLng,
-                map: map
-            });
-        } else {
-            marker.setPosition(selectedLatLng);
-        }
+
+// 지도 롱프레스(2초)로 newPost 이동 및 좌표 전달 (PC+모바일 완벽 지원)
+(function () {
+    let pressTimer = null;
+    let downLatLng = null;
+    let moved = false;
+    const mapDom = map.getElement();
+
+    // PC: 마우스
+    naver.maps.Event.addListener(map, 'mousedown', function (e) {
+        if (!e.coord) return;
+        downLatLng = e.coord;
+        moved = false;
+        pressTimer = setTimeout(function () {
+            if (downLatLng && !moved) {
+                localStorage.setItem('selectedCoords', JSON.stringify({ lat: downLatLng.y, lng: downLatLng.x }));
+                window.location.href = '/newPost/newPost.html';
+            }
+        }, 2000);
     });
-    document.getElementById('select-location-btn').onclick = function () {
-        if (selectedLatLng) {
-            localStorage.setItem('selectedCoords', JSON.stringify({ lat: selectedLatLng.y, lng: selectedLatLng.x }));
-            window.close();
-        } else {
-            alert('지도를 클릭해 위치를 선택하세요!');
-        }
-    }
-}
+    naver.maps.Event.addListener(map, 'mouseup', function (e) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+    });
+    naver.maps.Event.addListener(map, 'mouseout', function (e) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+    });
+    naver.maps.Event.addListener(map, 'mousemove', function (e) {
+        moved = true;
+    });
+
+    // 모바일: 지도 DOM에 직접 터치 이벤트
+    mapDom.addEventListener('touchstart', function (e) {
+        if (!e.touches || e.touches.length === 0) return;
+        moved = false;
+        const touch = e.touches[0];
+        const offset = mapDom.getBoundingClientRect();
+        const x = touch.clientX - offset.left;
+        const y = touch.clientY - offset.top;
+        // 픽셀 → 위경도 변환 (지도 중심 기준 보정)
+        const proj = map.getProjection();
+        const mapSize = map.getSize();
+        const center = map.getCenter();
+        const centerPoint = proj.fromCoordToPoint(center);
+        // 지도 중심에서의 픽셀 오프셋 계산
+        const dx = x - mapSize.width / 2;
+        const dy = y - mapSize.height / 2;
+        // 실제 클릭 위치의 지도 포인트
+        const clickPoint = new naver.maps.Point(centerPoint.x + dx, centerPoint.y + dy);
+        downLatLng = proj.fromPointToCoord(clickPoint);
+        pressTimer = setTimeout(function () {
+            if (downLatLng && !moved) {
+                localStorage.setItem('selectedCoords', JSON.stringify({ lat: downLatLng.y, lng: downLatLng.x }));
+                window.location.href = '/newPost/newPost.html';
+            }
+        }, 2000);
+    });
+    mapDom.addEventListener('touchend', function (e) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+    });
+    mapDom.addEventListener('touchmove', function (e) {
+        moved = true;
+    });
+})();
 
 // 뒤로가기/복귀 시 사이드 메뉴 상태 복원
 window.addEventListener('pageshow', function () {
