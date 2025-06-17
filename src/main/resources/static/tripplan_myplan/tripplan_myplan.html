@@ -20,8 +20,9 @@
             <span class="material-icons" style="visibility: hidden;">menu</span>
         </header>
         <main class="tripplanmy-main">
-            <div class="route-breadcrumb">여행루트1 > 여행루트2 &gt; 여행루트3 &gt; 여행루트4 &gt; 여행루트5 &gt; 여행루트6</div>
+            <div class="route-breadcrumb">여행루트1 > 여행루트2 &gt; 여행루트3 &gt; 여행루트4</div>
             <div class="plan-title-row">
+                <!-- 가져오는 값은 이전에 입력했던 값으로 가져오고 인풋에서 수정하고 수정버튼 누르면 수정되게 -->
                 <input class="plan-title-input" type="text" placeholder="여행 플랜 제목" />
                 <div class="plan-date" style="position: relative; display: flex; align-items: center; gap: 6px;">
                     <label style="margin:0; padding:0; position:relative; display:inline-block; cursor:pointer;">
@@ -44,20 +45,7 @@
             </div>
         </main>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.querySelector('.plan-date-input');
-            const text = document.querySelector('.plan-date-text');
-            if (input && text) {
-                input.addEventListener('change', function () {
-                    if (input.value) {
-                        const [yyyy, mm, dd] = input.value.split('-');
-                        text.textContent = `${String(yyyy).slice(2)}-${mm}-${dd}`;
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="tripplan_myplan/tripplan_myplan.js"></script>
 </body>
 
 </html>

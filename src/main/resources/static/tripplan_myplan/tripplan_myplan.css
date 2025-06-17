@@ -55,12 +55,13 @@ html {
 }
 
 .route-breadcrumb {
-    color: #333;
+    color: #555;
     font-size: 1rem;
     font-weight: 500;
-    margin-bottom: 20px;
     text-align: left;
     word-break: keep-all;
+    margin: 0 8px 20px 8px;
+
 }
 
 .plan-title-row {

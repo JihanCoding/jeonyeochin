@@ -95,10 +95,30 @@ window.naverMapInit = function () {
             function () { initMap(); }
         );
     } else { initMap(); }
+
+    // 경로 모드 아이콘 클릭 시 선택
+    document.querySelectorAll('.routeMode').forEach(function(label) {
+        label.addEventListener('click', function() {
+            document.querySelectorAll('.routeMode').forEach(l => l.classList.remove('selected'));
+            label.classList.add('selected');
+            // radio value 동기화
+            const input = label.querySelector('input[type="radio"]');
+            if (input) input.checked = true;
+        });
+    });
+    // 최초 selected 적용
+    const checked = document.querySelector('.routeMode input[type="radio"]:checked');
+    if (checked) checked.closest('.routeMode').classList.add('selected');
 };
 
 function onWaypointButtonClick(e) {
     const btn = e.target;
+    // 텍스트 클릭 시 옆의 + 또는 - 버튼을 대신 클릭
+    if (btn.classList.contains('waypoint-text-label')) {
+        const iconBtn = btn.parentNode.querySelector('.waypoint-action-icon');
+        if (iconBtn) iconBtn.click();
+        return;
+    }
     if (!btn.classList.contains('waypoint-action-icon')) return;
     const waypointItem = btn.closest('.waypoint-item');
     const textLabel = waypointItem.querySelector('.waypoint-text-label');
@@ -281,7 +301,7 @@ function showMapSelectionGuide(mode) {
         guideEl.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #2196F3; color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.3);`;
         document.body.appendChild(guideEl);
     }
-    guideEl.innerHTML = `📍 지도에서 ${modeText}를 클릭하세요 (ESC: 취소)`;
+    guideEl.innerHTML = `📍 지도에서 ${modeText}를 클릭하세요.`;
     guideEl.style.display = 'block';
 }
 function hideMapSelectionGuide() {

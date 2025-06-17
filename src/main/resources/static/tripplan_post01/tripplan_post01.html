@@ -16,7 +16,7 @@
             <button id="backButton" class="back-button" onclick="history.back()">
                 <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
             </button>
-            <div class="logo">경로 설정</div>
+            <div class="logo">여행 경로 설정</div>
             <span class="material-icons" style="visibility: hidden;">menu</span>
         </header>
         <div id="map"></div>
@@ -27,14 +27,14 @@
                         <span class="material-icons">location_on</span>
                     </span>
                     <!-- <span class="location-text-label">출발지</span> -->
-                    <input type="text" id="start-point" placeholder="출발지를 입력하세요" readonly>
+                    <input type="text" id="start-point" placeholder="출발지를 선택하세요" readonly>
                 </div>
                 <div id="waypoints-container">
                     <!-- 경유지 항목은 JS로 동적 추가됨, 샘플 1개만 남김 -->
                     <div class="waypoint-item">
                         <span class="waypoint-action-icon add">+</span>
                         <span class="waypoint-text-label">경유지 추가</span>
-                        <input type="text" class="waypoint-input-field" placeholder="경유지를 입력하세요" style="display: none;"
+                        <input type="text" class="waypoint-input-field" placeholder="경유지를 선택하세요" style="display: none;"
                             readonly>
                     </div>
                 </div>
@@ -43,26 +43,44 @@
                         <span class="material-icons">flag</span>
                     </span>
                     <!-- <span class="location-text-label">도착지</span> -->
-                    <input type="text" id="end-point" placeholder="도착지를 입력하세요" readonly>
+                    <input type="text" id="end-point" placeholder="도착지를 선택하세요" readonly>
                 </div>
-                <div class="route-mode-select" style="margin: 10px 0; text-align: center;">
-                    <label><input type="radio" name="routeMode" value="walking" checked> 도보</label>
-                    <label style="margin-left: 16px;"><input type="radio" name="routeMode" value="driving"> 자차</label>
-                    <label style="margin-left: 16px;"><input type="radio" name="routeMode" value="transit"> 대중교통</label>
+                <div class="route-mode-select">
+                    <label class="routeMode" data-mode="walking">
+                        <input type="radio" name="routeMode" value="walking" checked style="display:none;">
+                        <span class="material-icons">directions_walk</span>
+                    </label>
+                    <label class="routeMode" data-mode="driving">
+                        <input type="radio" name="routeMode" value="driving" style="display:none;">
+                        <span class="material-icons">directions_car</span>
+                    </label>
+                    <label class="routeMode" data-mode="transit">
+                        <input type="radio" name="routeMode" value="transit" style="display:none;">
+                        <span class="material-icons">directions_bus</span>
+                    </label>
                 </div>
+
                 <button class="route-search-btn" onclick="searchRoute()">
-                    🔍 경로 검색
+                    경로 검색
                 </button>
             </div>
         </div>
+
+
         <div id="route-info" style="display: none;"></div>
+
+
+        <section class="newplan-section">
+            <div class="newplan-btn-label"></div>
+            <button class="newplan-btn" aria-label="새 여행 플랜 만들기"
+                onclick="location.href='../tripplan_post02/tripplan_post02.html'">
+                <span class="material-icons">chevron_right</span>
+            </button>
+        </section>
         <div class="next-page-link">
             <a href="../tripplan_post02/tripplan_post02.html" class="next-link"
                 onclick="saveTripInfoForNextPage()">&gt;</a>
         </div>
-    </div>
-    <div id="loading" class="loading" style="display: none;">
-        경로를 검색하고 있습니다...
     </div>
     <script type="text/javascript"
         src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=e696ij4ub6&callback=naverMapInit"></script>
