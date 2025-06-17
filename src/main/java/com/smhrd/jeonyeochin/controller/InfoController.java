@@ -73,7 +73,9 @@ public class InfoController {
     @GetMapping("/category")
     public ResponseEntity<?> getInfoByCategory(@RequestParam String infoCategory) {
         try {
-            return ResponseEntity.ok(Map.of("result", infoService.findByCategory(infoCategory)));
+            return ResponseEntity.ok(Map.of(
+                "result", infoService.findByCategory(infoCategory)
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
