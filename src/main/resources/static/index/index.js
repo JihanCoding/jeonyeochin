@@ -32,6 +32,17 @@ function updateAllButtonState() {
     allButton.classList.toggle('active', allActive);
 }
 
+// 게시물이 3일 이내에 작성되었는지 확인하는 함수
+function isWithinThreeDays(createdAt) {
+    if (!createdAt) return false;
+
+    const now = new Date();
+    const postDate = new Date(createdAt);
+    const threeDaysInMs = 3 * 24 * 60 * 60 * 1000; // 3일을 밀리초로 변환
+
+    return (now - postDate) <= threeDaysInMs;
+}
+
 function filterPostsByTags() {
     const activeFilters = [...filterButtons]
         .filter(btn => btn.classList.contains('active') && btn.dataset.type !== '전체')
@@ -40,18 +51,21 @@ function filterPostsByTags() {
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
 
+    // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
+    const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
+
     let filteredData = [];
 
     // 전체가 선택된 경우 또는 아무것도 선택 안된 경우
     if (allButton.classList.contains('active') || activeFilters.length === 0) {
-        filteredData = [...posts, ...publicData];
+        filteredData = [...recentPosts, ...publicData]; // 3일 이내 게시물만 포함
     } else {
-        // 게시글 필터가 선택된 경우 - 모든 사용자 게시글 포함
+        // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
         if (activeFilters.includes('게시글')) {
-            filteredData = [...filteredData, ...posts];
+            filteredData = [...filteredData, ...recentPosts];
         }
 
-        // 공공데이터 필터들이 선택된 경우
+        // 공공데이터 필터들이 선택된 경우 (공공데이터는 날짜 제한 없음)
         ['축제', '공연', '관광', '테마파크'].forEach(filter => {
             if (activeFilters.includes(filter)) {
                 const matchingData = publicData.filter(item => item.type === filter);
@@ -60,19 +74,29 @@ function filterPostsByTags() {
         });
     }
 
-    // 마커 필터링
-    mapMarkers.forEach(({ marker, category, dataType }) => {
+    // 마커 필터링 (3일 제한 적용)
+    mapMarkers.forEach(({ marker, category, dataType, post }) => {
         let shouldShow = false;
 
-        if (allButton.classList.contains('active') || activeFilters.length === 0) {
-            shouldShow = true;
-        } else {
-            // 사용자 게시글인 경우
-            if ((dataType === 'user_post' || !dataType) && activeFilters.includes('게시글')) {
-                shouldShow = true;
+        // 사용자 게시글인 경우 3일 제한 확인
+        if ((dataType === 'user_post' || !dataType) && post) {
+            const isRecent = isWithinThreeDays(post.createdAt);
+            if (!isRecent) {
+                shouldShow = false; // 3일 지난 게시물은 무조건 숨김
+            } else {
+                // 3일 이내인 경우 필터 조건 확인
+                if (allButton.classList.contains('active') || activeFilters.length === 0) {
+                    shouldShow = true;
+                } else if (activeFilters.includes('게시글')) {
+                    shouldShow = true;
+                }
             }
-            // 공공데이터인 경우
-            else if (['축제', '공연', '관광', '테마파크'].includes(dataType) && activeFilters.includes(dataType)) {
+        }
+        // 공공데이터인 경우 (날짜 제한 없음)
+        else if (['축제', '공연', '관광', '테마파크'].includes(dataType)) {
+            if (allButton.classList.contains('active') || activeFilters.length === 0) {
+                shouldShow = true;
+            } else if (activeFilters.includes(dataType)) {
                 shouldShow = true;
             }
         }
@@ -276,20 +300,23 @@ function pointerCancelHandler(e) {
 }
 
 
-// 하단 시트 콘텐츠 업데이트 함수
+// 하단 시트 콘텐츠 업데이트 함수 (3일 제한 적용)
 function updateBottomSheetContent() {
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
     const sheetContent = document.getElementById('sheetContent');
 
-    if (posts.length === 0) {
-        sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">등록된 게시글이 없습니다.</div>';
+    // 3일 이내 게시물만 필터링
+    const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
+
+    if (recentPosts.length === 0) {
+        sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">최근 3일 이내 등록된 게시글이 없습니다.</div>';
         return;
     }
 
     const postsListContainer = document.createElement('ul');
     postsListContainer.style.listStyle = 'none';
     postsListContainer.style.padding = '0';
-    postsListContainer.style.margin = '0'; posts.reverse().forEach((post, index) => {
+    postsListContainer.style.margin = '0'; recentPosts.reverse().forEach((post, index) => {
         const li = document.createElement('li');
         li.style.padding = '12px 20px';
         li.style.borderBottom = '1px solid #eee';
@@ -369,12 +396,16 @@ function renderMarkersByCategory() {
 window.addEventListener('DOMContentLoaded', function () {
     // localStorage에서 임시 글 목록 읽어 마커 표시
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+    const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
     mapMarkers = [];
 
     // 하단 시트 콘텐츠 업데이트
     updateBottomSheetContent();
 
-    posts.forEach(post => {
+    // 3일 이내 사용자 게시물만 마커로 표시
+    const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
+
+    recentPosts.forEach(post => {
         if (post.lat && post.lng) {
             // 카테고리별 마커 색상 지정 (네이버 지도 기본 마커)
             let iconOptions = {};
@@ -404,22 +435,30 @@ window.addEventListener('DOMContentLoaded', function () {
             mapMarkers.push({
                 marker,
                 category: post.category || '기타',
-                dataType: post.type || 'user_post' // 데이터 타입 추가
-            });
-
-            // 마커 클릭 시 정보창
+                dataType: post.type || 'user_post',
+                post: post // 게시물 정보 추가하여 날짜 확인 가능하게 함
+            });            // 마커 클릭 시 정보창
             const tagsHtml = post.tags && post.tags.length > 0
                 ? `<div style="margin:4px 0 6px 0;">${post.tags.map(tag =>
                     `<span style="display:inline-block;margin:1px 2px;padding:1px 8px;border-radius:10px;background:#e8f4fd;color:#2193b0;font-size:0.8em;">${tag}</span>`
                 ).join('')}</div>`
                 : '';
 
+            // 게시 일자 포맷팅
+            const postDate = post.createdAt ? new Date(post.createdAt).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : '날짜 없음';
+
             const infoHtml = `
                 <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
                     <b>${post.title}</b><br>
                     <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${post.category ? post.category : '기타'}</span><br>
-                    ${tagsHtml}
-                    <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
+                    ${tagsHtml}                    <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
+                    <div style="margin-top:8px;padding-top:6px;border-top:1px solid #eee;color:#666;font-size:0.85em;">
+                        게시일: ${postDate}
+                    </div>
                     ${post.cameraImage ? `<img src='${post.cameraImage}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
                     ${post.galleryImages && post.galleryImages.length > 0 ? `<img src='${post.galleryImages[0]}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
                 </div>
@@ -437,7 +476,57 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // 초기 필터 상태 적용
+    // 공공데이터 마커 추가 (날짜 제한 없음)
+    publicData.forEach(item => {
+        if (item.lat && item.lng) {
+            let iconOptions = {};
+            switch (item.type) {
+                case '축제':
+                    iconOptions = { icon: { content: '<div style="background:#ffb300;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '공연':
+                    iconOptions = { icon: { content: '<div style="background:#42a5f5;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '관광':
+                    iconOptions = { icon: { content: '<div style="background:#66bb6a;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '테마파크':
+                    iconOptions = { icon: { content: '<div style="background:#ab47bc;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                default:
+                    iconOptions = {};
+            }
+            const marker = new naver.maps.Marker(Object.assign({
+                position: new naver.maps.LatLng(item.lat, item.lng),
+                map: map
+            }, iconOptions));
+            mapMarkers.push({
+                marker,
+                category: item.type || '기타',
+                dataType: item.type || 'public_data',
+                post: null // 공공데이터는 게시물 정보 없음
+            });
+
+            // 공공데이터 마커 클릭 시 정보창
+            const infoHtml = `
+                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
+                    <b>${item.title}</b><br>
+                    <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${item.type ? item.type : '기타'}</span><br>
+                    <span>${item.content || item.description || ''}</span><br>
+                </div>
+            `;
+            const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
+            naver.maps.Event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+                // 지도 클릭 시 InfoWindow 닫기
+                const closeOnMapClick = function () {
+                    infowindow.close();
+                    naver.maps.Event.removeListener(mapClickListener);
+                };
+                const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
+            });
+        }
+    });    // 초기 필터 상태 적용
     filterPostsByTags();
 });
 
