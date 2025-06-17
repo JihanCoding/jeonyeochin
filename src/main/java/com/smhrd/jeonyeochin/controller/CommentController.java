@@ -28,7 +28,7 @@ public class CommentController {
             
             // 댓글 반환
             return ResponseEntity.ok(Map.of(
-                "comment", savedComment
+                "result", savedComment
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -41,7 +41,9 @@ public class CommentController {
     public ResponseEntity<?> getCommentsWithNick(@PathVariable Integer postId) {
         try {
             List<Map<String, Object>> comments = commentService.getCommentsWithNickByPostId(postId);
-            return ResponseEntity.ok(comments);
+            return ResponseEntity.ok(Map.of(
+                "result",comments
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -56,7 +58,9 @@ public class CommentController {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Map<String, Object>> commentPage = commentService.getCommentsWithNickByPostIdPaged(postId, pageable);
-            return ResponseEntity.ok(commentPage);
+            return ResponseEntity.ok(Map.of(
+                "result",commentPage
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

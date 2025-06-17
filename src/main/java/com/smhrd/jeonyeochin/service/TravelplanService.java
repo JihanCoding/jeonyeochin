@@ -48,4 +48,14 @@ public class TravelplanService {
         plan.setTravelplanLayover(updateData.getTravelplanLayover());
         return travelplanRepository.save(plan);
     }
+
+    // 여행계획 삭제 (본인만 가능)
+    public void deleteTravelplan(Integer planId, Integer userId) {
+        Travelplan plan = travelplanRepository.findById(planId)
+            .orElseThrow(() -> new IllegalArgumentException("여행계획을 찾을 수 없습니다."));
+        if (!plan.getUserId().equals(userId)) {
+            throw new SecurityException("본인 여행계획만 삭제할 수 있습니다.");
+        }
+        travelplanRepository.delete(plan);
+    }
 }

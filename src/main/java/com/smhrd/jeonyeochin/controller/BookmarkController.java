@@ -24,7 +24,7 @@ public class BookmarkController {
             
             // 북마크 반환
             return ResponseEntity.ok(Map.of(
-                "Bookmark", savedBookmark
+                "result", savedBookmark
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest()

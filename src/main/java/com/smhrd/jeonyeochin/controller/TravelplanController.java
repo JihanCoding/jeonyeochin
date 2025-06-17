@@ -25,7 +25,7 @@ public class TravelplanController {
             
             // 여행계획 반환
             return ResponseEntity.ok(Map.of(
-                "travelplan", savedTravelplan
+                "result", savedTravelplan
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -38,7 +38,9 @@ public class TravelplanController {
     public ResponseEntity<?> getTravelplansByUserId(@RequestParam Integer userId) {
         try {
             java.util.List<Travelplan> plans = travelplanService.getTravelplansByUserId(userId);
-            return ResponseEntity.ok(Map.of("travelplans", plans));
+            return ResponseEntity.ok(Map.of(
+                "result", plans
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -49,7 +51,9 @@ public class TravelplanController {
     public ResponseEntity<?> getTravelplanById(@PathVariable Integer planId) {
         Travelplan plan = travelplanService.getTravelplanById(planId);
         if (plan != null) {
-            return ResponseEntity.ok(Map.of("travelplan", plan));
+            return ResponseEntity.ok(Map.of(
+                "result", plan
+            ));
         } else {
             return ResponseEntity.status(404).body(Map.of("error", "여행계획을 찾을 수 없습니다."));
         }
@@ -62,7 +66,24 @@ public class TravelplanController {
                                               @RequestParam Integer userId) {
         try {
             Travelplan updatedPlan = travelplanService.updateTravelplan(planId, updateData, userId);
-            return ResponseEntity.ok(Map.of("travelplan", updatedPlan));
+            return ResponseEntity.ok(Map.of(
+                "result", updatedPlan
+            ));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+    
+    // 여행계획 삭제 (본인만 가능)
+    @DeleteMapping("/delete/{planId}")
+    public ResponseEntity<?> deleteTravelplan(@PathVariable Integer planId, @RequestParam Integer userId) {
+        try {
+            travelplanService.deleteTravelplan(planId, userId);
+            return ResponseEntity.ok(Map.of(
+                "result", "삭제 완료"
+            ));
         } catch (SecurityException e) {
             return ResponseEntity.status(403).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
