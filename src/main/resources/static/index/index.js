@@ -495,7 +495,7 @@ function updateMaxHeight() {
     // 검색창(.search-bar)의 bottom ~ window의 bottom 거리
     const searchBar = document.querySelector('.search-bar');
     const searchRect = searchBar.getBoundingClientRect();
-    maxHeight = window.innerHeight - searchRect.bottom - 8; // 8px 여백
+    maxHeight = window.innerHeight - searchRect.bottom - 55; // 55px 여백
     // 최소값 보장
     if (maxHeight < minHeight + 40) maxHeight = minHeight + 40;
 }
@@ -776,27 +776,50 @@ window.addEventListener('DOMContentLoaded', function () {
                 day: 'numeric'
             }) : '날짜 없음';
 
+            // 사용자 게시글 팝업: 본인이 등록한 사진만 출력
+            let photoHtml = '';
+            if (post.cameraImage) {
+                photoHtml = `<img src='${encodeURI(post.cameraImage)}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>`;
+            } else if (post.galleryImages && post.galleryImages.length > 0 && post.galleryImages[0] && post.galleryImages[0] !== '없음') {
+                photoHtml = `<img src='${encodeURI(post.galleryImages[0])}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>`;
+            }
             const infoHtml = `
                 <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
                     <b>${post.title}</b><br>
                     <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${post.category ? post.category : '기타'}</span><br>
-                    ${tagsHtml}                    <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
+                    ${tagsHtml} <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
                     <div style="margin-top:8px;padding-top:6px;border-top:1px solid #eee;color:#666;font-size:0.85em;">
                         게시일: ${postDate}
                     </div>
-                    ${post.cameraImage ? `<img src='${post.cameraImage}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
-                    ${post.galleryImages && post.galleryImages.length > 0 ? `<img src='${post.galleryImages[0]}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>` : ''}
+                    ${photoHtml}
                 </div>
             `;
             const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
             naver.maps.Event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
-                // 지도 클릭 시 InfoWindow 닫기
-                const closeOnMapClick = function () {
-                    infowindow.close();
-                    naver.maps.Event.removeListener(mapClickListener);
-                };
-                const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
+                // 이미지가 있으면 이미지 로드 후 위치 보정 및 닫기 이벤트 등록
+                if (publicPhotoHtml) {
+                    // InfoWindow 내부의 이미지가 로드될 때까지 대기
+                    setTimeout(() => {
+                        const iwEl = document.querySelector('.ncp_infowindow_inner, .ncp_infowindow');
+                        if (iwEl) {
+                            const img = iwEl.querySelector('img');
+                            if (img) {
+                                img.onload = function () {
+                                    // 위치 보정
+                                    const markerPos = marker.getPosition();
+                                    const proj = map.getProjection();
+                                    if (proj && markerPos) {
+                                        const point = proj.fromCoordToPoint(markerPos);
+                                        point.y -= 70 / Math.pow(2, map.getZoom() - 7);
+                                        const newCoord = proj.fromPointToCoord(point);
+                                        infowindow.setPosition(newCoord);
+                                    }
+                                };
+                            }
+                        }
+                    }, 0);
+                }
             });
         }
     });
@@ -839,34 +862,53 @@ window.addEventListener('DOMContentLoaded', function () {
             if (image !== '/common/no-image.png') {
                 image = encodeURI(image);
             }
-            // infoHtml에 이미지 클릭 이벤트 추가 (JS 이벤트 바인딩 방식)
+            // infoDiv 대신 html string으로 content 구성
             const infoDiv = document.createElement('div');
             infoDiv.style.minWidth = '180px';
             infoDiv.style.maxWidth = '220px';
             infoDiv.style.wordBreak = 'break-all';
             infoDiv.style.position = 'relative';
-            infoDiv.innerHTML = `
-                <div style="font-weight:500;margin-bottom:8px;">${title}</div>
-                <img id="public-img-${title}" src="${image}" style="width:100%;max-height:120px;border-radius:8px;object-fit:cover;cursor:pointer;" onerror="this.onerror=null;this.src='/common/no-image.png';">
-            `;
-            // 이미지 클릭 시 상세 모달 표시
-            setTimeout(() => {
-                const imgEl = infoDiv.querySelector('img');
-                if (imgEl) {
-                    imgEl.addEventListener('click', function () {
-                        showPublicDetail(title, image, item.content || item.infoContent || '');
-                    });
+            let publicPhotoHtml = '';
+            if (rawImage && rawImage !== '없음') {
+                const lower = rawImage.toLowerCase();
+                if (lower.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/)) {
+                    publicPhotoHtml = `<img src='${encodeURI(rawImage)}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;cursor:pointer;'>`;
                 }
-            }, 0);
-            const infowindow = new naver.maps.InfoWindow({ content: infoDiv, zIndex: 9999 });
+            }
+            // infoDiv 대신 html string으로 content 구성
+            const infoHtml = `
+                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
+                    <div style="font-weight:500;margin-bottom:8px;">${title}</div>
+                    ${publicPhotoHtml}
+                </div>
+            `;
+            const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
             naver.maps.Event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
-                // 지도 클릭 시 InfoWindow 닫기
-                const closeOnMapClick = function () {
-                    infowindow.close();
-                    naver.maps.Event.removeListener(mapClickListener);
-                };
-                const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
+                // 이미지가 있으면 이미지 로드 후 위치 보정 및 닫기 이벤트 등록
+                if (publicPhotoHtml) {
+                    // InfoWindow 내부의 이미지가 로드될 때까지 대기
+                    setTimeout(() => {
+                        const iwEl = document.querySelector('.ncp_infowindow_inner, .ncp_infowindow');
+                        if (iwEl) {
+                            const img = iwEl.querySelector('img');
+                            if (img) {
+                                img.onload = function () {
+                                    // 위치 보정
+                                    const markerPos = marker.getPosition();
+                                    const proj = map.getProjection();
+                                    if (proj && markerPos) {
+                                        const point = proj.fromCoordToPoint(markerPos);
+                                        point.y -= 70 / Math.pow(2, map.getZoom() - 7);
+                                        const newCoord = proj.fromPointToCoord(point);
+                                        infowindow.setPosition(newCoord);
+                                    }
+                                };
+                            }
+                        }
+                    }, 0);
+                }
+                // 지도 클릭 시 InfoWindow 닫기 이벤트 제거 (팝업이 바로 사라지지 않게)
             });
         }
     });    // 지도 이동/줌 변경 시 하단 시트 업데이트
@@ -950,6 +992,7 @@ var map = new naver.maps.Map('map', {
     naver.maps.Event.addListener(map, 'touchend', endPress);
     naver.maps.Event.addListener(map, 'touchmove', onMove);
 })();
+
 
 // 뒤로가기/복귀 시 사이드 메뉴 상태 복원
 window.addEventListener('pageshow', function () {
@@ -1048,11 +1091,6 @@ function initializeSearch() {
 
 // 게시글/공공데이터(축제, 공연, 관광, 테마파크 등) 모두 지원하는 리스트 아이템 생성 함수
 function createPostListItem(item, isSearchResult = false) {
-    const li = document.createElement('li');
-    li.style.padding = '12px 20px';
-    li.style.borderBottom = '1px solid #eee';
-    li.style.cursor = 'pointer';
-
     // 게시글/공공데이터 구분
     const isPublic = ['축제', '공연', '관광', '테마파크'].includes(item.type);
     const title = item.title || item.infoTitle || item.postTitle || '제목 없음';
@@ -1061,21 +1099,40 @@ function createPostListItem(item, isSearchResult = false) {
     const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : (item.eventStartDate || '');
     let image = item.image || item.infoImages || item.postImage || '';
 
-    // 이미지 경로 자동 보정: 한글/특수문자 인코딩 및 경로 누락 시 기본 이미지
-    const defaultImg = '/common/no-image.png'; // 실제 존재하는 기본 이미지 경로로 수정 필요
-    if (image) {
-        // 경로에 한글/특수문자 있을 경우 encodeURI 적용
-        image = encodeURI(image);
-    } else {
-        image = defaultImg;
+    // 이미지가 없거나, '없음', 'no-image', 확장자 미포함, src가 비정상(깨진 링크 포함)일 때 이미지 태그를 절대 렌더링하지 않음
+    let imageTag = '';
+    if (image && typeof image === 'string') {
+        const lower = image.toLowerCase();
+        if (
+            lower &&
+            lower !== '없음' &&
+            !lower.includes('no-image') &&
+            lower.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/)
+        ) {
+            // 이미지가 실제로 로드 가능한지 동적으로 검사
+            const img = new window.Image();
+            img.src = image;
+            img.onload = function () {
+                // 정상 이미지일 때만 추가
+                if (img.width > 0 && img.height > 0) {
+                    img.style.cssText = 'width:100px;max-height:60px;margin-top:6px;border-radius:8px;object-fit:cover;';
+                    li.appendChild(img);
+                }
+            };
+            // onerror는 아무것도 하지 않음(깨진 이미지 무시)
+        }
     }
+
+    const li = document.createElement('li');
+    li.style.padding = '12px 20px';
+    li.style.borderBottom = '1px solid #eee';
+    li.style.cursor = 'pointer';
 
     li.innerHTML = `
         <div style="font-weight:500;">${title}</div>
-        <div style="color:#888;font-size:0.85em;margin-top:4px;">
-        </div>
-        <img src='${image}' style='width:100px;max-height:60px;margin-top:6px;border-radius:8px;object-fit:cover;' onerror="this.onerror=null;this.src='${image}';">
+        <div style="color:#888;font-size:0.85em;margin-top:4px;"></div>
     `;
+    // 이미지 태그는 위에서 동적으로 append
 
     // 클릭 시 상세 페이지 이동(게시글만), 공공데이터는 상세 없음
     if (!isPublic) {
@@ -1138,4 +1195,24 @@ function showPublicDetail(title, image, content) {
         </div>
     `;
     document.body.appendChild(modal);
+}
+
+// 전역 InfoWindow 인스턴스 하나만 사용
+let globalInfoWindow = null;
+let globalMapClickListener = null;
+
+function openGlobalInfoWindow(map, marker, html) {
+    if (globalInfoWindow) {
+        globalInfoWindow.close();
+    }
+    globalInfoWindow = new naver.maps.InfoWindow({ content: html, zIndex: 9999 });
+    globalInfoWindow.open(map, marker);
+    // 지도 클릭 시 InfoWindow 닫기 이벤트 등록
+    if (globalMapClickListener) {
+        naver.maps.Event.removeListener(globalMapClickListener);
+    }
+    globalMapClickListener = naver.maps.Event.addListener(map, 'click', function () {
+        if (globalInfoWindow) globalInfoWindow.close();
+        if (globalMapClickListener) naver.maps.Event.removeListener(globalMapClickListener);
+    });
 }
