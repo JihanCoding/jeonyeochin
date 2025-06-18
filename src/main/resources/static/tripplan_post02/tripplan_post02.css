@@ -6,7 +6,8 @@
     font-family: 'Pretendard', sans-serif;
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     font-family: 'Pretendard', sans-serif;
@@ -54,6 +55,7 @@ body, html {
     justify-content: center;
     padding: 0;
 }
+
 .route-list {
     color: #555;
     font-size: 0.9rem;
@@ -96,7 +98,7 @@ body, html {
     width: 60%;
     border: none;
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: 600;
     color: #2196f3;
     background: transparent;
     outline: none;
@@ -139,8 +141,8 @@ body, html {
     border: none;
     border-radius: 20px;
     background: #ecf5ffcc;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     color: #333;
     margin: 0 0 32px 0;
     box-sizing: border-box;
@@ -161,7 +163,21 @@ body, html {
     color: #2196f3;
 }
 
-
+.submit-btn {
+    background: linear-gradient(90deg, #64b5f6 0%, #2196f3 100%);
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    padding: 8px 16px;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+    transition: background 0.18s, box-shadow 0.18s;
+    margin-left: auto;
+    display: block;
+}
 
 
 /* ===== 반응형 ===== */

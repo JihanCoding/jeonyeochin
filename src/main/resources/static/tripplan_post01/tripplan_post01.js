@@ -298,10 +298,9 @@ function showMapSelectionGuide(mode) {
     if (!guideEl) {
         guideEl = document.createElement('div');
         guideEl.className = 'map-selection-guide';
-        guideEl.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #2196F3; color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.3);`;
         document.body.appendChild(guideEl);
     }
-    guideEl.innerHTML = `📍 지도에서 ${modeText}를 클릭하세요.`;
+    guideEl.innerHTML = `지도에서 ${modeText}를 클릭하세요.`;
     guideEl.style.display = 'block';
 }
 function hideMapSelectionGuide() {
