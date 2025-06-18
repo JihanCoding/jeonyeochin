@@ -44,8 +44,15 @@ public class InfoController {
     @GetMapping("/list")
     public ResponseEntity<?> getAllInfo() {
         try {
+            java.util.List<Info> infoList = infoService.findAll();
+            // infoImages에 경로를 붙여서 반환
+            infoList.forEach(info -> {
+                if (info.getInfoImages() != null && !info.getInfoImages().startsWith("/static/common/")) {
+                    info.setInfoImages("/static/common/" + info.getInfoImages());
+                }
+            });
             return ResponseEntity.ok(Map.of(
-                "result",infoService.findAll()
+                "result", infoList
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
