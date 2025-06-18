@@ -47,8 +47,8 @@ public class InfoController {
             java.util.List<Info> infoList = infoService.findAll();
             // infoImages에 경로를 붙여서 반환
             infoList.forEach(info -> {
-                if (info.getInfoImages() != null && !info.getInfoImages().startsWith("/static/common/")) {
-                    info.setInfoImages("/static/common/" + info.getInfoImages());
+                if (info.getInfoImages() != null && !info.getInfoImages().startsWith("/common/")) {
+                    info.setInfoImages("/common/" + info.getInfoImages());
                 }
             });
             return ResponseEntity.ok(Map.of(
