@@ -724,10 +724,10 @@ window.addEventListener('DOMContentLoaded', function () {
     // localStorage에서 임시 글 목록 읽어 마커 표시
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
-    mapMarkers = [];    // 하단 시트 콘텐츠 업데이트 - 현재 지도에 보이는 게시물만 표시
+    mapMarkers = [];
     updateBottomSheetWithVisiblePosts();
 
-    // 3일 이내 사용자 게시물만 마커로 표시
+    // 3일 이내 사용자 게시물만 마커로 표시 (마커 필터링용)
     const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
 
     recentPosts.forEach(post => {
@@ -917,7 +917,8 @@ var map = new naver.maps.Map('map', {
     function startPress(coord) {
         if (!coord) return;
         downLatLng = coord;
-        moved = false; pressTimer = setTimeout(function () {
+        moved = false;
+        pressTimer = setTimeout(function () {
             if (downLatLng && !moved) {
                 localStorage.setItem('selectedCoords', JSON.stringify({ lat: downLatLng.y, lng: downLatLng.x }));
                 window.location.href = '/newPost/newPost.html';
