@@ -1043,7 +1043,7 @@ function createPostListItem(item, isSearchResult = false) {
     let image = item.image || item.infoImages || item.postImage || '';
 
     // 이미지 경로 자동 보정: 한글/특수문자 인코딩 및 경로 누락 시 기본 이미지
-    const defaultImg = '/static/common/no-image.png'; // 실제 존재하는 기본 이미지 경로로 수정 필요
+    const defaultImg = '/common/no-image.png'; // 실제 존재하는 기본 이미지 경로로 수정 필요
     if (image) {
         // 경로에 한글/특수문자 있을 경우 encodeURI 적용
         image = encodeURI(image);
@@ -1057,7 +1057,7 @@ function createPostListItem(item, isSearchResult = false) {
             [${category}] ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}
         </div>
         <div style="color:#999;font-size:0.8em;margin-top:4px;">${dateStr ? '일자: ' + dateStr : ''}</div>
-        <img src='${image}' style='width:100px;max-height:60px;margin-top:6px;border-radius:8px;object-fit:cover;' onerror="this.onerror=null;this.src='${defaultImg}';">
+        <img src='${image}' style='width:100px;max-height:60px;margin-top:6px;border-radius:8px;object-fit:cover;' onerror="this.onerror=null;this.src='${image}';">
         ${isPublic ? `<span style='font-size:0.75em;color:#2193b0;'>공공데이터</span>` : ''}
     `;
 
