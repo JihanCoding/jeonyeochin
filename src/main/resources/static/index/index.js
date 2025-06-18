@@ -193,10 +193,10 @@ function updateBottomSheetContentWithFilter(filteredPosts) {
     sheetContent.appendChild(postsListContainer);
 }
 
+// 중복 제거: 필터 버튼 클릭 이벤트 리스너는 한 번만 선언
 filterButtons.forEach(button => {
     button.addEventListener('click', () => {
         const type = button.dataset.type;
-
         if (type === '전체') {
             const isAllActive = button.classList.contains('active');
             filterButtons.forEach(btn => {
@@ -205,11 +205,11 @@ filterButtons.forEach(button => {
         } else {
             button.classList.toggle('active');
             updateAllButtonState();
-        }        // 필터 적용
+        }
         if (currentSearchTerm !== '') {
-            updateBottomSheetWithSearch(); // 검색 중이면 검색 결과 업데이트
+            updateBottomSheetWithSearch();
         } else {
-            filterPostsByTags(); // 일반 필터 적용
+            filterPostsByTags();
         }
     });
 });
@@ -694,7 +694,7 @@ function fetchInfoMarkersFromDB() {
         .then(response => response.json())
         .then(data => {
             // Info 엔티티의 카테고리별 type 매핑
-            const publicData = data.map(item => ({
+            const publicData = data.result.map(item => ({
                 lat: item.infoLatitude,
                 lng: item.infoLongitude,
                 type: item.infoCategory, // '축제', '공연', '관광', '테마파크' 등
@@ -832,15 +832,33 @@ window.addEventListener('DOMContentLoaded', function () {
                 post: null // 공공데이터는 게시물 정보 없음
             });
 
-            // 공공데이터 마커 클릭 시 정보창
-            const infoHtml = `
-                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
-                    <b>${item.title}</b><br>
-                    <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${item.type ? item.type : '기타'}</span><br>
-                    <span>${item.content || item.description || ''}</span><br>
-                </div>
+            // 공공데이터 마커 클릭 시 제목+사진, 사진 클릭 시 상세 정보 모달 표시
+            const title = item.title || item.infoTitle || '제목 없음';
+            const rawImage = item.image || item.infoImages || '';
+            let image = (!rawImage || rawImage === '없음') ? '/common/no-image.png' : rawImage;
+            if (image !== '/common/no-image.png') {
+                image = encodeURI(image);
+            }
+            // infoHtml에 이미지 클릭 이벤트 추가 (JS 이벤트 바인딩 방식)
+            const infoDiv = document.createElement('div');
+            infoDiv.style.minWidth = '180px';
+            infoDiv.style.maxWidth = '220px';
+            infoDiv.style.wordBreak = 'break-all';
+            infoDiv.style.position = 'relative';
+            infoDiv.innerHTML = `
+                <div style="font-weight:500;margin-bottom:8px;">${title}</div>
+                <img id="public-img-${title}" src="${image}" style="width:100%;max-height:120px;border-radius:8px;object-fit:cover;cursor:pointer;" onerror="this.onerror=null;this.src='/common/no-image.png';">
             `;
-            const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
+            // 이미지 클릭 시 상세 모달 표시
+            setTimeout(() => {
+                const imgEl = infoDiv.querySelector('img');
+                if (imgEl) {
+                    imgEl.addEventListener('click', function () {
+                        showPublicDetail(title, image, item.content || item.infoContent || '');
+                    });
+                }
+            }, 0);
+            const infowindow = new naver.maps.InfoWindow({ content: infoDiv, zIndex: 9999 });
             naver.maps.Event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
                 // 지도 클릭 시 InfoWindow 닫기
@@ -1069,4 +1087,57 @@ function createPostListItem(item, isSearchResult = false) {
         });
     }
     return li;
+}
+
+// 중복 제거: 마커 생성 및 이벤트 바인딩 함수화
+function createMarker(options) {
+    // options: { position, map, iconOptions, infoHtml, onClick }
+    const marker = new naver.maps.Marker(Object.assign({
+        position: options.position,
+        map: options.map
+    }, options.iconOptions));
+    if (options.infoHtml) {
+        const infowindow = new naver.maps.InfoWindow({ content: options.infoHtml, zIndex: 9999 });
+        naver.maps.Event.addListener(marker, 'click', function () {
+            infowindow.open(options.map, marker);
+            const closeOnMapClick = function () {
+                infowindow.close();
+                naver.maps.Event.removeListener(mapClickListener);
+            };
+            const mapClickListener = naver.maps.Event.addListener(map, 'click', closeOnMapClick);
+        });
+    }
+    if (options.onClick) {
+        naver.maps.Event.addListener(marker, 'click', options.onClick);
+    }
+    return marker;
+}
+
+// 상세 정보 모달 표시 함수 (전역에 추가)
+function showPublicDetail(title, image, content) {
+    // 모달이 이미 있으면 제거
+    const oldModal = document.getElementById('publicDetailModal');
+    if (oldModal) oldModal.remove();
+    // 모달 생성
+    const modal = document.createElement('div');
+    modal.id = 'publicDetailModal';
+    modal.style.position = 'fixed';
+    modal.style.left = '0';
+    modal.style.top = '0';
+    modal.style.width = '100vw';
+    modal.style.height = '100vh';
+    modal.style.background = 'rgba(0,0,0,0.5)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = '99999';
+    modal.innerHTML = `
+        <div style="background:#fff;padding:24px 20px 16px 20px;border-radius:12px;max-width:340px;width:90vw;box-shadow:0 4px 24px #0002;position:relative;">
+            <div style="font-size:1.1em;font-weight:600;margin-bottom:10px;">${title}</div>
+            <img src="${image}" style="width:100%;max-height:220px;border-radius:8px;object-fit:cover;" onerror="this.onerror=null;this.src='/common/no-image.png';">
+            <div style="margin-top:12px;color:#444;font-size:0.98em;white-space:pre-line;">${content || ''}</div>
+            <button style="position:absolute;top:8px;right:12px;font-size:1.3em;background:none;border:none;cursor:pointer;color:#888;" onclick="document.getElementById('publicDetailModal').remove();">&times;</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
 }
