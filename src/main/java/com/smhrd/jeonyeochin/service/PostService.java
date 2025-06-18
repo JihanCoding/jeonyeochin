@@ -3,17 +3,18 @@ package com.smhrd.jeonyeochin.service;
 import com.smhrd.jeonyeochin.entity.Post;
 import com.smhrd.jeonyeochin.repository.PostRepository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional
 public class PostService {
-    
+
     @Autowired
     private PostRepository postRepository;
 
@@ -26,7 +27,7 @@ public class PostService {
     // 게시글 수정 (본인만 가능)
     public Post updatePost(Integer postId, Post updateData, Integer userId) {
         Post post = postRepository.findById(postId)
-            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         if (!post.getUserId().equals(userId)) {
             throw new SecurityException("본인 게시글만 수정할 수 있습니다.");
         }
@@ -46,4 +47,9 @@ public class PostService {
     public Page<Post> getPostsByUserId(Integer userId, Pageable pageable) {
         return postRepository.findAllByUserId(userId, pageable);
     }
+
+    public List<Post> getPostsByUserId(Integer userId) {
+        return postRepository.findByUserId(userId);
+    }
+
 }

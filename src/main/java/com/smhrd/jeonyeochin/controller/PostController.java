@@ -2,13 +2,14 @@ package com.smhrd.jeonyeochin.controller;
 
 import com.smhrd.jeonyeochin.entity.Post;
 import com.smhrd.jeonyeochin.service.PostService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
+
 
 
 @RestController
@@ -57,15 +58,20 @@ public class PostController {
         }
     }
     
-    // 마이페이지 - 내가 쓴 게시글 목록 페이징 조회
-    @GetMapping("/mylist")
-    public ResponseEntity<?> getMyPosts(@RequestParam Integer userId,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Post> postPage = postService.getPostsByUserId(userId, pageable);
-        return ResponseEntity.ok(Map.of(
-            "result", postPage
-        ));
+   
+
+    @GetMapping("list/{userId}")
+    public ResponseEntity<?> getMyPosts(@PathVariable Integer userId) {
+
+       List<Post> post = postService.getPostsByUserId(userId);
+        if (!post.isEmpty()) {
+            return ResponseEntity.ok(Map.of(
+                "result", post
+            ));
+        } else {
+            return ResponseEntity.status(404).body(Map.of("error", "해당사용자 게시글 없음."));
+        }
     }
 }
+    
+  
