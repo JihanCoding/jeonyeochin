@@ -191,13 +191,24 @@ html {
     background: #f7fafd;
     border-radius: 10px;
     margin-bottom: 6px;
+    overflow: hidden; /* 추가: 이미지가 영역을 넘지 않게 */
+    display: flex; /* 추가: 이미지 정렬을 위해 */
+    align-items: center; /* 추가: 세로 중앙 정렬 */
+    justify-content: center; /* 추가: 가로 중앙 정렬 */
 }
 
-.spot-title {
-    margin-left: 0.4rem;
-    color: #555;
-    font-size: 0.9rem;
-    font-weight: 600;
+.spot-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.spot-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .spot-content {
