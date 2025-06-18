@@ -1,14 +1,19 @@
 package com.smhrd.jeonyeochin.controller;
 
+import com.smhrd.dto.postDto;
 import com.smhrd.jeonyeochin.entity.Post;
 import com.smhrd.jeonyeochin.service.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/post")
@@ -19,17 +24,33 @@ public class PostController {
     private PostService postService;
 
     // 게시글 생성~!@!!
-    @RequestMapping("/create")
-    public ResponseEntity<?> create(@RequestBody Post postData) {
-        try {
-            // 게시글 처리
-            Post savedPost = postService.savePost(postData);
+    // @RequestMapping("/create")
+    // public ResponseEntity<?> create(@RequestBody postDto postData) {
+    // try {
+    // // 게시글 처리
+    // Post savedPost = postService.savePost(postData);
 
-            // 게시글 반환!!
-            return ResponseEntity.ok(Map.of(
-                    "result", savedPost));
+    // // 게시글 반환!!
+    // return ResponseEntity.ok(Map.of(
+    // "result", savedPost));
+    // } catch (Exception e) {
+    // return ResponseEntity.badRequest()
+    // .body(Map.of("error", e.getMessage()));
+    // }
+    // }
+
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> create(@ModelAttribute postDto form) {
+        try {
+            // 넘겨받은 formDto 안에 List<MultipartFile> postImage 가 들어 있음
+            System.out.println("size"+ form.getPostImage().size());
+            System.out.println("Received post data: " + form.getPostImage());
+            Post saved = postService.savePost(form);
+            return ResponseEntity.ok(Map.of("id", saved.getPostId()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
+            e.printStackTrace();
+            return ResponseEntity
+                    .badRequest()
                     .body(Map.of("error", e.getMessage()));
         }
     }
