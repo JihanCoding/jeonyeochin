@@ -21,7 +21,7 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 24px;
+    padding: 1rem 0px;
     border-bottom: 1px solid #eee;
     background: white;
     color: #2196f3;
