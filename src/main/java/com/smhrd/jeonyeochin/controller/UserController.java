@@ -77,12 +77,12 @@ public class UserController {
 
     // userNick 변경
     @PostMapping("/update")
-    public ResponseEntity<String> updateNickname(@RequestBody Map<String, Object> data) {
+    public ResponseEntity<?> updateNickname(@RequestBody Map<String, Object> data) {
         Integer userId = ((Number) data.get("userId")).intValue();
         String userNick = (String) data.get("userNick");
         boolean result = userService.updateNickname(userId, userNick);
         if (result) {
-            return ResponseEntity.ok("닉네임 변경 완료");
+            return ResponseEntity.ok(Map.of("result", result));
         } else {
             return ResponseEntity.status(404).body("사용자 없음");
         }
