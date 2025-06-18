@@ -22,23 +22,28 @@ html {
     padding: 1rem 0;
     border-bottom: 1px solid #eee;
     background: white;
-    color: #6dd5ed;
+    color: #2196f3;
     position: sticky;
     top: 0;
     z-index: 20;
 }
 
 .logo {
-    font-weight: 400;
-    font-size: 1.6rem;
-    color: #222;
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 
-.back-btn {
+#backButton {
+    background: none;
+    border: none;
     cursor: pointer;
-    font-size: 2rem;
-    color: #bbb;
+    color: #2196f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
+
 
 .profile-section {
     display: flex;
