@@ -104,7 +104,7 @@ document.querySelector(".submit-btn").addEventListener("click", async (e) => {
   const cameraInput = document.getElementById("cameraInput");
   const files = galleryInput.files; // FileList
   const files2 = cameraInput.files; // FileList
-console.log(selectedGalleryFiles.length, "개 이미지 파일이 선택되었습니다.");
+  console.log(selectedGalleryFiles.length, "개 이미지 파일이 선택되었습니다.");
 
   const formData = new FormData();
   formData.append("userId", JSON.parse(sessionStorage.getItem("user")).userId);
@@ -120,7 +120,7 @@ console.log(selectedGalleryFiles.length, "개 이미지 파일이 선택되었�
   formData.append("postLatitude", coords.lat);
   formData.append("postLongitude", coords.lng);
 
-  
+
   // 다중 이미지는 for문으로 각각 append
   for (let i = 0; i < selectedGalleryFiles.length; i++) {
     formData.append("postImage", selectedGalleryFiles[i]);
@@ -181,70 +181,75 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   photoGrid.appendChild(addBox);
 
-// 1) 카메라 onchange
-cameraInput.onchange = function () {
-  const file = cameraInput.files[0];
-  if (!file) return;
+  // 1) 카메라 onchange
+  cameraInput.onchange = function () {
+    const file = cameraInput.files[0];
+    if (!file) return;
 
-  // 전역 변수에 저장
-  selectedCameraFile = file;
+    // 전역 변수에 저장
+    selectedCameraFile = file;
 
-  // 미리보기
-  const reader = new FileReader();
-  reader.onload = ev => {
-    cameraBox.innerHTML = "";
-    const img = document.createElement("img");
-    img.src = ev.target.result;
-    img.style.cssText = "width:100%;height:100%;object-fit:cover";
-    cameraBox.appendChild(img);
-  };
-  reader.readAsDataURL(file);
-};
-
-// 2) 갤러리 onchange 한 번만 정의
-galleryInput.onchange = function () {
-  const files = Array.from(galleryInput.files)
-    .slice(0, maxGalleryPhotos - selectedGalleryFiles.length);
-
-  files.forEach(file => {
-    // ① 전역 배열에 추가
-    selectedGalleryFiles.push(file);
-
-    // ② base64 미리보기 소스 저장 (galleryImages는 base64만 담는 배열)
+    // 미리보기
     const reader = new FileReader();
     reader.onload = ev => {
-      galleryImages.push(ev.target.result);
-      renderGalleryImages();
+      cameraBox.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = ev.target.result;
+      img.style.cssText = "width:100%;height:100%;object-fit:cover";
+      cameraBox.appendChild(img);
     };
     reader.readAsDataURL(file);
-  });
-};
+  };
 
-// 3) renderGalleryImages: galleryImages 기준으로 그리되,
-//    삭제 시 selectedGalleryFiles도 동기화해야 함
-function renderGalleryImages() {
-  // 뷰 초기화
-  Array.from(photoGrid.querySelectorAll(".gallery-image-box")).forEach(el => el.remove());
+  // 2) 갤러리 onchange 한 번만 정의
+  galleryInput.onchange = function () {
+    const files = Array.from(galleryInput.files)
+      .slice(0, maxGalleryPhotos - selectedGalleryFiles.length);
 
-  galleryImages.forEach((src, idx) => {
-    const box = document.createElement("div");
-    box.className = "photo-box gallery-image-box";
-    const img = document.createElement("img");
-    img.src = src;
-    img.style.cssText = "width:100%;height:100%;object-fit:cover";
-    box.appendChild(img);
+    files.forEach(file => {
+      // ① 전역 배열에 추가
+      selectedGalleryFiles.push(file);
 
-    box.addEventListener("click", () => {
-      if (confirm("이 이미지를 삭제할까요?")) {
-        // base64 배열과 파일 배열 모두에서 같은 인덱스를 제거
-        galleryImages.splice(idx, 1);
-        selectedGalleryFiles.splice(idx, 1);
+      // ② base64 미리보기 소스 저장 (galleryImages는 base64만 담는 배열)
+      const reader = new FileReader();
+      reader.onload = ev => {
+        galleryImages.push(ev.target.result);
         renderGalleryImages();
-      }
+      };
+      reader.readAsDataURL(file);
     });
+  };
 
-    photoGrid.insertBefore(box, addBox);
+  // 3) renderGalleryImages: galleryImages 기준으로 그리되,
+  //    삭제 시 selectedGalleryFiles도 동기화해야 함
+  function renderGalleryImages() {
+    // 뷰 초기화
+    Array.from(photoGrid.querySelectorAll(".gallery-image-box")).forEach(el => el.remove());
+
+    galleryImages.forEach((src, idx) => {
+      const box = document.createElement("div");
+      box.className = "photo-box gallery-image-box";
+      const img = document.createElement("img");
+      img.src = src;
+      img.style.cssText = "width:100%;height:100%;object-fit:cover";
+      box.appendChild(img);
+
+      box.addEventListener("click", () => {
+        if (confirm("이 이미지를 삭제할까요?")) {
+          // base64 배열과 파일 배열 모두에서 같은 인덱스를 제거
+          galleryImages.splice(idx, 1);
+          selectedGalleryFiles.splice(idx, 1);
+          renderGalleryImages();
+        }
+      });
+
+      photoGrid.insertBefore(box, addBox);
+    });
+  }
+
+  // 페이지를 벗어날 때 선택한 위치 정보 삭제
+  window.addEventListener('beforeunload', function () {
+    localStorage.removeItem('selectedCoords');
   });
-}
 
 });

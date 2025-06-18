@@ -903,8 +903,8 @@ filterButtons.forEach(button => {
 
 // 네이버 지도 및 위치 선택 관련 코드 (기존 index.html <script>에서 이동)
 var map = new naver.maps.Map('map', {
-    center: new naver.maps.LatLng(34.7950926, 126.378867),
-    zoom: 12
+    center: new naver.maps.LatLng(34.96605, 126.7869061),
+    zoom: 10
 });
 
 // 지도 롱프레스(2초)로 newPost 이동 및 좌표 전달 (PC+모바일 완벽 지원)
@@ -1073,11 +1073,8 @@ function createPostListItem(item, isSearchResult = false) {
     li.innerHTML = `
         <div style="font-weight:500;">${title}</div>
         <div style="color:#888;font-size:0.85em;margin-top:4px;">
-            [${category}] ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}
         </div>
-        <div style="color:#999;font-size:0.8em;margin-top:4px;">${dateStr ? '일자: ' + dateStr : ''}</div>
         <img src='${image}' style='width:100px;max-height:60px;margin-top:6px;border-radius:8px;object-fit:cover;' onerror="this.onerror=null;this.src='${image}';">
-        ${isPublic ? `<span style='font-size:0.75em;color:#2193b0;'>공공데이터</span>` : ''}
     `;
 
     // 클릭 시 상세 페이지 이동(게시글만), 공공데이터는 상세 없음
