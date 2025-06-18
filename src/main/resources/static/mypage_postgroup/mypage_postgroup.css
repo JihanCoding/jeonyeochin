@@ -22,23 +22,28 @@ html {
     padding: 1rem 0;
     border-bottom: 1px solid #eee;
     background: white;
-    color: #6dd5ed;
+    color: #2196f3;
     position: sticky;
     top: 0;
     z-index: 20;
 }
 
 .logo {
-    font-weight: 400;
-    font-size: 1.6rem;
-    color: #222;
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 
-.back-btn {
+#backButton {
+    background: none;
+    border: none;
     cursor: pointer;
-    font-size: 2rem;
-    color: #bbb;
+    color: #2196f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
+
 
 .profile-section {
     display: flex;
@@ -141,83 +146,70 @@ html {
 .posts-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 32px;
 }
 
 .posts-group {
     width: 100%;
 }
+.posts-group {
+    width: 100%;
+}
 
 .posts-group-header {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #666;
-    margin-bottom: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2196f3;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 4px;
-}
-
-.arrow {
-    font-size: 1.2rem;
-    color: #bbb;
-}
-
-.posts-list.horizontal-scroll {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    padding-left: 0;
-    scrollbar-width: none;
-    margin-left: -24px;
-    margin-right: -24px;
-    padding-left: 24px;
-}
-
-.posts-list.horizontal-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.posts-list.horizontal-scroll::after {
-    content: "";
-    flex: 0 0 24px;
+    width: fit-content;
 }
 
 .post-card {
-    width: 100%;
-    max-width: 220px;
-    margin-left: auto;
-    margin-right: auto;
-    background: #fff;
-    border-radius: 12px;
-    padding: 10px 8px 8px 8px;
+    flex: 0 0 auto;
+    width: 120px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.post-card.no-image {
+    height: 60px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-    position: relative;
-    box-sizing: border-box;
+    justify-content: center;
 }
 
 .post-thumb {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     background: #d3d3d3;
     border-radius: 8px;
     margin-bottom: 8px;
 }
 
 .post-title {
-    font-size: 1.1rem;
-    color: #888;
-    margin-bottom: 2px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .post-desc {
-    font-size: 1rem;
-    color: #bbb;
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .add-post {
@@ -231,9 +223,9 @@ html {
     position: fixed;
     bottom: 6rem;
     right: 2rem;
-    color: #6dd5ed;
+    color: #2196f3;
     background: #ffffff;
-    border: 4px solid #6dd5ed;
+    border: 4px solid #2196f3;
     border-radius: 50%;
     width: 52px;
     height: 52px;

@@ -13,138 +13,92 @@
 <body>
     <div class="mypage-container">
         <header class="app-header">
-            <span class="material-icons back-btn" onclick="history.back()">chevron_left</span>
+            <button id="backButton" class="back-button" onclick="history.back()">
+                <span class="material-icons" style="font-size: 1.8rem;">chevron_left</span>
+            </button>
             <div class="logo">마이 페이지</div>
             <span class="material-icons" style="visibility: hidden;">menu</span>
         </header>
-        <section class="posts-section" style="margin-top:32px;">
+        <section class="posts-section" style="margin-top: 32px;">
             <div class="posts-group">
-                <div class="posts-group-header">25년 6월</div>
+                <div class="posts-group-header"
+                    onclick="window.location.href='/mypage_postgroup/mypage_postgroup.html'">25년 6월</div>
                 <div class="posts-list all-posts-list">
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">[후기] 강진수국길축제 다녀왔어요!</div>
+                        <div class="post-desc">정말 재밌었고 사진도 많이 찍었어요.<br>축제장 분위기 최고!</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">[정보] 목포 장미의 거리 꿀팁</div>
+                        <div class="post-desc">주차장 위치, 맛집, 사진 스팟 등 정리해봤어요.</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">[질문] 전남 축제 중 추천?</div>
+                        <div class="post-desc">여행 계획 중인데 추천 좀 해주세요!</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
                 </div>
             </div>
             <div class="posts-group">
-                <div class="posts-group-header">25년 5월</div>
+                <div class="posts-group-header"
+                    onclick="window.location.href='/mypage_postgroup/mypage_postgroup.html'">25년 5월</div>
                 <div class="posts-list all-posts-list">
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="posts-group">
-                <div class="posts-group-header">25년 2월</div>
-                <div class="posts-list all-posts-list">
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
                 </div>
             </div>
-            <div class="posts-group">
-                <div class="posts-group-header">24년 12월</div>
+                        <div class="posts-group">
+                <div class="posts-group-header"
+                    onclick="window.location.href='/mypage_postgroup/mypage_postgroup.html'">25년 4월</div>
                 <div class="posts-list all-posts-list">
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
+                    <div class="post-card" onclick="window.location.href='/mypage_post/mypage_post.html'">
+                        <div class="post-thumb" style="background:#e0e0e0;"></div>
+                        <div class="post-title">게시글 제목</div>
                         <div class="post-desc">내용</div>
                     </div>
-                    <div class="post-card">
-                        <div class="post-thumb"></div>
-                        <div class="post-title">게시글</div>
-                        <div class="post-desc">내용</div>
-                    </div>
-
                 </div>
             </div>
         </section>
-        <main style="padding:24px;">
-            <h2>내가 쓴 글 모아보기</h2>
-            <ul>
-                <li><a href="/mypage_post/mypage_post1.html">[후기] 강진수국길축제 다녀왔어요!</a></li>
-                <li><a href="/mypage_post/mypage_post2.html">[정보] 목포 장미의 거리 꿀팁</a></li>
-                <li><a href="/mypage_post/mypage_post3.html">[질문] 전남 축제 중 추천?</a></li>
-            </ul>
-        </main>
         <button class="write-button" onclick="window.location.href='/newPost/newPost.html'">
             <span class="material-icons">edit</span>
         </button>

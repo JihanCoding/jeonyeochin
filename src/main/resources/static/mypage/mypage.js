@@ -6,8 +6,8 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/login/login.html";
   }
 
-  const profile = document.getElementById("profile-img-preview");
-  profile.src = "/image/profile/" + userData.userProfile;
+  // const profile = document.getElementById("profile-img-preview");
+  // profile.src = "/image/profile/" + userData.userProfile;
 
   loadUserPosts()
 });
@@ -110,48 +110,48 @@ nicknameCheckBtn.addEventListener("click", async function () {
 });
 
 // 사용자가 작성한 게시물 조회
-async function loadUserPosts() {
-  const userData = JSON.parse(sessionStorage.getItem("user"));
-  if (!userData) {
-    window.location.href = "/login/login.html";
-  }
-  const userId = userData.userId;
-  try {
-    const res = await fetch(`/api/post/list/${userId}`);
-    if (!res.ok) {
-      throw new Error("서버 응답 오류");
-    } else {
-      const data = await res.json();
+// async function loadUserPosts() {
+//   const userData = JSON.parse(sessionStorage.getItem("user"));
+//   if (!userData) {
+//     window.location.href = "/login/login.html";
+//   }
+//   const userId = userData.userId;
+//   try {
+//     const res = await fetch(`/api/post/list/${userId}`);
+//     if (!res.ok) {
+//       throw new Error("서버 응답 오류");
+//     } else {
+//       const data = await res.json();
 
-      console.log(data);
-      if (data.result.length === 0) {
-        const container = document.getElementsByClassName("posts-section")[0];
-        container.innerHTML = `
-          <div class="no-posts-center">
-            <h3>작성한 게시글이 없습니다</h3>
-            <p>첫 번째 게시글을 작성해보세요!</p>
-            <button onclick="window.location.href='/newPost/newPost.html'"
-                    style="margin-top: 16px; padding: 12px 24px; background: #2196f3; color: white; border: none; border-radius: 8px; cursor: pointer;">
-              게시글 작성하기
-            </button>
-          </div>
-        `;
-      } else {
-        const post = data.result;
-        // -------------------------여기가 데이터 불러온 곳입니다  -----------------------------
-        // html에 요소 만들고 가져와서 데이터 넣으셔유~
-        const container = document.getElementsByClassName("posts-section")[0];
-        post.forEach((post) => {
-          const div = document.createElement("div");
-          div.innerHTML = `<h3>${post.postTitle}</h3><p>${post.postContent}</p><p>${post.postCreatedAt}</p>
-          <p>${post.postCategory}</p>`;
-          container.appendChild(div);
-          // 여기까지 뜨나 안뜨나 표시해둔거기 떄문에 변경하셔도 됩니다.
-        });
-      }
-    }
-  } catch (err) {
-    console.error("에러:", err);
-    alert("게시글을 불러오는 데 실패했습니다.");
-  }
-}
+//       console.log(data);
+//       if (data.result.length === 0) {
+//         const container = document.getElementsByClassName("posts-section")[0];
+//         container.innerHTML = `
+//           <div class="no-posts-center">
+//             <h3>작성한 게시글이 없습니다</h3>
+//             <p>첫 번째 게시글을 작성해보세요!</p>
+//             <button onclick="window.location.href='/newPost/newPost.html'"
+//                     style="margin-top: 16px; padding: 12px 24px; background: #2196f3; color: white; border: none; border-radius: 8px; cursor: pointer;">
+//               게시글 작성하기
+//             </button>
+//           </div>
+//         `;
+//       } else {
+//         const post = data.result;
+//         // -------------------------여기가 데이터 불러온 곳입니다  -----------------------------
+//         // html에 요소 만들고 가져와서 데이터 넣으셔유~
+//         const container = document.getElementsByClassName("posts-section")[0];
+//         post.forEach((post) => {
+//           const div = document.createElement("div");
+//           div.innerHTML = `<h3>${post.postTitle}</h3><p>${post.postContent}</p><p>${post.postCreatedAt}</p>
+//           <p>${post.postCategory}</p>`;
+//           container.appendChild(div);
+//           // 여기까지 뜨나 안뜨나 표시해둔거기 떄문에 변경하셔도 됩니다.
+//         });
+//       }
+//     }
+//   } catch (err) {
+//     console.error("에러:", err);
+//     alert("게시글을 불러오는 데 실패했습니다.");
+//   }
+// }
