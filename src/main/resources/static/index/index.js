@@ -877,7 +877,7 @@ window.addEventListener('DOMContentLoaded', function () {
             }
             // infoDiv 대신 html string으로 content 구성
             const infoHtml = `
-                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
+                <div id="publicInfoWindowContent_${item.lat}_${item.lng}" style="min-width:180px;max-width:220px;word-break:break-all;position:relative;cursor:pointer;">
                     <div style="font-weight:500;margin-bottom:8px;">${title}</div>
                     ${publicPhotoHtml}
                 </div>
@@ -885,16 +885,24 @@ window.addEventListener('DOMContentLoaded', function () {
             const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
             naver.maps.Event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
+                // InfoWindow 내부 클릭 시 상세 모달 띄우기
+                setTimeout(() => {
+                    const contentDiv = document.getElementById(`publicInfoWindowContent_${item.lat}_${item.lng}`);
+                    if (contentDiv) {
+                        contentDiv.onclick = function(e) {
+                            e.stopPropagation();
+                            showPublicDetail(title, image, item.overview || item.infoText || '');
+                        };
+                    }
+                }, 0);
                 // 이미지가 있으면 이미지 로드 후 위치 보정 및 닫기 이벤트 등록
                 if (publicPhotoHtml) {
-                    // InfoWindow 내부의 이미지가 로드될 때까지 대기
                     setTimeout(() => {
                         const iwEl = document.querySelector('.ncp_infowindow_inner, .ncp_infowindow');
                         if (iwEl) {
                             const img = iwEl.querySelector('img');
                             if (img) {
                                 img.onload = function () {
-                                    // 위치 보정
                                     const markerPos = marker.getPosition();
                                     const proj = map.getProjection();
                                     if (proj && markerPos) {
@@ -908,7 +916,6 @@ window.addEventListener('DOMContentLoaded', function () {
                         }
                     }, 0);
                 }
-                // 지도 클릭 시 InfoWindow 닫기 이벤트 제거 (팝업이 바로 사라지지 않게)
             });
         }
     });    // 지도 이동/줌 변경 시 하단 시트 업데이트

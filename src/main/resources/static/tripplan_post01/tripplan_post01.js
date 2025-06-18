@@ -348,7 +348,7 @@ async function searchRoute() {
         displayRouteOnMapWithPolyline(coordinates, polylineCoords);
         displayRouteInfo(optimizedRouteFromPolyline(coordinates, polylineCoords));
     } catch (error) {
-        alert('Developing..');
+        alert('경로 검색 중 오류가 발생했습니다: ' + error.message);
     } finally {
         showLoading(false);
     }
