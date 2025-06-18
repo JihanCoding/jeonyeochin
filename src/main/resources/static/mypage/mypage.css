@@ -141,13 +141,12 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
 }
 
 .profile-id {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #777;
+    color: #999;
 }
 
 .profile-username-row {
@@ -190,15 +189,16 @@ body {
 
 .profile-stats {
     display: flex;
-    gap: 24px;
+    gap: 1rem;
     font-size: 0.8rem;
-    color: #888;
+    font-weight: 500;
+    color: #777;
     margin-top: 8px;
-    text-align: center;
+    text-align: left;
 }
 
 .profile-stats b {
-    color: #888;
+    color: #777;
     font-weight: 500;
 }
 
@@ -219,9 +219,9 @@ body {
 }
 
 .posts-group-header {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #666;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2196f3;
     margin-bottom: 12px;
     display: flex;
     align-items: center;
@@ -231,7 +231,8 @@ body {
 
 .arrow {
     font-size: 1.2rem;
-    color: #bbb;
+    font-weight: 500;
+    color: #2196f3;
 }
 
 .posts-list.horizontal-scroll {
@@ -277,8 +278,8 @@ body {
 }
 
 .post-thumb {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     background: #d3d3d3;
     border-radius: 8px;
     margin-bottom: 8px;
@@ -308,20 +309,130 @@ body {
     -webkit-box-orient: vertical;
 }
 
-@media (max-width: 480px) {
+/* 닉네임 영역 스타일 개선 */
+.profile-nickname-row, .profile-nickname-edit-row {
+    gap: 8px;
+}
+#nickname-text {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #333;
+}
+#nickname-input {
+    font-family: pretendard, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 4px 0 4px 0;
+    border: none;
+    border-bottom: 2px solid #bbb;
+    border-radius: 0;
+    min-width: 80px;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 auto;
+    background: transparent;
+    color: #222;
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.2s;
+}
+#nickname-input:focus {
+    border-bottom: 2px solid #f32121;
+    background: transparent;
+}
+#nickname-edit-msg {
+    font-size: 0.78em;
+    color: #999;
+    margin-left: 2px;
+    margin-top: 2px;
+}
+#nickname-edit-msg.available {
+    color: #2196f3;
+}
+#nickname-input.available {
+    border-bottom: 2px solid #2196f3 !important;
+}
+#nickname-edit-msg.unavailable {
+    color: #f32121;
+}
+#nickname-input.unavailable {
+    border-bottom: 2px solid #f32121 !important;
+}
+#nickname-edit-btn, #nickname-check-btn {
+    font-size: 0.9rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+#nickname-check-btn {
+    flex-shrink: 0;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#nickname-check-btn .material-icons {
+    color: #bbb;
+    font-size: 1.3rem;
+    transition: color 0.2s;
+}
+#nickname-check-btn.available .material-icons {
+    color: #2196f3;
+}
+#nickname-check-btn.unavailable .material-icons {
+    color: #f32121;
+}
+
+/* 닉네임 수정 영역 메시지 아래 배치 스타일 */
+.profile-nickname-edit-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0px !important;
+}
+.profile-nickname-edit-row > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+#nickname-edit-btn {
+    font-size: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    transition: background 0.15s, color 0.15s;
+}
+#nickname-edit-btn:hover {
+    background: #bbb;
+    color: #2196f3;
+}
+#nickname-edit-btn .material-icons {
+    font-size: 1rem;
+    color: #bbb;
+    transition: color 0.15s;
+}
+#nickname-edit-btn:hover .material-icons {
+    color: #2196f3;
+}
+
+@media (max-width: 400px) {
     .mypage-container {
         padding: 0 24px;
     }
 
+    .profile-img-bg,
     .profile-img {
         width: 100px;
         height: 100px;
-    }
-
-    .profile-img-bg,
-    .profile-img {
-        width: 96px;
-        height: 96px;
     }
 }
 

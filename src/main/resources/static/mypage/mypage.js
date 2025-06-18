@@ -26,66 +26,84 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.addEventListener("DOMContentLoaded", function () {
   const userEmail = document.getElementById("userEmail");
-  const userNick = document.getElementById("userNick");
+  const nicknameText = document.getElementById("nickname-text");
+  const nicknameInput = document.getElementById("nickname-input");
+  const nicknameEditMsg = document.getElementById("nickname-edit-msg");
 
   const userData = JSON.parse(sessionStorage.getItem("user"));
-  console.log(userData);
   userEmail.innerText = userData.userEmail;
-  userNick.value = userData.userNick;
+  nicknameText.innerText = userData.userNick;
+  nicknameInput.value = userData.userNick;
 });
 
-// 닉네임 입력 했을 때 닉네임 중복체크
+// 닉네임 보기/수정 모드 전환
+const nicknameView = document.getElementById("nickname-view");
+const nicknameEdit = document.getElementById("nickname-edit");
+const nicknameEditBtn = document.getElementById("nickname-edit-btn");
+const nicknameCheckBtn = document.getElementById("nickname-check-btn");
+const nicknameText = document.getElementById("nickname-text");
+const nicknameInput = document.getElementById("nickname-input");
+const nicknameEditMsg = document.getElementById("nickname-edit-msg");
+
+nicknameEditBtn.addEventListener("click", function () {
+  nicknameView.style.display = "none";
+  nicknameEdit.style.display = "flex";
+  nicknameInput.value = nicknameText.innerText;
+  nicknameEditMsg.innerText = "닉네임 변경";
+  nicknameEditMsg.style.color = "#888";
+  nicknameInput.style.borderColor = "#ccc";
+  nicknameInput.focus();
+});
+
+// 닉네임 중복 체크
 let timer;
-document.getElementById("userNick").addEventListener("input", function () {
-  const userNick = document.getElementById("userNick");
-  const checkM = document.getElementById("checkM");
-
+nicknameInput.addEventListener("input", function () {
   clearTimeout(timer);
-
   timer = setTimeout(async () => {
-    const res = await fetch(
-      `/api/user/check-nick?userNick=${encodeURIComponent(userNick.value)}`
-    );
+    const res = await fetch(`/api/user/check-nick?userNick=${encodeURIComponent(nicknameInput.value)}`);
     const data = await res.json();
-
     if (data.result) {
-      checkM.innerText = "사용중인 닉네임 입니다.";
-      checkM.style.color = "red";
-      userNick.style.borderColor = "red";
+      nicknameEditMsg.innerText = "사용중인 닉네임 입니다.";
+      nicknameEditMsg.classList.remove("available");
+      nicknameEditMsg.classList.add("unavailable");
+      nicknameEditMsg.style.color = "";
+      nicknameInput.classList.remove("available");
+      nicknameInput.classList.add("unavailable");
+      nicknameCheckBtn.classList.remove("available");
+      nicknameCheckBtn.classList.add("unavailable");
     } else {
-      checkM.innerText = "사용가능한 닉네임 입니다.";
-      checkM.style.color = "green";
-      userNick.style.borderColor = "lightgreen";
+      nicknameEditMsg.innerText = "사용가능한 닉네임 입니다.";
+      nicknameEditMsg.classList.remove("unavailable");
+      nicknameEditMsg.classList.add("available");
+      nicknameEditMsg.style.color = "";
+      nicknameInput.classList.remove("unavailable");
+      nicknameInput.classList.add("available");
+      nicknameCheckBtn.classList.remove("unavailable");
+      nicknameCheckBtn.classList.add("available");
     }
   }, 400);
 });
 
-// 닉네임 변경
-const checkBtn = document.getElementById("edit-btn");
-const userNick = document.getElementById("userNick");
-checkBtn.addEventListener("click", async function () {
-  if (userNick.borderColor === "lightgreen") {
+// 닉네임 변경 체크 버튼
+nicknameCheckBtn.addEventListener("click", async function () {
+  if (nicknameEditMsg.style.color === "red") {
     alert("닉네임 사용이 불가능합니다.");
     return;
   }
   const userData = JSON.parse(sessionStorage.getItem("user"));
   const res = await fetch("/api/user/update", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      userId: userData.userId,
-      userNick: userNick.value,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: userData.userId, userNick: nicknameInput.value }),
   });
   const result = await res.json();
-
   if (result) {
-    userData.userNick = userNick.value;
+    userData.userNick = nicknameInput.value;
     sessionStorage.setItem("user", JSON.stringify(userData));
+    nicknameText.innerText = nicknameInput.value;
+    nicknameView.style.display = "flex";
+    nicknameEdit.style.display = "none";
     alert("변경완료");
-    window.location.href = "/myPage/myPage.html";
   } else {
     alert("실패");
   }
