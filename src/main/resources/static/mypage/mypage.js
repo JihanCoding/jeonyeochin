@@ -9,53 +9,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const profile = document.getElementById("profile-img-preview");
   profile.src = "/image/profile/" + userData.userProfile;
 
-  // 사용자 게시글 로드
-  loadUserPosts();
+  loadUserPosts()
 });
-
-// 사용자 작성 게시글 로드
-function loadUserPosts() {
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  if (!user || !user.userId) {
-    alert("로그인이 필요합니다.");
-    return;
-  }
-
-  const userId = user.userId;
-
-  fetch(`/api/post/list/${userId}`)
-    .then(res => {
-      if (!res.ok) throw new Error("서버 응답 오류");
-      return res.json();
-    })
-    .then(data => {
-      const posts = data.result;
-      const container = document.getElementsByClassName("posts-section")[0];
-
-      if (posts.length === 0) {
-        container.innerHTML = `
-          <div class="no-posts-center">
-            <h3>작성한 게시글이 없습니다</h3>
-            <p>첫 번째 게시글을 작성해보세요!</p>
-            <button onclick="window.location.href='/newPost/newPost.html'" 
-                    style="margin-top: 16px; padding: 12px 24px; background: #2196f3; color: white; border: none; border-radius: 8px; cursor: pointer;">
-              게시글 작성하기
-            </button>
-          </div>
-        `;
-      } else {
-        posts.forEach(post => {
-          const div = document.createElement("div");
-          div.innerHTML = `<h3>${post.postTitle}</h3><p>${post.postContent}</p><p>${post.postCreatedAt}</p>`;
-          container.appendChild(div);
-        });
-      }
-    })
-    .catch(err => {
-      console.error("에러:", err);
-      alert("게시글을 불러오는 데 실패했습니다.");
-    });
-}
 
 // 마이페이지 뒤로가기 버튼(index로 이동)
 document.addEventListener("DOMContentLoaded", function () {
@@ -67,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-
 // 세션에서 정보 불러오기
 
 window.addEventListener("DOMContentLoaded", function () {
@@ -77,34 +31,33 @@ window.addEventListener("DOMContentLoaded", function () {
   const userData = JSON.parse(sessionStorage.getItem("user"));
   console.log(userData);
   userEmail.innerText = userData.userEmail;
-  userNick.value = userData.userNick
-
+  userNick.value = userData.userNick;
 });
 
 // 닉네임 입력 했을 때 닉네임 중복체크
 let timer;
 document.getElementById("userNick").addEventListener("input", function () {
   const userNick = document.getElementById("userNick");
-  const checkM = document.getElementById('checkM');
+  const checkM = document.getElementById("checkM");
 
   clearTimeout(timer);
 
   timer = setTimeout(async () => {
-    const res = await fetch(`/api/user/check-nick?userNick=${encodeURIComponent(userNick.value)}`);
+    const res = await fetch(
+      `/api/user/check-nick?userNick=${encodeURIComponent(userNick.value)}`
+    );
     const data = await res.json();
 
     if (data.result) {
-      checkM.innerText = "사용중인 닉네임 입니다."
+      checkM.innerText = "사용중인 닉네임 입니다.";
       checkM.style.color = "red";
       userNick.style.borderColor = "red";
     } else {
-      checkM.innerText = "사용가능한 닉네임 입니다."
+      checkM.innerText = "사용가능한 닉네임 입니다.";
       checkM.style.color = "green";
       userNick.style.borderColor = "lightgreen";
     }
-
   }, 400);
-
 });
 
 // 닉네임 변경
@@ -119,64 +72,68 @@ checkBtn.addEventListener("click", async function () {
   const res = await fetch("/api/user/update", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       userId: userData.userId,
-      userNick: userNick.value
-    })
-  })
+      userNick: userNick.value,
+    }),
+  });
   const result = await res.json();
 
   if (result) {
-    userData.userNick = userNick.value
+    userData.userNick = userNick.value;
     sessionStorage.setItem("user", JSON.stringify(userData));
     alert("변경완료");
     window.location.href = "/myPage/myPage.html";
   } else {
     alert("실패");
   }
-
 });
 
+// 사용자가 작성한 게시물 조회
+async function loadUserPosts() {
+  const userData = JSON.parse(sessionStorage.getItem("user"));
+  if (!userData) {
+    window.location.href = "/login/login.html";
+  }
+  const userId = userData.userId;
+  try {
+    const res = await fetch(`/api/post/list/${userId}`);
+    if (!res.ok) {
+      throw new Error("서버 응답 오류");
+    } else {
+      const data = await res.json();
 
-
-// 프로필 변경
-
-// const profileImg = document.getElementById("profile-img-input");
-// const userData = JSON.parse(sessionStorage.getItem("user"));
-// const userId = userData.userId;
-
-
-// profileImg.addEventListener("change", async () => {
-//   const file = profileImg.files[0];
-//   if (!file) return;
-
-//   const reder = new FileReader();
-//   reder.onload = (e) => {
-//     profileImg.src = e.target.result;
-//   };
-//   reder.readAsDataURL(file);
-
-//   const formData = new FormData();
-//   formData.append("file", file);
-//   formData.append("userId", userId);
-//   try {
-//     const res = await fetch("/api/user/updateProfile", {
-//       method: "POST",
-//       body: formData
-//     });
-//     const result = await res.json();
-
-//     if (result.result) {
-//       userData.userProfile = result.fileName;
-//       sessionStorage.setItem("user", JSON.stringify(userData));
-//     } else {
-//       alert("업로드실패" + result.message);
-//     }
-//   } catch (err) {
-//     console.error("업로드 중 에러 발생:", err);
-//     alert("에러 발생!");
-//   }
-// });
-
+      console.log(data);
+      if (data.result.length === 0) {
+        const container = document.getElementsByClassName("posts-section")[0];
+        container.innerHTML = `
+          <div class="no-posts-center">
+            <h3>작성한 게시글이 없습니다</h3>
+            <p>첫 번째 게시글을 작성해보세요!</p>
+            <button onclick="window.location.href='/newPost/newPost.html'"
+                    style="margin-top: 16px; padding: 12px 24px; background: #2196f3; color: white; border: none; border-radius: 8px; cursor: pointer;">
+              게시글 작성하기
+            </button>
+          </div>
+        `;
+      } else {
+        const post = data.result;
+        // -------------------------여기가 데이터 불러온 곳입니다  -----------------------------
+        // html에 요소 만들고 가져와서 데이터 넣으셔유~
+        const container = document.getElementsByClassName("posts-section")[0];
+        post.forEach((post) => {
+          const div = document.createElement("div");
+          div.innerHTML = `<h3>${post.postTitle}</h3><p>${post.postContent}</p><p>${post.postCreatedAt}</p>
+          <p>${post.postCategory}</p>`;
+          container.appendChild(div);
+          // 여기까지 뜨나 안뜨나 표시해둔거기 떄문에 변경하셔도 됩니다.
+        });
+      }
+    }
+  } catch (err) {
+    console.error("에러:", err);
+    alert("게시글을 불러오는 데 실패했습니다.");
+  }
+}
