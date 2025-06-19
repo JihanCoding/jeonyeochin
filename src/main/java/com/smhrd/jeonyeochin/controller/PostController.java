@@ -43,17 +43,26 @@ public class PostController {
     // return ResponseEntity.badRequest()
     // .body(Map.of("error", e.getMessage()));
     // }
-    // }
-
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // }    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> create(@ModelAttribute postDto form) {
         try {
+            System.out.println("=== 게시글 생성 요청 수신 ===");
+            System.out.println("UserId: " + form.getUserId());
+            System.out.println("PostAuthor: " + form.getPostAuthor());
+            System.out.println("PostTitle: " + form.getPostTitle());
+            System.out.println("PostCategory: " + form.getPostCategory());
+            System.out.println("PostContent: " + form.getPostContent());
+            System.out.println("PostLatitude: " + form.getPostLatitude());
+            System.out.println("PostLongitude: " + form.getPostLongitude());
+            System.out.println("Image files count: " + (form.getPostImage() != null ? form.getPostImage().size() : 0));
+            
             // 넘겨받은 formDto 안에 List<MultipartFile> postImage 가 들어 있음
-            System.out.println("size" + form.getPostImage().size());
-            System.out.println("Received post data: " + form.getPostImage());
             Post saved = postService.savePost(form);
-            return ResponseEntity.ok(Map.of("id", saved.getPostId()));
+            System.out.println("게시글 저장 성공 - ID: " + saved.getPostId());
+            
+            return ResponseEntity.ok(Map.of("id", saved.getPostId(), "message", "게시글이 성공적으로 생성되었습니다."));
         } catch (Exception e) {
+            System.err.println("게시글 생성 중 오류 발생:");
             e.printStackTrace();
             return ResponseEntity
                     .badRequest()

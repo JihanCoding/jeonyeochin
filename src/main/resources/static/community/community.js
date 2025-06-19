@@ -40,14 +40,14 @@ function createUserPostCard(post, index) {
 
   // 이미지가 있는지 확인
   const hasImage = post.cameraImage || (post.galleryImages && post.galleryImages.length > 0);
-
   // 이미지 HTML 생성 (이미지가 있을 때만)
   let imageSection = '';
   if (hasImage) {
     let imageHtml = '';
-    if (post.cameraImage) {
-      imageHtml = `<img src="${post.cameraImage}" alt="게시글 이미지" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
-    } else if (post.galleryImages && post.galleryImages.length > 0) {
+    // if (post.cameraImage) {
+    //   imageHtml = `<img src="${post.cameraImage}" alt="게시글 이미지" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+    //  } else 
+    if (post.galleryImages && post.galleryImages.length > 0) {
       imageHtml = `<img src="${post.galleryImages[0]}" alt="게시글 이미지" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
     }
     imageSection = `<div class="card-image">${imageHtml}</div>`;
