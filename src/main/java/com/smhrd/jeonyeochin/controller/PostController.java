@@ -1,19 +1,25 @@
 package com.smhrd.jeonyeochin.controller;
 
-import com.smhrd.dto.postDto;
-import com.smhrd.jeonyeochin.entity.Post;
-import com.smhrd.jeonyeochin.service.PostService;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.smhrd.dto.postDto;
+import com.smhrd.jeonyeochin.entity.Post;
+import com.smhrd.jeonyeochin.service.PostService;
 
 @RestController
 @RequestMapping("/api/post")
@@ -43,7 +49,7 @@ public class PostController {
     public ResponseEntity<?> create(@ModelAttribute postDto form) {
         try {
             // 넘겨받은 formDto 안에 List<MultipartFile> postImage 가 들어 있음
-            System.out.println("size"+ form.getPostImage().size());
+            System.out.println("size" + form.getPostImage().size());
             System.out.println("Received post data: " + form.getPostImage());
             Post saved = postService.savePost(form);
             return ResponseEntity.ok(Map.of("id", saved.getPostId()));
@@ -80,6 +86,16 @@ public class PostController {
         try {
             List<Post> post = postService.getPostsByUserId(userId);
             return ResponseEntity.ok(Map.of("result", post));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "서버오류"));
+        }
+    } // 모든 게시글 조회 (지도 마커용)
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllPosts() {
+        try {
+            List<Post> posts = postService.getAllPosts();
+            return ResponseEntity.ok(Map.of("result", posts));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "서버오류"));
         }

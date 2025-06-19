@@ -81,21 +81,34 @@ function filterPostsByTags() {
         .filter(btn => btn.classList.contains('active') && btn.dataset.type !== '전체')
         .map(btn => btn.dataset.type);
 
+    const isAllActive = allButton.classList.contains('active');
+
+    console.log('🔍 필터 상태:', {
+        '전체버튼활성화': isAllActive,
+        '활성필터': activeFilters,
+        '활성필터개수': activeFilters.length
+    });
+
     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
 
     // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
     const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
 
-    let filteredData = [];    // 전체가 선택된 경우
-    if (allButton.classList.contains('active')) {
+    let filteredData = [];
+
+    // 전체가 선택된 경우
+    if (isAllActive) {
         filteredData = [...recentPosts, ...publicData]; // 3일 이내 게시물만 포함
+        console.log('✅ 전체 필터 활성화 - 모든 데이터 표시');
     }
     // 아무것도 선택되지 않은 경우 (전체도 비활성화)
     else if (activeFilters.length === 0) {
         filteredData = []; // 빈 배열로 아무것도 표시하지 않음
+        console.log('❌ 모든 필터 비활성화 - 데이터 숨김');
     }
     else {
+        console.log('🎯 개별 필터 활성화:', activeFilters);
         // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
         if (activeFilters.includes('게시글')) {
             filteredData = [...filteredData, ...recentPosts];
@@ -109,12 +122,14 @@ function filterPostsByTags() {
             }
         });
     }    // 마커 필터링 (3일 제한 적용)
+    let hiddenCount = 0, visibleCount = 0;
+
     mapMarkers.forEach(({ marker, category, dataType, post }) => {
         let shouldShow = false;
 
         // 전체가 비활성화되고 다른 필터도 없으면 모든 마커 숨김
-        if (!allButton.classList.contains('active') && activeFilters.length === 0) {
-            shouldShow = false;
+        if (!isAllActive && activeFilters.length === 0) {
+            shouldShow = false; // 모든 필터가 꺼져있으면 무조건 숨김
         } else {
             // 사용자 게시글인 경우 3일 제한 확인
             if ((dataType === 'user_post' || !dataType) && post) {
@@ -123,25 +138,33 @@ function filterPostsByTags() {
                     shouldShow = false; // 3일 지난 게시물은 무조건 숨김
                 } else {
                     // 3일 이내인 경우 필터 조건 확인
-                    if (allButton.classList.contains('active')) {
+                    if (isAllActive) {
                         shouldShow = true;
                     } else if (activeFilters.includes('게시글')) {
                         shouldShow = true;
+                    } else {
+                        shouldShow = false; // 게시글 필터가 없으면 숨김
                     }
                 }
             }
             // 공공데이터인 경우 (날짜 제한 없음)
             else if (['축제', '공연', '관광', '테마파크'].includes(dataType)) {
-                if (allButton.classList.contains('active')) {
+                if (isAllActive) {
                     shouldShow = true;
                 } else if (activeFilters.includes(dataType)) {
                     shouldShow = true;
+                } else {
+                    shouldShow = false; // 해당 필터가 없으면 숨김
                 }
             }
         }
 
         marker.setVisible(shouldShow);
-    });// 하단 시트 업데이트 - 현재 지도에 보이는 게시물만 표시
+        if (shouldShow) visibleCount++;
+        else hiddenCount++;
+    });
+
+    console.log(`📍 마커 상태: 보임 ${visibleCount}개, 숨김 ${hiddenCount}개`);// 하단 시트 업데이트 - 현재 지도에 보이는 게시물만 표시
     updateBottomSheetWithVisiblePosts();
 }
 
@@ -215,173 +238,6 @@ filterButtons.forEach(button => {
 });
 // 초기 상태도 맞춰주기 (필터 버튼들 모두 켜져있다고 가정)
 updateAllButtonState();
-
-
-// 사이드 메뉴 뒤로가기 클릭시 모든 메뉴 닫기
-
-
-// // 검색 관련 변수
-// let currentSearchTerm = '';
-// let searchResults = [];
-
-// // 검색 기능 초기화
-// function initializeSearch() {
-//     // 검색 버튼 클릭 이벤트
-//     searchButton.addEventListener('click', performSearch);
-
-//     // 엔터 키 이벤트
-//     searchInput.addEventListener('keypress', function (e) {
-//         if (e.key === 'Enter') {
-//             performSearch();
-//         }
-//     });
-
-//     // 검색창이 비워질 때 검색 결과 초기화
-//     searchInput.addEventListener('input', function (e) {
-//         if (e.target.value.trim() === '') {
-//             currentSearchTerm = '';
-//             searchResults = [];
-//             filterPostsByTags(); // 기존 필터 적용하여 원래 상태로 복원
-//         }
-//     });
-// }
-
-// // 검색 실행 함수
-// function performSearch() {
-//     const searchTerm = searchInput.value.trim();
-
-//     if (searchTerm === '') {
-//         currentSearchTerm = '';
-//         searchResults = [];
-//         filterPostsByTags();
-//         return;
-//     }
-
-//     currentSearchTerm = searchTerm;
-
-//     // 모든 게시물에서 태그로 검색
-//     const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
-//     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
-//     const allPosts = [...posts, ...publicData];
-
-//     // 태그에서 검색어가 포함된 게시물 찾기
-//     searchResults = allPosts.filter(post => {
-//         if (!post.tags || !Array.isArray(post.tags)) return false;
-//         return post.tags.some(tag =>
-//             tag.toLowerCase().includes(searchTerm.toLowerCase())
-//         );
-//     });
-
-//     // 검색 결과가 있으면 하단 시트 업데이트
-//     updateBottomSheetWithSearch();
-// }
-
-// // 검색 결과를 포함한 하단 시트 업데이트
-// function updateBottomSheetWithSearch() {
-//     const sheetContent = document.getElementById('sheetContent');
-
-//     if (searchResults.length === 0 && currentSearchTerm !== '') {
-//         sheetContent.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">검색 결과가 없습니다.</div>';
-//         return;
-//     }
-
-//     // 검색 결과가 있으면 검색 결과 + 원래 게시물 표시
-//     if (currentSearchTerm !== '' && searchResults.length > 0) {
-//         // 현재 필터에 맞는 원래 게시물들 가져오기
-//         const activeFilters = [...document.querySelectorAll('.filters button')]
-//             .filter(btn => btn.classList.contains('active') && btn.dataset.type !== '전체')
-//             .map(btn => btn.dataset.type);
-
-//         const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
-//         const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
-//         const allButton = document.querySelector('.filters button[data-type="전체"]');
-
-//         // 3일 이내 게시물만 필터링 (사용자 게시글에만 적용)
-//         const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
-
-//         let originalPosts = [];
-
-//         // 전체가 선택된 경우 또는 아무것도 선택 안된 경우
-//         if (allButton.classList.contains('active') || activeFilters.length === 0) {
-//             originalPosts = [...recentPosts, ...publicData];
-//         } else {
-//             // 게시글 필터가 선택된 경우 - 3일 이내 사용자 게시글만 포함
-//             if (activeFilters.includes('게시글')) {
-//                 originalPosts = [...originalPosts, ...recentPosts];
-//             }
-
-//             // 공공데이터 필터들이 선택된 경우
-//             ['축제', '공연', '관광', '테마파크'].forEach(filter => {
-//                 if (activeFilters.includes(filter)) {
-//                     const matchingData = publicData.filter(item => item.type === filter);
-//                     originalPosts = [...originalPosts, ...matchingData];
-//                 }
-//             });
-//         }
-
-//         // 검색 결과에 포함된 게시물들의 ID/제목을 기준으로 원래 게시물에서 제외
-//         const searchResultIds = searchResults.map(post => post.title || post.id);
-//         const filteredOriginalPosts = originalPosts.filter(post =>
-//             !searchResultIds.includes(post.title || post.id)
-//         );
-
-//         // HTML 생성
-//         const postsListContainer = document.createElement('div');
-
-//         // 검색 결과 섹션
-//         if (searchResults.length > 0) {
-//             const searchSection = document.createElement('div');
-//             searchSection.innerHTML = `
-//                 <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
-//                     🔍 검색 결과 (${searchResults.length}개)
-//                 </div>
-//             `;
-
-//             const searchList = document.createElement('ul');
-//             searchList.style.listStyle = 'none';
-//             searchList.style.padding = '0';
-//             searchList.style.margin = '0';
-
-//             searchResults.forEach(post => {
-//                 const li = createPostListItem(post, true); // 검색 결과임을 표시
-//                 searchList.appendChild(li);
-//             });
-
-//             searchSection.appendChild(searchList);
-//             postsListContainer.appendChild(searchSection);
-//         }
-
-//         // 원래 게시물 섹션 (15px 공백 후)
-//         if (filteredOriginalPosts.length > 0) {
-//             const originalSection = document.createElement('div');
-//             originalSection.style.marginTop = '15px';
-//             originalSection.innerHTML = `
-//                 <div style="padding:12px 20px;background:#f8f9fa;border-bottom:2px solid #e9ecef;font-weight:600;color:#495057;">
-//                     📋 다른 게시물
-//                 </div>
-//             `;
-
-//             const originalList = document.createElement('ul');
-//             originalList.style.listStyle = 'none';
-//             originalList.style.padding = '0';
-//             originalList.style.margin = '0';
-
-//             filteredOriginalPosts.reverse().forEach(post => {
-//                 const li = createPostListItem(post, false);
-//                 originalList.appendChild(li);
-//             });
-
-//             originalSection.appendChild(originalList);
-//             postsListContainer.appendChild(originalSection);
-//         }
-
-//         sheetContent.innerHTML = '';
-//         sheetContent.appendChild(postsListContainer);
-//     } else {
-//         // 검색어가 없으면 기존 필터 적용
-//         filterPostsByTags();
-//     }
-// }
 
 // 현재 지도 뷰포트에 보이는 마커들만 가져오는 함수
 function getVisibleMarkers() {
@@ -719,110 +575,71 @@ function fetchInfoMarkersFromDB() {
         });
 }
 
+// [DB 연동] 사용자 게시물 마커 데이터 불러오기
+function fetchUserPostsFromDB() {
+    console.log('🔄 DB에서 사용자 게시물 불러오기 시작...');
+
+    fetch('/api/post/all')
+        .then(response => {
+            console.log('📡 API 응답 상태:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('📦 받은 데이터:', data);
+
+            if (data.result && Array.isArray(data.result)) {
+                console.log('✅ 게시물 개수:', data.result.length);
+
+                // 사용자 게시물 데이터를 testPosts 형태로 변환
+                const userPosts = data.result.map(item => {
+                    console.log('📋 게시물 데이터:', item);
+                    return {
+                        id: item.postId,
+                        title: item.postTitle,
+                        content: item.postContent,
+                        category: item.postCategory || '게시글',
+                        lat: item.postLatitude,
+                        lng: item.postLongitude,
+                        tags: item.postTags ? item.postTags.split(',') : [],
+                        createdAt: item.postCreatedAt,
+                        cameraImage: item.postImage || null,
+                        galleryImages: item.postImages ? item.postImages.split(',') : []
+                    };
+                });
+
+                console.log('🔄 변환된 게시물 데이터:', userPosts);
+
+                // localStorage의 기존 testPosts를 DB 데이터로 교체
+                localStorage.setItem('testPosts', JSON.stringify(userPosts));
+                console.log('💾 localStorage에 저장 완료');
+
+                // 기존 마커들 제거하고 다시 렌더링
+                if (typeof window.mapMarkers !== 'undefined') {
+                    window.mapMarkers.forEach(({ marker }) => marker.setMap(null));
+                    window.mapMarkers = [];
+                    console.log('🗑️ 기존 마커 제거 완료');
+                }
+
+                // 마커 다시 렌더링
+                console.log('🎯 마커 렌더링 시작...');
+                renderUserPostMarkers();
+            } else {
+                console.warn('⚠️ 데이터 형식이 올바르지 않음:', data);
+            }
+        })
+        .catch(err => {
+            console.error('❌ DB에서 사용자 게시물 불러오기 실패:', err);
+        });
+}
+
 window.addEventListener('DOMContentLoaded', function () {
-    fetchInfoMarkersFromDB(); // 페이지 로드시 DB에서 마커 데이터 불러오기
-    // localStorage에서 임시 글 목록 읽어 마커 표시
-    const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+    fetchInfoMarkersFromDB(); // 페이지 로드시 DB에서 공공데이터 마커 불러오기
+    fetchUserPostsFromDB(); // 페이지 로드시 DB에서 사용자 게시물 마커 불러오기
+
+    // 공공데이터는 별도로 처리
     const publicData = JSON.parse(localStorage.getItem('publicData') || '[]');
     mapMarkers = [];
     updateBottomSheetWithVisiblePosts();
-
-    // 3일 이내 사용자 게시물만 마커로 표시 (마커 필터링용)
-    const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
-
-    recentPosts.forEach(post => {
-        if (post.lat && post.lng) {
-            // 카테고리별 마커 색상 지정 (네이버 지도 기본 마커)
-            let iconOptions = {};
-            switch (post.category) {
-                case '축제':
-                    iconOptions = { icon: { content: '<div style="background:#ffb300;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
-                    break;
-                case '공연':
-                    iconOptions = { icon: { content: '<div style="background:#42a5f5;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
-                    break;
-                case '관광':
-                    iconOptions = { icon: { content: '<div style="background:#66bb6a;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
-                    break;
-                case '테마파크':
-                    iconOptions = { icon: { content: '<div style="background:#ab47bc;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
-                    break;
-                case '게시글':
-                    iconOptions = { icon: { content: '<div style="background:#ef5350;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
-                    break;
-                default:
-                    iconOptions = {};
-            }
-            const marker = new naver.maps.Marker(Object.assign({
-                position: new naver.maps.LatLng(post.lat, post.lng),
-                map: map
-            }, iconOptions));
-            mapMarkers.push({
-                marker,
-                category: post.category || '기타',
-                dataType: post.type || 'user_post',
-                post: post // 게시물 정보 추가하여 날짜 확인 가능하게 함
-            });            // 마커 클릭 시 정보창
-            const tagsHtml = post.tags && post.tags.length > 0
-                ? `<div style="margin:4px 0 6px 0;">${post.tags.map(tag =>
-                    `<span style="display:inline-block;margin:1px 2px;padding:1px 8px;border-radius:10px;background:#e8f4fd;color:#2193b0;font-size:0.8em;">${tag}</span>`
-                ).join('')}</div>`
-                : '';
-
-            // 게시 일자 포맷팅
-            const postDate = post.createdAt ? new Date(post.createdAt).toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            }) : '날짜 없음';
-
-            // 사용자 게시글 팝업: 본인이 등록한 사진만 출력
-            let photoHtml = '';
-            if (post.cameraImage) {
-                photoHtml = `<img src='${encodeURI(post.cameraImage)}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>`;
-            } else if (post.galleryImages && post.galleryImages.length > 0 && post.galleryImages[0] && post.galleryImages[0] !== '없음') {
-                photoHtml = `<img src='${encodeURI(post.galleryImages[0])}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>`;
-            }
-            const infoHtml = `
-                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
-                    <b>${post.title}</b><br>
-                    <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${post.category ? post.category : '기타'}</span><br>
-                    ${tagsHtml} <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
-                    <div style="margin-top:8px;padding-top:6px;border-top:1px solid #eee;color:#666;font-size:0.85em;">
-                        게시일: ${postDate}
-                    </div>
-                    ${photoHtml}
-                </div>
-            `;
-            const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
-            naver.maps.Event.addListener(marker, 'click', function () {
-                infowindow.open(map, marker);
-                // 이미지가 있으면 이미지 로드 후 위치 보정 및 닫기 이벤트 등록
-                if (publicPhotoHtml) {
-                    // InfoWindow 내부의 이미지가 로드될 때까지 대기
-                    setTimeout(() => {
-                        const iwEl = document.querySelector('.ncp_infowindow_inner, .ncp_infowindow');
-                        if (iwEl) {
-                            const img = iwEl.querySelector('img');
-                            if (img) {
-                                img.onload = function () {
-                                    // 위치 보정
-                                    const markerPos = marker.getPosition();
-                                    const proj = map.getProjection();
-                                    if (proj && markerPos) {
-                                        const point = proj.fromCoordToPoint(markerPos);
-                                        point.y -= 70 / Math.pow(2, map.getZoom() - 7);
-                                        const newCoord = proj.fromPointToCoord(point);
-                                        infowindow.setPosition(newCoord);
-                                    }
-                                };
-                            }
-                        }
-                    }, 0);
-                }
-            });
-        }
-    });
 
     // 공공데이터 마커 추가 (날짜 제한 없음)
     publicData.forEach(item => {
@@ -853,21 +670,14 @@ window.addEventListener('DOMContentLoaded', function () {
                 category: item.type || '기타',
                 dataType: item.type || 'public_data',
                 post: null // 공공데이터는 게시물 정보 없음
-            });
-
-            // 공공데이터 마커 클릭 시 제목+사진, 사진 클릭 시 상세 정보 모달 표시
+            });            // 공공데이터 마커 클릭 시 제목+사진, 사진 클릭 시 상세 정보 모달 표시
             const title = item.title || item.infoTitle || '제목 없음';
             const rawImage = item.image || item.infoImages || '';
             let image = (!rawImage || rawImage === '없음') ? '/common/no-image.png' : rawImage;
             if (image !== '/common/no-image.png') {
                 image = encodeURI(image);
             }
-            // infoDiv 대신 html string으로 content 구성
-            const infoDiv = document.createElement('div');
-            infoDiv.style.minWidth = '180px';
-            infoDiv.style.maxWidth = '220px';
-            infoDiv.style.wordBreak = 'break-all';
-            infoDiv.style.position = 'relative';
+
             let publicPhotoHtml = '';
             if (rawImage && rawImage !== '없음') {
                 const lower = rawImage.toLowerCase();
@@ -875,27 +685,52 @@ window.addEventListener('DOMContentLoaded', function () {
                     publicPhotoHtml = `<img src='${encodeURI(rawImage)}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;cursor:pointer;'>`;
                 }
             }
-            // infoDiv 대신 html string으로 content 구성
+
+            // InfoWindow 내용 구성
             const infoHtml = `
-                <div id="publicInfoWindowContent_${item.lat}_${item.lng}" style="min-width:180px;max-width:220px;word-break:break-all;position:relative;cursor:pointer;">
+                <div id="publicInfoWindowContent_${item.lat}_${item.lng}" style="min-width:180px;max-width:220px;word-break:break-all;position:relative;cursor:pointer;padding:8px;">
                     <div style="font-weight:500;margin-bottom:8px;">${title}</div>
                     ${publicPhotoHtml}
+                    <div style="font-size:0.85em;color:#666;margin-top:4px;">클릭하여 상세정보 보기</div>
                 </div>
             `;
+
             const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
+
             naver.maps.Event.addListener(marker, 'click', function () {
+                // 기존 InfoWindow 모두 닫기
+                if (globalInfoWindow && globalInfoWindow !== infowindow) {
+                    globalInfoWindow.close();
+                }
+
                 infowindow.open(map, marker);
+                globalInfoWindow = infowindow;
+
                 // InfoWindow 내부 클릭 시 상세 모달 띄우기
                 setTimeout(() => {
                     const contentDiv = document.getElementById(`publicInfoWindowContent_${item.lat}_${item.lng}`);
                     if (contentDiv) {
-                        contentDiv.onclick = function(e) {
-                            e.stopPropagation();
-                            showPublicDetail(title, image, item.overview || item.infoText || '');
+                        contentDiv.onclick = function (e) {
+                            e.stopPropagation(); // 이벤트 버블링 방지
+                            infowindow.close(); // 팝업창 닫기
+                            showPublicDetail(title, image, item.overview || item.infoText || item.content || '상세 정보가 없습니다.');
                         };
                     }
-                }, 0);
-                // 이미지가 있으면 이미지 로드 후 위치 보정 및 닫기 이벤트 등록
+                }, 100);
+
+                // 지도 클릭 시 InfoWindow 닫기 (팝업창 밖 클릭)
+                if (globalMapClickListener) {
+                    naver.maps.Event.removeListener(globalMapClickListener);
+                }
+                globalMapClickListener = naver.maps.Event.addListener(map, 'click', function () {
+                    infowindow.close();
+                    if (globalMapClickListener) {
+                        naver.maps.Event.removeListener(globalMapClickListener);
+                        globalMapClickListener = null;
+                    }
+                });
+
+                // 이미지가 있으면 이미지 로드 후 위치 보정
                 if (publicPhotoHtml) {
                     setTimeout(() => {
                         const iwEl = document.querySelector('.ncp_infowindow_inner, .ncp_infowindow');
@@ -914,7 +749,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                 };
                             }
                         }
-                    }, 0);
+                    }, 200);
                 }
             });
         }
@@ -960,17 +795,22 @@ var map = new naver.maps.Map('map', {
 (function () {
     let pressTimer = null;
     let downLatLng = null;
-    let moved = false;
-
-    // 통합 이벤트 처리 함수
+    let moved = false;    // 통합 이벤트 처리 함수
     function startPress(coord) {
         if (!coord) return;
         downLatLng = coord;
         moved = false;
         pressTimer = setTimeout(function () {
             if (downLatLng && !moved) {
-                localStorage.setItem('selectedCoords', JSON.stringify({ lat: downLatLng.y, lng: downLatLng.x }));
-                window.location.href = '/newPost/newPost.html';
+                try {
+                    localStorage.setItem('selectedCoords', JSON.stringify({ lat: downLatLng.y, lng: downLatLng.x }));
+                    // 디버그 모드 방지를 위해 replace 사용
+                    window.location.replace('/newPost/newPost.html');
+                } catch (error) {
+                    console.error('페이지 이동 중 오류:', error);
+                    // 에러 발생 시 일반적인 방법으로 이동
+                    window.location.href = '/newPost/newPost.html';
+                }
             }
         }, 2000);
     }
@@ -1180,6 +1020,7 @@ function showPublicDetail(title, image, content) {
     // 모달이 이미 있으면 제거
     const oldModal = document.getElementById('publicDetailModal');
     if (oldModal) oldModal.remove();
+
     // 모달 생성
     const modal = document.createElement('div');
     modal.id = 'publicDetailModal';
@@ -1193,15 +1034,47 @@ function showPublicDetail(title, image, content) {
     modal.style.alignItems = 'center';
     modal.style.justifyContent = 'center';
     modal.style.zIndex = '99999';
+
     modal.innerHTML = `
-        <div style="background:#fff;padding:24px 20px 16px 20px;border-radius:12px;max-width:340px;width:90vw;box-shadow:0 4px 24px #0002;position:relative;">
+        <div id="modalContent" style="background:#fff;padding:24px 20px 16px 20px;border-radius:12px;max-width:340px;width:90vw;box-shadow:0 4px 24px #0002;position:relative;max-height:80vh;overflow-y:auto;">
             <div style="font-size:1.1em;font-weight:600;margin-bottom:10px;">${title}</div>
             <img src="${image}" style="width:100%;max-height:220px;border-radius:8px;object-fit:cover;" onerror="this.onerror=null;this.src='/common/no-image.png';">
-            <div style="margin-top:12px;color:#444;font-size:0.98em;white-space:pre-line;">${content || ''}</div>
-            <button style="position:absolute;top:8px;right:12px;font-size:1.3em;background:none;border:none;cursor:pointer;color:#888;" onclick="document.getElementById('publicDetailModal').remove();">&times;</button>
+            <div style="margin-top:12px;color:#444;font-size:0.98em;white-space:pre-line;line-height:1.5;">${content || '상세 정보가 없습니다.'}</div>
+            <button id="closeModalBtn" style="position:absolute;top:8px;right:12px;font-size:1.3em;background:none;border:none;cursor:pointer;color:#888;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">&times;</button>
         </div>
     `;
+
     document.body.appendChild(modal);
+
+    // 모달 닫기 이벤트들
+    function closeModal() {
+        const modalEl = document.getElementById('publicDetailModal');
+        if (modalEl) modalEl.remove();
+    }
+
+    // X 버튼 클릭 시 닫기
+    document.getElementById('closeModalBtn').onclick = closeModal;
+
+    // 모달 배경(밖) 클릭 시 닫기
+    modal.onclick = function (e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    };
+
+    // ESC 키로 닫기
+    function handleEscKey(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', handleEscKey);
+        }
+    }
+    document.addEventListener('keydown', handleEscKey);
+
+    // 모달 내용 클릭 시 이벤트 버블링 방지
+    document.getElementById('modalContent').onclick = function (e) {
+        e.stopPropagation();
+    };
 }
 
 // 전역 InfoWindow 인스턴스 하나만 사용
@@ -1223,3 +1096,96 @@ function openGlobalInfoWindow(map, marker, html) {
         if (globalMapClickListener) naver.maps.Event.removeListener(globalMapClickListener);
     });
 }
+
+// 사용자 게시물 마커 렌더링 함수
+function renderUserPostMarkers() {
+    const posts = JSON.parse(localStorage.getItem('testPosts') || '[]');
+    const recentPosts = posts.filter(post => isWithinThreeDays(post.createdAt));
+
+    recentPosts.forEach(post => {
+        if (post.lat && post.lng) {
+            // 카테고리별 마커 색상 지정
+            let iconOptions = {};
+            switch (post.category) {
+                case '축제':
+                    iconOptions = { icon: { content: '<div style="background:#ffb300;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '공연':
+                    iconOptions = { icon: { content: '<div style="background:#42a5f5;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '관광':
+                    iconOptions = { icon: { content: '<div style="background:#66bb6a;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '테마파크':
+                    iconOptions = { icon: { content: '<div style="background:#ab47bc;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px #0002;"></div>', anchor: new naver.maps.Point(12, 12) } };
+                    break;
+                case '게시글':
+                    iconOptions = { icon: { content: '<div style="color:#ef5350;font-size:32px;text-shadow:0 2px 4px rgba(0,0,0,0.3);"><span class="material-icons" style="font-size:32px;">location_on</span></div>', anchor: new naver.maps.Point(16, 32) } };
+                    break;
+                default:
+                    iconOptions = { icon: { content: '<div style="color:#ef5350;font-size:32px;text-shadow:0 2px 4px rgba(0,0,0,0.3);"><span class="material-icons" style="font-size:32px;">location_on</span></div>', anchor: new naver.maps.Point(16, 32) } };
+            }
+
+            const marker = new naver.maps.Marker(Object.assign({
+                position: new naver.maps.LatLng(post.lat, post.lng),
+                map: map
+            }, iconOptions));
+
+            if (!window.mapMarkers) window.mapMarkers = [];
+            window.mapMarkers.push({
+                marker,
+                category: post.category || '기타',
+                dataType: post.type || 'user_post',
+                post: post
+            });
+
+            // 마커 클릭 시 정보창
+            const tagsHtml = post.tags && post.tags.length > 0
+                ? `<div style="margin:4px 0 6px 0;">${post.tags.map(tag =>
+                    `<span style="display:inline-block;margin:1px 2px;padding:1px 8px;border-radius:10px;background:#e8f4fd;color:#2193b0;font-size:0.8em;">${tag}</span>`
+                ).join('')}</div>`
+                : '';
+
+            const postDate = post.createdAt ? new Date(post.createdAt).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : '날짜 없음';
+
+            // 사용자 게시글 팝업: 본인이 등록한 사진만 출력
+            let photoHtml = '';
+            if (post.cameraImage) {
+                photoHtml = `<img src='${encodeURI(post.cameraImage)}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>`;
+            } else if (post.galleryImages && post.galleryImages.length > 0 && post.galleryImages[0] && post.galleryImages[0] !== '없음') {
+                photoHtml = `<img src='${encodeURI(post.galleryImages[0])}' style='width:100%;max-height:120px;margin-top:6px;border-radius:8px;object-fit:cover;'>`;
+            }
+
+            const infoHtml = `
+                <div style="min-width:180px;max-width:220px;word-break:break-all;position:relative;">
+                    <b>${post.title}</b><br>
+                    <span style='display:inline-block;margin:4px 0 6px 0;padding:2px 10px;border-radius:12px;background:#6dd5ed;color:#fff;font-size:0.9em;'>${post.category ? post.category : '기타'}</span><br>
+                    ${tagsHtml} <span>${post.category ? '[' + post.category + '] ' : ''}${post.content}</span><br>
+                    <div style="margin-top:8px;padding-top:6px;border-top:1px solid #eee;color:#666;font-size:0.85em;">
+                        게시일: ${postDate}
+                    </div>
+                    ${photoHtml}
+                </div>
+            `;
+
+            const infowindow = new naver.maps.InfoWindow({ content: infoHtml, zIndex: 9999 });
+            naver.maps.Event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+                setTimeout(() => {
+                    const mapClickListener = naver.maps.Event.addListener(map, 'click', function () {
+                        infowindow.close();
+                        naver.maps.Event.removeListener(mapClickListener);
+                    });
+                }, 0);
+            });
+        }
+    });
+
+    // 하단 시트 업데이트
+    updateBottomSheetWithVisiblePosts();
+}
+

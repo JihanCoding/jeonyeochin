@@ -1,14 +1,5 @@
 package com.smhrd.jeonyeochin.service;
 
-import com.smhrd.dto.postDto;
-import com.smhrd.jeonyeochin.entity.Post;
-import com.smhrd.jeonyeochin.repository.PostRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +8,15 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.smhrd.dto.postDto;
+import com.smhrd.jeonyeochin.entity.Post;
+import com.smhrd.jeonyeochin.repository.PostRepository;
 
 @Service
 @Transactional
@@ -32,9 +32,8 @@ public class PostService {
         // 1) 업로드 디렉터리 준비
         String projectDir = System.getProperty("user.dir");
         Path uploadDir = Paths.get(
-            projectDir,
-            "src", "main", "resources", "static", "common"
-        );
+                projectDir,
+                "src", "main", "resources", "static", "common");
         Files.createDirectories(uploadDir);
 
         // 2) 이미지 안전 처리
@@ -45,24 +44,24 @@ public class PostService {
 
         // 3) 파일 저장 → 파일명 수집
         List<String> savedFileNames = images.stream()
-            .filter(f -> !f.isEmpty())
-            .map(f -> {
-                try {
-                    String fn = System.currentTimeMillis() + "_" + f.getOriginalFilename();
-                    Path target = uploadDir.resolve(fn);
-                    f.transferTo(target.toFile());
-                    return fn;
-                } catch (Exception e) {
-                    throw new RuntimeException("파일 저장 실패: " + e.getMessage(), e);
-                }
-            })
-            .collect(Collectors.toList());
+                .filter(f -> !f.isEmpty())
+                .map(f -> {
+                    try {
+                        String fn = System.currentTimeMillis() + "_" + f.getOriginalFilename();
+                        Path target = uploadDir.resolve(fn);
+                        f.transferTo(target.toFile());
+                        return fn;
+                    } catch (Exception e) {
+                        throw new RuntimeException("파일 저장 실패: " + e.getMessage(), e);
+                    }
+                })
+                .collect(Collectors.toList());
 
         // 4) 날짜 파싱 (OffsetDateTime → LocalDateTime)
         OffsetDateTime odt = OffsetDateTime.parse(form.getPostCreatedAt());
         LocalDateTime createdAt = odt
-            .atZoneSameInstant(ZoneId.of("Asia/Seoul"))
-            .toLocalDateTime();
+                .atZoneSameInstant(ZoneId.of("Asia/Seoul"))
+                .toLocalDateTime();
 
         // 3) DTO → 엔티티 매핑
         Post post = new Post();
@@ -117,5 +116,12 @@ public class PostService {
      */
     public List<Post> getPostsByUserId(Integer userId) {
         return postRepository.findByUserId(userId);
+    }
+
+    /**
+     * 모든 게시글 조회 (지도 마커용)
+     */
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
     }
 }
